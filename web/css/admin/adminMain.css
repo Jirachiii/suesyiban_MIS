@@ -1,0 +1,140 @@
+@font-face {
+	font-family: 'Montserrat';
+	src: url('../fonts/Montserrat/Montserrat-Regular.ttf') format('ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'PingHei';
+	src: url('../fonts/PingHei/PingHei-light.ttf') format('ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+body {
+	font-family: Montserrat;
+}
+
+.Ad_head {
+	position: relative;
+	height: 50px;
+	width: 100%;
+	background-color: #333;
+	z-index: 2;
+}
+.hd_downbtn {
+	display: none;
+	position: relative;
+	left: 92%;
+}
+.Ad_Lef {
+	padding: 0px;
+	height: 600px;
+	box-shadow: 1px 0px 20px #BBB;
+	z-index: 1;
+}
+.Ad_Rig {
+	height: 100%;
+	background-color: #EEE;
+	height: 600px;
+	color: #666;
+}
+
+.Ad_Lef_sea {
+	width: 80%;
+	margin: auto;
+}
+.Ad_Lef_hr {
+	height: 1px;
+	background-color: #EEE;
+}
+.Ad_Lef_btn {
+	cursor: pointer;
+	height: 50px;
+	-webkit-transition:all .3s ease-in-out;
+}
+.Ad_Lef_btn_checked {
+	cursor: pointer;
+	color: #FFF;
+	background-color: #099;
+	height: 50px;
+	-webkit-transition:all .3s ease-in-out;
+}
+.Ad_Lef_btn_colorchange {
+	color: #fff !important;
+}
+.Ad_Lef_btnPic,.Ad_Lef_btnWord {
+	position: relative;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	height: 70%;
+	color: #099;
+	text-decoration:none;
+}
+.Ad_Lef_btnPic {
+	text-decoration:none;
+	padding-left: 20px;
+}
+.Ad_Lef_btnA {
+	color: #099;
+	text-decoration:none;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translateX(-50%) translateY(-50%);
+}
+.Ad_Lef_btnWord {
+	top: 50%;
+}
+.Ad_Lef_btnP {
+	position: relative;
+	top: 50%;
+	-webkit-transform: translateY(-40%);
+	font-size: 1.2em;
+}
+.Ad_Lef_btn:hover {
+	background-color: #DDD;
+}
+.Ad_RShow {
+	background-color: #FFF;
+	width: 100%;
+	border-radius: 5px;
+	box-shadow: 1px 0px 7px #BBB;
+	height: 80%;
+}
+.nav_btn {
+	color: #222;
+	text-decoration:none;
+	margin: 15px;
+	-webkit-transition: color .2s;
+	cursor: pointer;
+}
+.nav_btn:hover {
+	color: #F66;
+	text-decoration:none;
+}
+@media (max-width: 1260px) {
+	.Ad_Lef {
+		width: 30%;
+	}
+	.Ad_Rig {
+		width: 70%;
+	}
+}
+@media (max-width: 700px) {
+	.Ad_Lef {
+		background-color: #FFF;
+		position: absolute;
+		top: -100%;
+		width: 100%;
+		-webkit-transition:all .5s ease-in-out;
+	}
+	.Ad_Rig {
+		position: absolute;
+		top: 50px;
+		width: 100%;
+	}
+	.hd_downbtn {
+		display: block;
+		position: relative;
+		left: 92%;
+	}
+}

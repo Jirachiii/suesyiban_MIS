@@ -1,0 +1,35 @@
+@font-face {
+	font-family: 'Montserrat';
+	src: url('../fonts/Montserrat/Montserrat-Regular.ttf') format('ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'PingHei';
+	src: url('../fonts/PingHei/PingHei-light.ttf') format('ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+body {
+	font-family: Montserrat;
+}
+.M_log {
+	position: relative;
+	width: 40%;
+	height: 390px;
+	background-color: #EEE;
+	border-radius: 5px;
+	margin: auto;
+}
+
+.M_header {
+	position: relative;
+	top: 30px;
+	text-align: center;
+}
+.M_body {
+	margin: 0px 20%;
+}
+.M_sp {
+	font-size: 1.1em;
+}
