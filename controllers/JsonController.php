@@ -17,7 +17,7 @@ class JsonController extends Controller {
 		$moments = new Moments();
 		$content = $moments->adminGetMoment();
 		if ($content !== '') {
-			$msg = '{"success":true,"getcontent":"'.$content[0]['Content'].'","name":"'.$content[0]['name'].'","like":"'.$content[0]['like_Num'].'"}';
+			$msg = '{"success":true,"getcontent":"'.$content[0]['Content'].'","Createname":"'.$content[0]['name'].'","like":"'.$content[0]['like_Num'].'"}';
 		} else {
 			$msg = '{"success":false}';
 		}

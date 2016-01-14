@@ -71,7 +71,7 @@
 				$.getJSON('index.php?r=json/getmomentdata', function(data, textStatus) {
 					if (textStatus == 'success') {
 						if (data.success) {
-							$("#MomentsData").html(data.getcontent);
+							$("#MomentsData").html(data.getcontent+'  '+data.Createname+'  '+data.like);
 						} else {
 							$("#MomentsData").html("出现错误：" + data);
 						}
