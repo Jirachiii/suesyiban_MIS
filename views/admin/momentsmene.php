@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="css/admin/adminMain.css">
 		<title>管理员</title>
 	</head>
-	<body>
+	<body onload="getMomentData()">
 		<header class="Ad_head">
 			<button class="btn btn-primary hd_downbtn" onclick="tiggle()">下拉</button>
 		</header>
@@ -49,9 +49,13 @@
 		</div>
 		<div class="col-xs-10 Ad_Rig">
 			<h2>动态管理</h2><br>
-
+			<div class="Ad_RShow"><br>
+				<div id="MomentsData">
+				</div>
+			</div>
 		</div>
         <script src="js/adminHref.js"></script>
+        <script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.js"></script>
 		<script>
 			var show = 0;
 			function tiggle() {
@@ -62,6 +66,19 @@
 					document.getElementById("showandhide").style.top = '-100%';
 					this.show = 0;
 				}
+			}
+			function getMomentData() {
+				$.getJSON('index.php?r=json/getmomentdata', function(data, textStatus) {
+					if (textStatus == 'success') {
+						if (data.success) {
+							$("#MomentsData").html(data.getcontent);
+						} else {
+							$("#MomentsData").html("出现错误：" + data);
+						}
+					} else {
+						alert("系统错误" + textStatus);
+					}
+				});
 			}
 		</script>
 	</body>

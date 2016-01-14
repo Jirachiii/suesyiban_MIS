@@ -1,6 +1,8 @@
 <?php
 namespace app\models;
 use app\controllers\DbFactory;
+header("Content-Type: application/json;charset=utf-8");
+
 /**
  * This is the model class for table "user_tb".
  *
@@ -54,8 +56,8 @@ class UserTb extends \yii\db\ActiveRecord {
 	public function getName($id) {
 		$Dbfactory = DbFactory::getinstance();
 		$id        = $Dbfactory->dbSqlProtected($id);
-		$password  = $Dbfactory->findOnlyOne('Name', 'user_tb', 'XH_ID', $id);
-		return $password;
+		$name      = $Dbfactory->findOnlyOne('Name', 'user_tb', 'XH_ID', $id);
+		return $name;
 	}
 	//登录逻辑
 	public function handleLogin($username, $password) {

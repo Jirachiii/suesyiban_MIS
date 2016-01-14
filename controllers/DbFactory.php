@@ -1,5 +1,6 @@
 <?php
 namespace app\controllers;
+header("Content-Type: application/json;charset=utf-8");
 
 /**
  * 自己编的yii2框架扩展工厂类
@@ -54,7 +55,7 @@ class DbFactory {
 	public function findBySql($sql) {
 		$sql        = $this->dbSqlProtected($sql);
 		$connection = \Yii::$app->db;
-		$command    = $connection->createCommand($sql)->execute;
+		$command    = $connection->createCommand($sql)->queryAll();
 		return $command;
 	}
 	/*
