@@ -6,6 +6,8 @@ use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 
+//网页的首页
+
 class SiteController extends Controller {
 
 	public $enableCsrfValidation = false;

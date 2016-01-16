@@ -6,7 +6,7 @@ use yii\filters\VerbFilter;
 use yii\web\Controller;
 
 /**
- * 管理员界面
+ * 管理员界面的集合
  */
 
 class AdminController extends Controller {

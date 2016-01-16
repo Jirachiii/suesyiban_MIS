@@ -61,6 +61,7 @@
 
 		</div>
         <script src="js/adminHref.js"></script>
+        <script src="js/adminUser.js"></script>
 		<script>
 			var show = 0;
 			function tiggle() {
@@ -71,22 +72,6 @@
 					document.getElementById("showandhide").style.top = '-100%';
 					this.show = 0;
 				}
-			}
-			//用户,所有数据都通过ajax请求
-			function allUser(){
-
-			}
-			function addUser() {
-
-			}
-			function IDontKnowHowToNameIt() {
-
-			}
-			function userAuthority() {
-
-			}
-			function forgetPass() {
-
 			}
 		</script>
 	</body>

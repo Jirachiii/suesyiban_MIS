@@ -2,7 +2,7 @@
 namespace app\controllers;
 // include 'DbFactory.php';
 /**
- * 处理登录业务接口
+ * 处理登录业务接口，现在废弃
  */
 
 class loginMethod {

@@ -58,6 +58,13 @@ class DbFactory {
 		$command    = $connection->createCommand($sql)->queryAll();
 		return $command;
 	}
+	//数量
+	public function tableCount($table) {
+		$connection = \Yii::$app->db;
+		$command    = $connection->createCommand('SELECT COUNT(*) FROM '.$table);
+		$Count      = $command->queryScalar();
+		return $Count;
+	}
 	/*
 	 *通用通过主键查找数据条的单个属性内容，删除数据，tables为表，thekey是主键的名称，findid为主键值
 	 */
@@ -99,8 +106,7 @@ class DbFactory {
 		$sql        = 'insert into '.$table.'('.$keys.') values('.$values.')';
 		$command    = $connection->createCommand($sql)->execute();
 		//以后解决数据已存在的问题
-		return "<script>alert('成功！');history.go(-1);</script>";
-
+		return "<script>alert('成功!');history.go(-1);</script>";
 	}
 	//测试方法
 	public function selectTest() {
