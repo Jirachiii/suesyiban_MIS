@@ -13,7 +13,7 @@ class AdminController extends Controller {
 	public $enableCsrfValidation = false;
 	public $defaultAction        = 'index';
 
-	//管理员首页
+	//用户首页
 	public function actionIndex() {
 		return $this->renderPartial('index');
 	}

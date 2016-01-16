@@ -9,12 +9,12 @@ header("Content-Type: application/json;charset=utf-8");
 /**
  * This is the model class for table "moments".
  *
- * @property integer $id
- * @property string $XH_ID
- * @property string $Time
- * @property string $Mdate
- * @property string $Content
- * @property integer $like_Num
+ * @property integer $id 		动态主键
+ * @property string $XH_ID 		发送人（外键）
+ * @property string $Time 		发送时间
+ * @property string $Mdate 		发送日期
+ * @property string $Content 	发送内容
+ * @property integer $like_Num 	点赞数？
  *
  * @property UserTb $xH
  */

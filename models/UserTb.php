@@ -6,11 +6,11 @@ header("Content-Type: application/json;charset=utf-8");
 /**
  * This is the model class for table "user_tb".
  *
- * @property string $XH_ID
- * @property string $XH_PW
- * @property string $Name
- * @property string $phone
- * @property integer $status
+ * @property string $XH_ID		用户主键（学号）
+ * @property string $XH_PW		用户密码
+ * @property string $Name 		姓名
+ * @property string $phone 		联系方式
+ * @property integer $status 	权限
  */
 
 class UserTb extends \yii\db\ActiveRecord {

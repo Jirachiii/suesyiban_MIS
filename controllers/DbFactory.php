@@ -19,6 +19,10 @@ class DbFactory {
 		}
 		return self::$_instance;
 	}
+	//操作有误，错误代码打印
+	public function err($error) {
+		die("对不起，您的操作有误，错误原因为：".$error);
+	}
 	/*
 	连接数据库代码
 	 */
@@ -39,6 +43,7 @@ class DbFactory {
 	public function dbSqlProtected($value) {
 		$connection = $this->DatabaseConnection();
 		$value      = mysqli_real_escape_string($connection, $value);
+		$value      = $this->xssChecked($value);
 		mysqli_close($connection);
 		return $value;
 	}
@@ -104,9 +109,29 @@ class DbFactory {
 		$values     = implode(',', $keyValue);
 		$connection = \Yii::$app->db;
 		$sql        = 'insert into '.$table.'('.$keys.') values('.$values.')';
-		$command    = $connection->createCommand($sql)->execute();
-		//以后解决数据已存在的问题
-		return "<script>alert('成功!');history.go(-1);</script>";
+		$this->doQuery($sql);
+	}
+	//更新数据
+	public function updateTheDbRecord($table, $KeyName, $id, $arrUpdate) {
+		foreach ($arrUpdate as $key => $value) {
+			$value            = $this->dbSqlProtected($value);
+			$keyAndvalueArr[] = "`".$key."`='".$value."'";
+		}
+		$keyAndValue = implode(',', $keyAndvalueArr);
+		$sql         = 'update '.$table.' set '.$keyAndValue.' where '.$KeyName.' = '.$id;
+		$query       = $this->doQuery($sql);
+		return $query;
+	}
+	//query查询
+	public function doQuery($sql) {
+		$connection = $this->DatabaseConnection();
+		if (!($query = mysqli_query($connection, $sql))) {//使用mysql_query函数执行sql语句
+			$this->err($sql."<br />".mysqli_error($connection));//mysql_error 报错
+			mysqli_close($connection);
+		} else {
+			mysqli_close($connection);
+			return $query;
+		}
 	}
 	//测试方法
 	public function selectTest() {

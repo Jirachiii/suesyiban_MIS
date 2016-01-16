@@ -42,7 +42,7 @@ class JsonController extends Controller {
 		//以后解决，request过来的值
 		$momentMsg['Content']  = 'addmomentadded';
 		$momentMsg['like_Num'] = 0;
-		$moment->insertMomentData($momentMsg);
+		echo $moment->insertMomentData($momentMsg);
 	}
 	public function actionGetmoments() {
 		$moment    = new Moments();
