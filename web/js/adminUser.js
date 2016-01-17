@@ -2,11 +2,13 @@
 function allUser(){
 	$.ajax({
 		type: "GET",
-		url: "index.php?r=ajaxuser/search&classmark=" + $("#keyword").val(),
+		url: "index.php?r=json/getuserdata",
 		dataType: "json",
 		success: function(data) {
 			if (data.success) {
+
 			} else {
+				
 			}
 		},
 		error: function(jqXHR){

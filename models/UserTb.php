@@ -115,5 +115,13 @@ class UserTb extends \yii\db\ActiveRecord {
 			}
 		}
 	}
+	//显示用户代码，以后添加用户职务
+	public function getPageMomentWithOrder($page, $number) {
+		$front     = ($page-1)*$number;
+		$sql       = 'SELECT * FROM user_tb LIMIT '.$front.','.$number;
+		$Dbfactory = DbFactory::getinstance();
+		$users     = $Dbfactory->findBySql($sql);
+		return $users;
+	}
 
 }

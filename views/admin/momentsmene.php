@@ -7,6 +7,7 @@
 		<link rel="stylesheet" href="css/main/bootstrap.css">
 		<link rel="stylesheet" href="css/main/normalize.css">
 		<link rel="stylesheet" href="css/admin/adminMain.css">
+		<link rel="stylesheet" href="css/admin/adminUser.css">
 		<title>管理员</title>
 	</head>
 	<body onload="getMomentData()">
@@ -49,8 +50,10 @@
 		</div>
 		<div class="col-xs-10 Ad_Rig">
 			<h2>动态管理</h2><br>
-			<div class="Ad_RShow"><br>
-				<div id="MomentsData">
+			<div class="Ad_RShow"><br><br>
+				<div class="Ad_User_Main">
+					<table id="MomentsData" class="table table-condensed">
+					</table>
 				</div>
 			</div>
 		</div>
@@ -70,11 +73,13 @@
 			function getMomentData() {
 				$.getJSON('index.php?r=json/getmomentdata', function(data, textStatus) {
 					if (textStatus == 'success') {
-						if (data.success) {
-							$("#MomentsData").html(data.getcontent+'  '+data.Createname+'  '+data.like);
-						} else {
-							$("#MomentsData").html("出现错误：" + data);
-						}
+						var tableHead = '<thead><tr><td>编号</td><td>用户id</td><td>学号</td><td>内容</td><td>点赞数</td><td>姓名</td></tr></thead>';
+						var tableBody = '<tbody>';
+						for (var i = 0; i < data.moments.length; i++) {
+							tableBody += '<tr><td>'+(i+1)+'</td><td>'+1+'</td><td>'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].like_Num+'</td><td>'+data.moments[i].username+'</td></tr>';
+						};
+						tableBody += '</tbody>';
+						document.getElementById('MomentsData').innerHTML = tableHead+tableBody;
 					} else {
 						alert("系统错误" + textStatus);
 					}

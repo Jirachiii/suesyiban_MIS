@@ -7,9 +7,10 @@
 		<link rel="stylesheet" href="css/main/bootstrap.css">
 		<link rel="stylesheet" href="css/main/normalize.css">
 		<link rel="stylesheet" href="css/admin/adminMain.css">
+		<link rel="stylesheet" href="css/admin/adminUser.css">
 		<title>管理员</title>
 	</head>
-	<body>
+	<body onload="getRawData()">
 		<header class="Ad_head">
 			<button class="btn btn-primary hd_downbtn" onclick="tiggle()">下拉</button>
 		</header>
@@ -50,18 +51,23 @@
 		<div class="col-xs-10 Ad_Rig">
 			<h2>用户管理</h2><br>
 			<div class="Ad_RShow"><br>
-				<div>
+				<div class="Ad_btns">
 					<a class="nav_btn" onclick="allUser()">所有用户</a>
 					<a class="nav_btn" onclick="addUser()">用户添加</a>
 					<a class="nav_btn" onclick="?">日历</a>
 					<a class="nav_btn" onclick="userAuthority()">用户权限管理</a>
 					<a class="nav_btn" onclick="forgetPass()">忘记密码</a>
 				</div>
+				<br>
+				<div class="Ad_User_Main">
+					<table id="userMsgShow" class="table table-condensed">
+					</table>
+				</div>
 			</div>
-
 		</div>
         <script src="js/adminHref.js"></script>
         <script src="js/adminUser.js"></script>
+        <script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.js"></script>
 		<script>
 			var show = 0;
 			function tiggle() {
@@ -72,6 +78,21 @@
 					document.getElementById("showandhide").style.top = '-100%';
 					this.show = 0;
 				}
+			}
+			function getRawData() {
+				$.getJSON('index.php?r=json/getuserdata', function(data, textStatus) {
+					if (textStatus == 'success') {
+						var tableHead = '<thead><tr><td>编号</td><td>学号</td><td>姓名</td><td>权限</td><td>电话</td><td>职务</td></tr></thead>';
+						var tableBody = '<tbody>';
+						for (var i = 0; i < data.users.length; i++) {
+							tableBody += '<tr><td>'+(i+1)+'</td><td>'+data.users[i].XH_ID+'</td><td>'+data.users[i].Name+'</td><td>'+data.users[i].Authority+'</td><td>'+data.users[i].phone+'</td><td>技术部总监</td></tr>';
+						};
+						tableBody += '</tbody>';
+						document.getElementById('userMsgShow').innerHTML = tableHead+tableBody;
+					} else {
+						alert("系统错误" + textStatus);
+					}
+				});
 			}
 		</script>
 	</body>

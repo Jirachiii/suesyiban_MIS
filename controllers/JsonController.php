@@ -1,7 +1,7 @@
 <?php
 namespace app\controllers;
-
 use app\models\Moments;
+use app\models\UserTb;
 use yii\web\Controller;
 date_default_timezone_set("PRC");
 header('Content-type: application/json');
@@ -19,13 +19,16 @@ class JsonController extends Controller {
 
 	public function actionGetmomentdata() {
 		$moments = new Moments();
-		$content = $moments->adminGetMoment();
-		if ($content !== '') {
-			$msg = '{"success":true,"getcontent":"'.$content[0]['Content'].'","Createname":"'.$content[0]['name'].'","like":"'.$content[0]['like_Num'].'"}';
-		} else {
-			$msg = '{"success":false}';
-		}
-		echo $msg;
+		$content = $moments->getPageMomentWithOrder(1, 5);
+		$content = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).'}';
+		echo $content;
+	}
+
+	public function actionGetuserdata() {
+		$usertb = new UserTb();
+		$result = $usertb->getPageMomentWithOrder(1, 10);
+		$result = '{"users":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
+		echo $result;
 	}
 
 	//这下面都不属于这边，以后更换位置

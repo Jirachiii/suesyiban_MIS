@@ -81,7 +81,7 @@ class Moments extends \yii\db\ActiveRecord {
 	//获取当前时间
 	public function getDateAndTime() {
 		$RightNow['date'] = date('y-m-d');
-		$RightNow['time'] = date('h:i:s');
+		$RightNow['time'] = date('H:i:s');
 		return $RightNow;
 	}
 
