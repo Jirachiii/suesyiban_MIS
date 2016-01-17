@@ -52,7 +52,7 @@
 			<h2>动态管理</h2><br>
 			<div class="Ad_RShow"><br><br>
 				<div class="Ad_User_Main">
-					<table id="MomentsData" class="table table-condensed">
+					<table id="MomentsData" class="table table-condensed table-hover">
 					</table>
 				</div>
 			</div>

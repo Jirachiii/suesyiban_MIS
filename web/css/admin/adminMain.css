@@ -16,6 +16,13 @@ body {
 table {
 	text-align: center;
 }
+tr {
+	height: 50px;
+}
+td {
+	position: relative;
+	top: 10px;
+}
 
 .Ad_head {
 	position: relative;
@@ -103,20 +110,25 @@ table {
 	box-shadow: 1px 0px 7px #BBB;
 	height: 80%;
 }
+.Ad_btns {
+}
 .nav_btn {
-	color: #222;
+	border-radius: 7px;
+	font-size: 1.2em;
+	padding: 1%;
+	color: #666;
 	text-decoration:none;
 	margin: 10px;
-	-webkit-transition: color .2s;
+	-webkit-transition:all .2s ease-in-out;
 	cursor: pointer;
 }
 .nav_btn:hover {
-	color: #F66;
+	background-color: #099;
+	color: #FFF;
 	text-decoration:none;
 }
-.Ad_btns {
-	margin: auto;
-}
+
+
 @media (max-width: 1260px) {
 	.Ad_Lef {
 		width: 30%;

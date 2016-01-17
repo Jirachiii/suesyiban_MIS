@@ -51,16 +51,16 @@
 		<div class="col-xs-10 Ad_Rig">
 			<h2>用户管理</h2><br>
 			<div class="Ad_RShow"><br>
-				<div class="Ad_btns">
-					<a class="nav_btn" onclick="allUser()">所有用户</a>
-					<a class="nav_btn" onclick="addUser()">用户添加</a>
-					<a class="nav_btn" onclick="?">日历</a>
-					<a class="nav_btn" onclick="userAuthority()">用户权限管理</a>
-					<a class="nav_btn" onclick="forgetPass()">忘记密码</a>
-				</div>
+				<span class="Ad_btns">
+						<a class="nav_btn" onclick="allUser()">所有用户</a>
+						<a class="nav_btn" onclick="addUser()">用户添加</a>
+						<a class="nav_btn" onclick="?">日历</a>
+						<a class="nav_btn" onclick="userAuthority()">用户权限管理</a>
+						<a class="nav_btn" onclick="forgetPass()">忘记密码</a>
+				</span><hr>
 				<br>
 				<div class="Ad_User_Main">
-					<table id="userMsgShow" class="table table-condensed">
+					<table id="userMsgShow" class="table table-condensed table-hover">
 					</table>
 				</div>
 			</div>
