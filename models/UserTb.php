@@ -59,6 +59,14 @@ class UserTb extends \yii\db\ActiveRecord {
 		$name      = $Dbfactory->findOnlyOne('Name', 'user_tb', 'XH_ID', $id);
 		return $name;
 	}
+	//插入数据，并在插入之前检验数据是否会对数据库有害
+	public function insertMomentData($arr) {
+		$Dbfactory = DbFactory::getinstance();
+		foreach ($arr as $value) {
+			$value = $Dbfactory->dbSqlProtected($value);
+		}
+		$Dbfactory->insertIntoDb('user_tb', $arr);
+	}
 	//登录逻辑
 	public function handleLogin($username, $password) {
 		$this->getLoginMess($username, $password);

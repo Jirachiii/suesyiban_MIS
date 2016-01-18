@@ -119,7 +119,7 @@ class Moments extends \yii\db\ActiveRecord {
 
 	public function deleteOneMoment($id) {
 		$Dbfactory = DbFactory::getinstance();
-		$Dbfactory->deleteOneRecord($this->tableName, 'id', $id);
+		$Dbfactory->deleteOneRecord('moments', 'id', $id);
 	}
 
 	private function decideGetMomentContinue($page, $number) {

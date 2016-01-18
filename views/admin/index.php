@@ -14,7 +14,7 @@
 		<header class="Ad_head">
 			<button class="btn btn-primary hd_downbtn" onclick="tiggle()">下拉</button>
 		</header>
-		<div class="col-xs-2 Ad_Lef" id="showandhide">
+		<section class="col-xs-2 Ad_Lef" id="showandhide">
 			<br>
 			<input type="text" class="form-control Ad_Lef_sea" placeholder="Search"><br>
 			<div class="Ad_Lef_hr"></div><br>
@@ -47,15 +47,15 @@
 				<div class="col-xs-10 Ad_Lef_btnWord"><p class="Ad_Lef_btnP">动态管理</p></div>
 			</div>
 			<br>
-		</div>
-		<div class="col-xs-10 Ad_Rig">
+		</section>
+		<section class="col-xs-10 Ad_Rig">
 			<h2>用户管理</h2><br>
 			<div class="Ad_RShow"><br>
 				<span class="Ad_btns">
-						<a class="nav_btn" onclick="allUser()">所有用户</a>
+						<a class="nav_btn" onclick="getRawData()">所有用户</a>
 						<a class="nav_btn" onclick="addUser()">用户添加</a>
-						<a class="nav_btn" onclick="?">日历</a>
-						<a class="nav_btn" onclick="userAuthority()">用户权限管理</a>
+						<a class="nav_btn" onclick="searchUser()">搜索用户</a>
+						<a class="nav_btn" onclick="userManage()">用户管理</a>
 						<a class="nav_btn" onclick="forgetPass()">忘记密码</a>
 				</span><hr>
 				<br>
@@ -64,21 +64,28 @@
 					</table>
 				</div>
 			</div>
-		</div>
+		</section>
+		<!-- 以下为用户添加，默认隐藏 -->
+		<section class="cover" id="coverDiv" onclick="hideAll()"></section>
+		<section class="showSetting" id="SetDiv">
+			<div class="Set_pic" style="background-image: url(images/New_York.jpg);">
+				<p class="Set_tit">添加用户</p>
+			</div>
+			<section class="Set_xm">
+				<span class="Set_sp">学号：</span><input class="Set_input" type="text" placeholder="学号" id="insertClassmark"><br>
+				<span class="Set_sp">姓名：</span><input class="Set_input" type="text" placeholder="姓名" id="insertName"><br>
+				<span class="Set_sp">联系方式：</span><input class="Set_input" type="text" placeholder="联系方式" id="insertPhone"><br>
+			</section>
+			<p id="createResult">123</p>
+			<div class="Set_btn_M">
+				<button class="Set_btn" style="" onclick="insertUser()">插入</button>
+				<button class="Set_btn" onclick="hideAll()">取消</button>
+			</div>
+		</section>
         <script src="js/adminHref.js"></script>
         <script src="js/adminUser.js"></script>
         <script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.js"></script>
 		<script>
-			var show = 0;
-			function tiggle() {
-				if (this.show == 0) {
-					document.getElementById("showandhide").style.top = '51px';
-					this.show = 1;
-				} else {
-					document.getElementById("showandhide").style.top = '-100%';
-					this.show = 0;
-				}
-			}
 			function getRawData() {
 				$.getJSON('index.php?r=json/getuserdata', function(data, textStatus) {
 					if (textStatus == 'success') {
@@ -93,6 +100,23 @@
 						alert("系统错误" + textStatus);
 					}
 				});
+			}
+			//隐藏状态栏
+			function hideAll() {
+				document.getElementById("coverDiv").style.top = '-999px';
+				document.getElementById("SetDiv").style.top = '-600px';
+				document.getElementById("SetDiv").style.opacity = 0;
+			}
+			//下拉手风琴
+			var show = 0;
+			function tiggle() {
+				if (this.show == 0) {
+					document.getElementById("showandhide").style.top = '51px';
+					this.show = 1;
+				} else {
+					document.getElementById("showandhide").style.top = '-100%';
+					this.show = 0;
+				}
 			}
 		</script>
 	</body>
