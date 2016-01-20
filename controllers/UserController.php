@@ -8,7 +8,7 @@ use yii\web\Controller;
  * 用户界面的集合
  */
 
-class AdminController extends Controller {
+class UserController extends Controller {
 
 	public $enableCsrfValidation = false;
 	public $defaultAction        = 'index';
