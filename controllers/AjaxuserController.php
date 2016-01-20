@@ -66,9 +66,9 @@ class AjaxuserController extends Controller {
 	}
 	//删除一条记录(删除不了？)
 	public function actionDeleteone() {
-		$user = new UserTb();
-		// $XH_ID = $_POST['XH_ID'];
-		$XH_ID = '031513217';
+		$user  = new UserTb();
+		$XH_ID = $_POST['XH_ID'];
+		// $XH_ID = '031513217';
 		$user->deleteOneUser($XH_ID);
 		echo '{"success":true}';
 	}

@@ -47,14 +47,6 @@ class JsonController extends Controller {
 		$momentMsg['like_Num'] = 0;
 		echo $moment->insertMomentData($momentMsg);
 	}
-	public function actionGetmoments() {
-		$moment    = new Moments();
-		$momentMsg = $moment->getPageMomentWithOrder(1, 5);
-		// if ($momentMsg !== '') {
-		// 	$momentMsg = json_encode($momentMsg, JSON_UNESCAPED_UNICODE);
-		// }
-		print_r($momentMsg);
-	}
 
 	public function actionTest() {
 		$Dbfactory = DbFactory::getinstance();

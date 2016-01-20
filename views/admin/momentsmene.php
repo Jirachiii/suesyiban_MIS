@@ -52,7 +52,7 @@
 			<h2>动态管理</h2><br>
 			<div class="Ad_RShow"><br>
 				<span class="Ad_btns">
-						<a class="nav_btn" onclick="getRawData()">所有动态</a>
+						<a class="nav_btn" onclick="getMomentData()">所有动态</a>
 						<a class="nav_btn" onclick="addUser()">动态置顶</a>
 						<a class="nav_btn" onclick="?">动态搜索</a>
 				</span><hr><br>

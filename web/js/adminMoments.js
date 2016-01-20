@@ -1,3 +1,4 @@
+//动态删除
 function deleteMom(monentsId) {
 	var deleteOrNot = confirm('确定删除此条记录？');
 	if(deleteOrNot == true) {
