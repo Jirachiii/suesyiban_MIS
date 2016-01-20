@@ -24,7 +24,7 @@
 			</div>
 			<div class="Ad_Lef_btn" onclick="emptyClassShow()">
 				<span class="col-xs-2 Ad_Lef_btnPic"><a class="glyphicon glyphicon-education Ad_Lef_btnA"></a></span>
-				<div class="col-xs-10 Ad_Lef_btnWord"><p class="Ad_Lef_btnP">空课表查看</p></div>
+				<div class="col-xs-10 Ad_Lef_btnWord"><p class="Ad_Lef_btnP">智能排班</p></div>
 			</div>
 			<div class="Ad_Lef_btn" onclick="itemShow()">
 				<span class="col-xs-2 Ad_Lef_btnPic"><a class="glyphicon glyphicon-briefcase Ad_Lef_btnA"></a></span>
@@ -34,9 +34,9 @@
 				<span class="col-xs-2 Ad_Lef_btnPic"><a class="glyphicon glyphicon-folder-open Ad_Lef_btnA"></a></span>
 				<div class="col-xs-10 Ad_Lef_btnWord"><p class="Ad_Lef_btnP">项目发布</p></div>
 			</div>
-			<div class="Ad_Lef_btn" onclick="item()">
+			<div class="Ad_Lef_btn" onclick="article()">
 				<span class="col-xs-2 Ad_Lef_btnPic"><a class="glyphicon glyphicon-calendar Ad_Lef_btnA"></a></span>
-				<div class="col-xs-10 Ad_Lef_btnWord"><p class="Ad_Lef_btnP">项目</p></div>
+				<div class="col-xs-10 Ad_Lef_btnWord"><p class="Ad_Lef_btnP">库存管理</p></div>
 			</div>
 			<div class="Ad_Lef_btn" onclick="SignIn()">
 				<span class="col-xs-2 Ad_Lef_btnPic"><a class="glyphicon glyphicon-th-list Ad_Lef_btnA"></a></span>
@@ -64,7 +64,7 @@
 		</div>
         <script src="js/adminHref.js"></script>
         <script src="js/adminMoments.js"></script>
-        <script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.js"></script>
+        <script src="js/jquery.min.js"></script>
 		<script>
 			var show = 0;
 			function tiggle() {

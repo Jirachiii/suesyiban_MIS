@@ -67,6 +67,17 @@ class UserTb extends \yii\db\ActiveRecord {
 		}
 		$Dbfactory->insertIntoDb('user_tb', $arr);
 	}
+	//删除用户
+	public function deleteOneUser($id) {
+		$Dbfactory = DbFactory::getinstance();
+		$Dbfactory->deleteOneRecord('user_tb', 'XH_ID', $id);
+	}
+	//重置密码为123456
+	public function resetPass($id) {
+		$Dbfactory          = DbFactory::getinstance();
+		$arrUpdate['XH_PW'] = md5(123456);
+		return $Dbfactory->updateTheDbRecord('user_tb', 'XH_ID', $id, $arrUpdate);
+	}
 	//登录逻辑
 	public function handleLogin($username, $password) {
 		$this->getLoginMess($username, $password);

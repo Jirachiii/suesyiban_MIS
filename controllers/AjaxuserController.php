@@ -17,10 +17,6 @@ header("Content-Type: application/json;charset=utf-8");
 class AjaxuserController extends Controller {
 
 	public $enableCsrfValidation = false;
-
-	public function actionAllUser() {
-
-	}
 	//管理员插入用户
 	public function actionAdmininsertuser() {
 		//判断信息是否填写完全
@@ -40,6 +36,41 @@ class AjaxuserController extends Controller {
 		$usertb->insertMomentData($user);
 		//提示保存成功
 		echo '{"success":true,"msg":"用户：'.$_POST["name"].' 信息保存成功！"}';
+	}
+	//管理员搜索用户
+	public function actionAdminsearchuser() {
+		if (!isset($_GET["searchuser"]) || empty($_GET["searchuser"])) {
+			echo '{"success":false,"msg":"你输入了空值"}';
+			return;
+		}
+		//TODO: 获取GET表单数据并搜索数据库
+		$XH_ID     = $_GET["searchuser"].'%';
+		$sql       = 'SELECT XH_ID,Name,phone,status FROM user_tb WHERE XH_ID LIKE \''.$XH_ID.'\'';
+		$Dbfactory = DbFactory::getinstance();
+		$result    = $Dbfactory->doQuery($sql);
+		$result    = $Dbfactory->findAll($result);
+		$result    = '{"success":true,"users":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
+		echo $result;
+	}
+	//重置密码
+	public function actionResetpass() {
+		$user   = new UserTb();
+		$XH_ID  = $_POST['XH_ID'];
+		$result = $user->resetPass($XH_ID);
+		if ($result == true) {
+			echo '{"success":true}';
+		} else {
+			echo '{"success":false}';
+		}
+
+	}
+	//删除一条记录(删除不了？)
+	public function actionDeleteone() {
+		$user = new UserTb();
+		// $XH_ID = $_POST['XH_ID'];
+		$XH_ID = '031513217';
+		$user->deleteOneUser($XH_ID);
+		echo '{"success":true}';
 	}
 
 }

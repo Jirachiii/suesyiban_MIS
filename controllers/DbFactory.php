@@ -133,6 +133,18 @@ class DbFactory {
 			return $query;
 		}
 	}
+	/**
+	 *列表
+	 *
+	 *@param source $query sql语句通过mysql_query 执行出来的资源
+	 *@return array   返回列表数组
+	 **/
+	function findAll($query) {
+		while ($rs = mysqli_fetch_array($query, MYSQL_ASSOC)) {//mysql_fetch_array函数把资源转换为数组，一次转换出一行出来
+			$list[] = $rs;
+		}
+		return isset($list)?$list:"";
+	}
 	//测试方法
 	public function selectTest() {
 		// $connection = \Yii::$app->db;

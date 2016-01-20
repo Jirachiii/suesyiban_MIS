@@ -30,8 +30,8 @@ class AdminController extends Controller {
 	public function actionItemshow() {
 		return $this->renderPartial('itemshow');
 	}
-	public function actionItem() {
-		return $this->renderPartial('item');
+	public function actionArticles() {
+		return $this->renderPartial('articles');
 	}
 	public function actionItemcreate() {
 		return $this->renderPartial('itemcreate');
