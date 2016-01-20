@@ -1,6 +1,8 @@
 <?php
 namespace app\models;
 use app\controllers\DbFactory;
+use yii\db\ActiveRecord;
+use Yii;
 header("Content-Type: application/json;charset=utf-8");
 
 /**

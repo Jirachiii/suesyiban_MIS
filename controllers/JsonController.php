@@ -3,6 +3,10 @@ namespace app\controllers;
 use app\models\Moments;
 use app\models\UserTb;
 use yii\web\Controller;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii;
+
 date_default_timezone_set("PRC");
 header('Content-type: application/json');
 header('Access-Control-Allow-Origin:*');
@@ -16,6 +20,54 @@ header("Content-Type: application/json;charset=utf-8");
  */
 
 class JsonController extends Controller {
+	public function behaviors()
+	{
+		return [
+			'access' => [
+				'class' => AccessControl::className(),
+				'only' => ['logout','login','getuserdata','getmomentdata','addmoment','getmoment'],
+				'rules' => [
+					[
+						'allow' => true,
+						'actions' => ['login'],
+						'roles' => ['?'],
+					],
+					//只有1级管理员有权限
+					[
+						'actions' => ['logout','getuserdata','getmomentdata','addmoment','getmoment'],
+						'allow' => true,
+						'roles' => ['@'],
+						'matchCallback' => function ($rule, $action) {
+							return Yii::$app->user->identity->status == 1;
+						}
+					],
+
+
+				],
+			],
+//            emptyclassshow/itemshow/itemcreate/articles/signinmene/momentsmene
+
+			'verbs' => [
+				'class' => VerbFilter::className(),
+				'actions' => [
+					'logout' => ['post'],
+				],
+			],
+		];
+	}
+
+	public function actions()
+	{
+		return [
+			'error' => [
+				'class' => 'yii\web\ErrorAction',
+			],
+			'captcha' => [
+				'class' => 'yii\captcha\CaptchaAction',
+				'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+			],
+		];
+	}
 
 	public function actionGetmomentdata() {
 		$moments = new Moments();
@@ -53,5 +105,6 @@ class JsonController extends Controller {
 		$count     = $Dbfactory->TableCount('Moments');
 		echo $count;
 	}
+
 
 }

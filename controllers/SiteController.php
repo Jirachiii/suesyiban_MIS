@@ -1,10 +1,11 @@
 <?php
 namespace app\controllers;
 
-use app\models\UserTb;
 use Yii;
-use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\filters\VerbFilter;
+use app\models\LoginForm;
 
 //网页的首页
 
@@ -14,14 +15,43 @@ class SiteController extends Controller {
 	public $defaultAction        = 'index';
 
 	public function behaviors() {
-		return [
-			'verbs'    => [
-				'class'   => VerbFilter::className(),
-				'actions' => [
-					'logout' => ['post'],
-				],
-			],
-		];
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['logout','index','login'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['login'],
+                        'roles' => ['?'],
+                    ],
+                    //1级管理员权限控制
+                    [
+                        'actions' => ['logout','index'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->user->identity->status == 1;
+                        }
+                    ],
+                    //2级管理员权限控制
+                    [
+                        'actions' => ['logout','index'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->user->identity->status == 2;
+                        }
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'logout' => ['post'],
+                ],
+            ],
+        ];
 	}
 
 	public function actions() {
@@ -40,51 +70,24 @@ class SiteController extends Controller {
 		return $this->renderPartial('index');
 	}
 
-	public function actionLogin() {
-		$session  = \Yii::$app->session;
-		$logornot = $session->get('username');
-		$session->close();
-		if ($logornot == '') {
-			$request  = \Yii::$app->request;
-			$username = $request->post('username', '');
-			$password = $request->post('password', '');
-			$login    = new UserTb();
-			$error    = $login->handleLogin($username, $password);
-			if ($error == '') {
-				$authority = \Yii::$app->session->set('authority', $authority);
-				$session->close();
-				switch ($authority) {
-					case '1':
-						echo "<script>window.location.href='index.php?r=admin/index'</script>";
-						break;
-					case '2':
-						echo "2";
-						break;
-					case '3':
-						echo "3";
-						break;
-					default:
-						return $this->renderPartial('index');
-						break;
-				}
-			} else {
-				return $this->renderPartial('login');
-			}
-		} else {
-			echo "<script>window.location.href='index.php?r=site/index'</script>";
+	public function actionLogin()
+	{
+		if (!\Yii::$app->user->isGuest) {
+			return $this->goHome();
 		}
 
+		$model = new LoginForm();
+		if ($model->load(Yii::$app->request->post()) && $model->login()) {
+			return $this->goBack();
+		}
+		return $this->renderPartial('login', [
+			'model' => $model,
+		]);
 	}
 	public function actionLogout() {
-		//登录只要销毁session内的值即可
-		$session = \Yii::$app->session;
-		if (!($session->isActive)) {
-			$session->open();
-		}
-		$session->remove('username');
-		$session->remove('authority');
-		$session->close();
-		return $this->renderPartial('login');
+        Yii::$app->user->logout();
+
+        return $this->goHome();
 	}
 
 	public function actionTest() {
