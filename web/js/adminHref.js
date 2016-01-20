@@ -10,8 +10,8 @@ function itemShow() {
 	window.location.href='index.php?r=admin/itemshow';
 }
 
-function item() {
-	window.location.href='index.php?r=admin/item';
+function article() {
+	window.location.href='index.php?r=admin/articles';
 }
 
 function itemCreate() {

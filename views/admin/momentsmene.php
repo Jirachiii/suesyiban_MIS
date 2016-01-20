@@ -24,7 +24,7 @@
 			</div>
 			<div class="Ad_Lef_btn" onclick="emptyClassShow()">
 				<span class="col-xs-2 Ad_Lef_btnPic"><a class="glyphicon glyphicon-education Ad_Lef_btnA"></a></span>
-				<div class="col-xs-10 Ad_Lef_btnWord"><p class="Ad_Lef_btnP">空课表查看</p></div>
+				<div class="col-xs-10 Ad_Lef_btnWord"><p class="Ad_Lef_btnP">智能排班</p></div>
 			</div>
 			<div class="Ad_Lef_btn" onclick="itemShow()">
 				<span class="col-xs-2 Ad_Lef_btnPic"><a class="glyphicon glyphicon-briefcase Ad_Lef_btnA"></a></span>
@@ -34,9 +34,9 @@
 				<span class="col-xs-2 Ad_Lef_btnPic"><a class="glyphicon glyphicon-folder-open Ad_Lef_btnA"></a></span>
 				<div class="col-xs-10 Ad_Lef_btnWord"><p class="Ad_Lef_btnP">项目发布</p></div>
 			</div>
-			<div class="Ad_Lef_btn" onclick="item()">
+			<div class="Ad_Lef_btn" onclick="article()">
 				<span class="col-xs-2 Ad_Lef_btnPic"><a class="glyphicon glyphicon-calendar Ad_Lef_btnA"></a></span>
-				<div class="col-xs-10 Ad_Lef_btnWord"><p class="Ad_Lef_btnP">项目</p></div>
+				<div class="col-xs-10 Ad_Lef_btnWord"><p class="Ad_Lef_btnP">库存管理</p></div>
 			</div>
 			<div class="Ad_Lef_btn" onclick="SignIn()">
 				<span class="col-xs-2 Ad_Lef_btnPic"><a class="glyphicon glyphicon-th-list Ad_Lef_btnA"></a></span>
@@ -50,15 +50,21 @@
 		</div>
 		<div class="col-xs-10 Ad_Rig">
 			<h2>动态管理</h2><br>
-			<div class="Ad_RShow"><br><br>
+			<div class="Ad_RShow"><br>
+				<span class="Ad_btns">
+						<a class="nav_btn" onclick="getRawData()">所有动态</a>
+						<a class="nav_btn" onclick="addUser()">动态置顶</a>
+						<a class="nav_btn" onclick="?">动态搜索</a>
+				</span><hr><br>
 				<div class="Ad_User_Main">
-					<table id="MomentsData" class="table table-condensed">
+					<table id="MomentsData" class="table table-condensed table-hover">
 					</table>
 				</div>
 			</div>
 		</div>
         <script src="js/adminHref.js"></script>
-        <script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.js"></script>
+        <script src="js/adminMoments.js"></script>
+        <script src="js/jquery.min.js"></script>
 		<script>
 			var show = 0;
 			function tiggle() {
@@ -73,10 +79,10 @@
 			function getMomentData() {
 				$.getJSON('index.php?r=json/getmomentdata', function(data, textStatus) {
 					if (textStatus == 'success') {
-						var tableHead = '<thead><tr><td>编号</td><td>用户id</td><td>学号</td><td>内容</td><td>点赞数</td><td>姓名</td></tr></thead>';
+						var tableHead = '<thead><tr><td>编号</td><td>学号</td><td>内容</td><td>点赞数</td><td>姓名</td><td>删除</td></tr></thead>';
 						var tableBody = '<tbody>';
 						for (var i = 0; i < data.moments.length; i++) {
-							tableBody += '<tr><td>'+(i+1)+'</td><td>'+1+'</td><td>'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].like_Num+'</td><td>'+data.moments[i].username+'</td></tr>';
+							tableBody += '<tr><td>'+(i+1)+'</td><td>'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].like_Num+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
 						};
 						tableBody += '</tbody>';
 						document.getElementById('MomentsData').innerHTML = tableHead+tableBody;

@@ -55,15 +55,6 @@ class JsonController extends Controller {
 		// }
 		print_r($momentMsg);
 	}
-	public function actionDeletemoment() {
-		$request = \Yii::$app->request;
-		$id      = $request->post('momentId', '');
-		$moment  = new Moments();
-		$moment->deleteOneMoment($id);
-	}
-	public function actionchange() {
-		$moments = new Moments();
-	}
 
 	public function actionTest() {
 		$Dbfactory = DbFactory::getinstance();

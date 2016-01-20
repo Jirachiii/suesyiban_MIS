@@ -18,6 +18,7 @@ class loginMethod {
 		$this->Dbfactory = DbFactory::getinstance();
 		$this->handleLogin($username, $password);
 	}
+	//整合
 	public function handleLogin($username, $password) {
 		//过滤
 		$this->processtheLoginmessage();
@@ -28,8 +29,8 @@ class loginMethod {
 		//error
 		if ($this->error == '') {
 			//存入session，登录成功
-			Yii::$app->session->set('username', $this->username);
-			Yii::$app->session->close();
+			\Yii::$app->session->set('username', $this->username);
+			\Yii::$app->session->close();
 		}
 	}
 	private function processtheLoginmessage() {
