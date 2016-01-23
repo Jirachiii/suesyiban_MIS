@@ -5,6 +5,13 @@ function addUser() {
 	document.getElementById("SetDiv").style.opacity = 1;
 }
 //ajax插入用户
+var daojishinum=2;
+function daojishi () {
+	$("#createResult").html("保存成功！"+daojishinum+"秒后将自动关闭此页面");
+	daojishinum=daojishinum-1;
+	setTimeout("daojishi()",1000);				
+	
+}
 function insertUser(){
 	$.ajax({
 	    type: "POST",
@@ -17,7 +24,12 @@ function insertUser(){
 		dataType: "json",
 		success: function(data){
 			if (data.success) {
-				$("#createResult").html(data.msg);
+				setTimeout("hideAll()",3500);
+				$("#createResult").html("保存成功！3秒后将自动关闭此页面");
+				setTimeout("daojishi()",1000);				
+				setTimeout("window.location.reload();",3800);
+
+
 			} else {
 				$("#createResult").html("出现错误：" + data.msg);
 			}  
@@ -41,7 +53,7 @@ function searchUserhandle() {
 				} else {
 					var tableBody = '<thead><tr><td>编号</td><td>学号</td><td>姓名</td><td>权限</td><td>电话</td><td>重置密码</td></tr></thead><tbody>';
 					for (var i = 0; i < data.users.length; i++) {
-						tableBody += '<tr><td>'+(i+1)+'</td><td>'+data.users[i].XH_ID+'</td><td>'+data.users[i].Name+'</td><td>'+data.users[i].Authority+'</td><td>'+data.users[i].phone+'</td><td><div class="Set_dele glyphicon glyphicon-wrench" onclick="resetPass('+data.users[i].XH_ID+')"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteUser('+data.users[i].XH_ID+')"></div></td></tr>';
+						tableBody += '<tr><td>'+(i+1)+'</td><td>'+data.users[i].XH_ID+'</td><td>'+data.users[i].Name+'</td><td>'+data.users[i].Authority+'</td><td>'+data.users[i].phone+'</td><td><div class="Set_dele glyphicon glyphicon-wrench" onclick="resetPass(&quot;'+data.users[i].XH_ID+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteUser(&quot;'+data.users[i].XH_ID+'&quot;)"></div></td></tr>';
 					};
 					tableBody += '</tbody>';
 				};
@@ -95,10 +107,10 @@ function deleteUser(XH_ID) {
 			success: function(data) {
 				if (data.success) {
 					alert('删除成功');
-					window.location.href('index.php?r=admin/index');
+					window.location.reload();
 				} else {
 					alert('删除失败');
-					window.location.href('index.php?r=admin/index');
+					window.location.reload();
 				}
 			},
 			error: function(jqXHR){

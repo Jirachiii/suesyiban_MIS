@@ -94,7 +94,7 @@
 						var tableHead = '<thead><tr><td>编号</td><td>学号</td><td>姓名</td><td>权限</td><td>电话</td><td>重置密码/删除</td></tr></thead>';
 						var tableBody = '<tbody>';
 						for (var i = 0; i < data.users.length; i++) {
-							tableBody += '<tr><td>'+(i+1)+'</td><td>'+data.users[i].XH_ID+'</td><td>'+data.users[i].Name+'</td><td>'+data.users[i].Authority+'</td><td>'+data.users[i].phone+'</td><td><div class="Set_dele glyphicon glyphicon-wrench" onclick="resetPass('+data.users[i].XH_ID+')"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteUser('+data.users[i].XH_ID+')"></div></td></tr>';
+							tableBody += '<tr><td>'+(i+1)+'</td><td>'+data.users[i].XH_ID+'</td><td>'+data.users[i].Name+'</td><td>'+data.users[i].Authority+'</td><td>'+data.users[i].phone+'</td><td><div class="Set_dele glyphicon glyphicon-wrench" onclick="resetPass(&quot;'+data.users[i].XH_ID+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteUser(&quot;'+data.users[i].XH_ID+'&quot;)"></div></td></tr>';
 						};
 						tableBody += '</tbody>';
 						document.getElementById('userMsgShow').innerHTML = tableHead+tableBody;
