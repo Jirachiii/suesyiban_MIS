@@ -108,12 +108,6 @@ function deleteUser(XH_ID) {
 	}
 }
 
-function forgetPassword() {
-	document.getElementById("coverDiv").style.top = '0px';
-	document.getElementById("SetDiv").style.top = '5%';
-	document.getElementById("SetDiv").style.opacity = 1;
-}
-
 function searchUser() {
 
 }

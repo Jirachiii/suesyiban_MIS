@@ -127,9 +127,7 @@ class DbFactory {
 		$connection = $this->DatabaseConnection();
 		if (!($query = mysqli_query($connection, $sql))) {//使用mysql_query函数执行sql语句
 			$this->err($sql."<br />".mysqli_error($connection));//mysql_error 报错
-			mysqli_close($connection);
 		} else {
-			mysqli_close($connection);
 			return $query;
 		}
 	}
