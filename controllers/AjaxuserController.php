@@ -45,7 +45,7 @@ class AjaxuserController extends Controller {
 		}
 		//TODO: 获取GET表单数据并搜索数据库
 		$XH_ID     = $_GET["searchuser"].'%';
-		$sql       = 'SELECT XH_ID,Name,phone,status FROM user_tb WHERE XH_ID LIKE \''.$XH_ID.'\'';
+		$sql       = 'SELECT XH_ID,Name,phone,status FROM user_tb WHERE XH_ID LIKE \'%'.$XH_ID.'%\'';
 		$Dbfactory = DbFactory::getinstance();
 		$result    = $Dbfactory->doQuery($sql);
 		$result    = $Dbfactory->findAll($result);
