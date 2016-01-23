@@ -59,6 +59,13 @@
 				<div class="Ad_User_Main">
 					<table id="MomentsData" class="table table-condensed table-hover">
 					</table>
+					<div class="pageStyle">
+						<button onclick="beforePage()">上一页</button>
+						<div id="thePage">
+
+						</div>
+						<button onclick="afterPage()">下一页</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -67,6 +74,8 @@
         <script src="js/jquery.min.js"></script>
 		<script>
 			var show = 0;
+			var nowPage = 1;
+			var allpage = 1;
 			function tiggle() {
 				if (this.show == 0) {
 					document.getElementById("showandhide").style.top = '51px';
@@ -79,10 +88,11 @@
 			function getMomentData() {
 				$.getJSON('index.php?r=json/getmomentdata', function(data, textStatus) {
 					if (textStatus == 'success') {
-						var tableHead = '<thead><tr><td>编号</td><td>学号</td><td>内容</td><td>点赞数</td><td>姓名</td><td>删除</td></tr></thead>';
+						this.allpage = data.allPage;
+						var tableHead = '<thead><tr><td>学号</td><td>内容</td><td>点赞数</td><td>姓名</td><td>删除</td></tr></thead>';
 						var tableBody = '<tbody>';
 						for (var i = 0; i < data.moments.length; i++) {
-							tableBody += '<tr><td>'+(i+1)+'</td><td>'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].like_Num+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
+							tableBody += '<tr><td>'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].like_Num+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
 						};
 						tableBody += '</tbody>';
 						document.getElementById('MomentsData').innerHTML = tableHead+tableBody;

@@ -112,8 +112,7 @@ class Moments extends \yii\db\ActiveRecord {
 			}
 			return $Moments;
 		} else {
-			$Moments[0] = '超出此长度';
-			return $Moments;
+			return false;
 		}
 	}
 
@@ -135,5 +134,10 @@ class Moments extends \yii\db\ActiveRecord {
 	public function getMomentCount() {
 		$Dbfactory = DbFactory::getinstance();
 		return $Dbfactory->tableCount('Moments');
+	}
+
+	public function getAllPage($countEveryPage) {
+		$count = $this->getMomentCount();
+		return ceil($count/$countEveryPage);
 	}
 }

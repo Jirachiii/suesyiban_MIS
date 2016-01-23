@@ -23,4 +23,16 @@ class AjaxmomentsController extends Controller {
 		echo '{"success":true}';
 	}
 
+	public function actionPagechange() {
+		$page   = $_POST['page'];
+		$moment = new Moments();
+		$result = $moment->getPageMomentWithOrder($page, 5);
+		if ($result == false) {
+			return '{"success":false}';
+		} else {
+			$result = '{"success":true,"moments":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
+			echo $result;
+		}
+	}
+
 }

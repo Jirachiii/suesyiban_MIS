@@ -2,10 +2,10 @@
 namespace app\controllers;
 use app\models\Moments;
 use app\models\UserTb;
-use yii\web\Controller;
+use yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use yii;
+use yii\web\Controller;
 
 date_default_timezone_set("PRC");
 header('Content-type: application/json');
@@ -20,35 +20,33 @@ header("Content-Type: application/json;charset=utf-8");
  */
 
 class JsonController extends Controller {
-	public function behaviors()
-	{
+	public function behaviors() {
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only' => ['logout','login','getuserdata','getmomentdata','addmoment','getmoment'],
+				'only'  => ['logout', 'login', 'getuserdata', 'getmomentdata', 'addmoment', 'getmoment'],
 				'rules' => [
 					[
-						'allow' => true,
+						'allow'   => true,
 						'actions' => ['login'],
-						'roles' => ['?'],
+						'roles'   => ['?'],
 					],
 					//只有1级管理员有权限
 					[
-						'actions' => ['logout','getuserdata','getmomentdata','addmoment','getmoment'],
-						'allow' => true,
-						'roles' => ['@'],
+						'actions'       => ['logout', 'getuserdata', 'getmomentdata', 'addmoment', 'getmoment'],
+						'allow'         => true,
+						'roles'         => ['@'],
 						'matchCallback' => function ($rule, $action) {
 							return Yii::$app->user->identity->status == 1;
 						}
 					],
 
-
 				],
 			],
-//            emptyclassshow/itemshow/itemcreate/articles/signinmene/momentsmene
+			//            emptyclassshow/itemshow/itemcreate/articles/signinmene/momentsmene
 
-			'verbs' => [
-				'class' => VerbFilter::className(),
+			'verbs'    => [
+				'class'   => VerbFilter::className(),
 				'actions' => [
 					'logout' => ['post'],
 				],
@@ -56,15 +54,14 @@ class JsonController extends Controller {
 		];
 	}
 
-	public function actions()
-	{
+	public function actions() {
 		return [
-			'error' => [
+			'error'  => [
 				'class' => 'yii\web\ErrorAction',
 			],
-			'captcha' => [
-				'class' => 'yii\captcha\CaptchaAction',
-				'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+			'captcha'          => [
+				'class'           => 'yii\captcha\CaptchaAction',
+				'fixedVerifyCode' => YII_ENV_TEST?'testme':null,
 			],
 		];
 	}
@@ -72,30 +69,30 @@ class JsonController extends Controller {
 	public function actionGetmomentdata() {
 		$moments = new Moments();
 		$content = $moments->getPageMomentWithOrder(1, 5);
-		$content = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).'}';
+		$allPage = $moments->getAllPage(5);
+		$content = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).',"allPage":"'.$allPage.'"}';
 		echo $content;
 	}
 
 	public function actionGetuserdata() {
 		$usertb = new UserTb();
-		$result = $usertb->getPageMomentWithOrder(1, 10);
+		$result = $usertb->getPageMomentWithOrder(1, 5);
 		$result = '{"users":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
 		echo $result;
 	}
 
 	//这下面都不属于这边，以后更换位置
 	public function actionAddmoment() {
-		$content = '123456';
+		$content = '测试';
 		$XH_ID   = \Yii::$app->session->get('username');
 		\Yii::$app->session->close();
 		$moment             = new Moments();
 		$RightNow           = $moment->getDateAndTime();
-		$momentMsg['XH_ID'] = '031513217';
-		// $momentMsg['XH_ID'] = $XH_ID;
+		$momentMsg['XH_ID'] = $XH_ID;
 		$momentMsg['Mdate'] = $RightNow['date'];
 		$momentMsg['Time']  = $RightNow['time'];
 		//以后解决，request过来的值
-		$momentMsg['Content']  = 'addmomentadded';
+		$momentMsg['Content']  = '测试';
 		$momentMsg['like_Num'] = 0;
 		echo $moment->insertMomentData($momentMsg);
 	}
@@ -105,6 +102,5 @@ class JsonController extends Controller {
 		$count     = $Dbfactory->TableCount('Moments');
 		echo $count;
 	}
-
 
 }
