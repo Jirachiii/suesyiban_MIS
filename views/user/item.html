@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/main/bootstrap.css">
+	<link rel="stylesheet" href="css/main/normalize.css">
+	<link rel="stylesheet" href="css/Main.css">
+	<link rel="stylesheet" href="css/teambition.css">
+	<title>teamBition</title>
+</head>
+<body>
+	<header>
+		<nav>
+			<div onclick="indexShow()" class="nav_pic" style="background-image: url(images/SuesYiBanteam.png);"></div>
+			<section class="nav_sec1">
+				<a class="nav_btn" href="index.php?r=user/item">项目</a>
+				<a class="nav_btn" href="index.php?r=user/homepage">我的</a>
+				<a class="nav_btn" href="index.php?r=user/order">排班</a>
+				<a class="nav_btn" href="index.php?r=user/getmess">收件箱</a>
+			</section>
+			<section class="nav_right">
+				<a class="nav_btn glyphicon glyphicon-th-list" onclick="showThing()"><span aria-hidden="true"></span></a>
+			</section>
+		</nav>
+	</header>
+	<section class="mask_main">
+		<div>
+			<div class="item_show" style="background-image: url(images/itemImg.jpeg);">
+				<h3 class="item_showtit">示例项目</h3>
+			</div>
+			<div class="item_show" style="background-image: url(images/itemImg.jpeg);"></div>
+			<div class="item_show" style="background-image: url(images/itemImg.jpeg);"></div>
+			<div class="item_show" onclick="createItem()" style="background-color: #EEE;"><br><br>
+				<img src="images/addicon.png" class="item_Addicon">
+			</div>
+		</div>
+	</section>
+	<section class="cover" id="coverDiv" onclick="hideAll()"></section>
+	<section class="showSetting" id="createItem" style="height: 493px;">
+		<div class="Set_pic" style="background-image: url(images/New_York.png);">
+			<p class="Set_tit">新建项目</p>
+		</div>
+		<section class="Set_xm">
+			<div class="Set_sp">项目名：</div><input class="form-control" type="text" placeholder="项目名" id="insertItemName">
+			<div class="Set_sp">项目简介：</div><textarea class="form-control" rows="4" placeholder="项目简介(不能超过64个字)" id="insertPhone"></textarea>
+		</section>
+		<p id="createResult" class="Set_btn_P"></p><br>
+		<div class="Set_btn_M">
+			<button class="Set_btn col-xs-6 handlegreen" onclick="insertItem()">创建</button>
+			<button class="Set_btn col-xs-6" onclick="hideAll()">取消</button>
+		</div>
+	</section>
+	<script src="js/userHref.js"></script>
+    <script src="js/jquery.min.js"></script>
+	<script>
+		//显示状态栏
+		function createItem() {
+			document.getElementById("coverDiv").style.top = '0px';
+			document.getElementById("createItem").style.top = '5%';
+			document.getElementById("createItem").style.opacity = 1;
+		}
+		function hideAll() {
+			document.getElementById("coverDiv").style.top = '-999px';
+			document.getElementById("createItem").style.top = '-600px';
+			document.getElementById("createItem").style.opacity = 0;
+		}
+
+
+		//拖放，以后完成对象的处理
+		var i = '';
+		function drop(ev) {
+			ev.preventDefault();
+			var data = ev.dataTransfer.getData("Text");
+			ev.target.appendChild(document.getElementById(data));
+			//与数据库进行交换
+			console.log(data);
+			console.log(this.i);
+			// dbStatusChange(data,this.i);
+			
+		}
+		function allowDrop(ev) {
+			ev.preventDefault();
+		}
+		function drag(ev) {
+			ev.dataTransfer.setData("Text",ev.target.id);
+			this.i = ev.dataTransfer.setData("Text",ev.target.id);
+		}
+		//ajax实现和数据库的交换，传参，第一个为状态，第二个为事件
+		function dbStatusChange(status,event) {
+			$.ajax({
+				url: '/path/to/file',
+				type: 'default GET (Other values: POST)',
+				dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
+				data: {param1: 'value1'},
+			})
+			.done(function() {
+				console.log("success");
+			})
+			.fail(function() {
+				console.log("error");
+			})
+			.always(function() {
+				console.log("complete");
+			});
+		}
+
+	</script>
+</body>
+</html>

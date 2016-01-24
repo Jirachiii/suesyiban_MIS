@@ -1,6 +1,6 @@
 <?php
 namespace app\controllers;
-
+use app\models\TestTb;
 use app\models\UserTb;
 use yii\web\Controller;
 
@@ -71,6 +71,18 @@ class AjaxuserController extends Controller {
 		// $XH_ID = '031513217';
 		$user->deleteOneUser($XH_ID);
 		echo '{"success":true}';
+	}
+
+	public function actionChangestatus() {
+		$testTb = new TestTb();
+		$id     = $_POST['id'];
+		$status = $_POST['status'];
+		$result = $testTb->changeStatus($id, $status);
+		if ($result == true) {
+			echo '{"success":true}';
+		} else {
+			echo '{"success":false}';
+		}
 	}
 
 }

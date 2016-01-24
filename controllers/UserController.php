@@ -15,7 +15,19 @@ class UserController extends Controller {
 
 	//用户首页
 	public function actionIndex() {
-		return $this->renderPartial('index');
+		return $this->renderPartial('index.html');
+	}
+
+	public function actionItem() {
+		return $this->renderPartial('item.html');
+	}
+
+	public function actionItemdetail() {
+		return $this->renderPartial('ItemDetail.html');
+	}
+
+	public function actionGetmess() {
+		return $this->renderPartial('message.html');
 	}
 
 	public function behaviors() {

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/main/bootstrap.css">
+	<link rel="stylesheet" href="css/main/normalize.css">
+	<link rel="stylesheet" href="css/teambition.css">
+	<title>teamBition</title>
+	<style>
+/*		body{  
+	    	overflow-x: hidden;
+	    	overflow-y: hidden;
+		} */ 
+	</style>
+</head>
+<body onload="getMomentData()">
+	<header>
+		<nav>
+			<div class="nav_pic" style="background-image: url(images/SuesYiBanteam.png);"></div>
+			<section class="nav_sec1">
+				<a class="nav_btn" href="index.php?r=user/index">项目</a>
+				<a class="nav_btn" href="index.php?r=user/homepage">我的</a>
+				<a class="nav_btn" href="index.php?r=user/order">排班</a>
+				<a class="nav_btn" href="index.php?r=user/getmess">收件箱</a>
+			</section>
+			<section class="nav_right">
+				<a class="nav_btn glyphicon glyphicon-search" onclick="OnSearch()" ><span aria-hidden="true"></span></a>
+				<a class="nav_btn glyphicon glyphicon-th-list" onclick="showThing()"><span aria-hidden="true"></span></a>
+			</section>
+
+		</nav>
+	</header>
+	<section class="sec_nav">
+
+	</section>
+	<section class="mask_main">
+		<div class="mask_m" ondrop="drop(event)" ondragover="allowDrop(event)" id="getStarted">
+		</div>
+		<div class="mask_m" ondrop="drop(event)" ondragover="allowDrop(event)" id="Completed">
+		</div>
+		<div class="mask_m" ondrop="drop(event)" ondragover="allowDrop(event)" id="Complete">
+			<div class="mask_div">
+				<p class="mask_tit">Amazing</p>
+			</div>
+		</div>
+	</section>
+	<section class="cover" id="coverDiv" onclick="hideAll()"></section>
+	<section class="showSetting" id="SetDiv">
+		<div class="Set_pic" style="background-image: url(images/New_York.jpg);">
+			<p class="Set_tit">用户</p>
+		</div>
+		<section class="Set_xm">
+			<h3>设置</h3>
+			<p>这是一个设置模式框</p>
+		</section>
+		<button class="Set_btn" onclick="hideAll()">Cancel</button>
+	</section>
+	<script src="js/userItem.js"></script>
+    <script src="js/jquery.min.js"></script>
+	<script>
+		function getMomentData() {
+			$.getJSON('index.php?r=json/getitemdetail', function(data, textStatus) {
+				if (textStatus == 'success') {
+					var start = '<div class="mask_div"><p class="mask_tit">进行中</p></div>';
+					var completed = '<div class="mask_div"><p class="mask_tit">已完成</p></div>';
+					for(var i=0;i<data.getStarted.length;i++) {
+						start += '<div class="mask_tip" draggable="true" id="'+data.getStarted[i].id+'" ondragstart="drag(event)"><p class="mask_tipp">'+data.getStarted[i].Content+'</p></div>';
+					}
+					for(var i=0;i<data.Completed.length;i++) {
+						completed += '<div class="mask_tip" draggable="true" id="'+data.Completed[i].id+'" ondragstart="drag(event)"><p class="mask_tipp">'+data.Completed[i].Content+'</p></div>';
+					}
+					document.getElementById('Completed').innerHTML = completed;
+					document.getElementById('getStarted').innerHTML = start;
+				} else {
+					alert("系统错误" + textStatus);
+				}
+			});
+		}
+		//显示状态栏
+		function showThing() {
+			document.getElementById("coverDiv").style.top = '0px';
+			document.getElementById("SetDiv").style.top = '5%';
+			document.getElementById("SetDiv").style.opacity = 1;
+		}
+		function hideAll() {
+			document.getElementById("coverDiv").style.top = '-999px';
+			document.getElementById("SetDiv").style.top = '-600px';
+			document.getElementById("SetDiv").style.opacity = 0;
+		}
+
+
+		//拖放，以后完成对象的处理
+		// var i = '';
+		function drop(ev) {
+			ev.preventDefault();
+			var data = ev.dataTransfer.getData("Text");
+			ev.target.appendChild(document.getElementById(data));
+			//与数据库进行交换
+			dbStatusChange(data,ev.target.id);
+			
+		}
+		function allowDrop(ev) {
+			ev.preventDefault();
+		}
+		function drag(ev) {
+			ev.dataTransfer.setData("Text",ev.target.id);
+			this.i = ev.dataTransfer.setData("Text",ev.target.id);
+		}
+	</script>
+</body>
+</html>
