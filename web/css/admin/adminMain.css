@@ -41,6 +41,8 @@ td {
 	height: 600px;
 	box-shadow: 1px 0px 20px #BBB;
 	z-index: 1;
+	overflow-y: hidden;
+	overflow-y: hidden;
 }
 .Ad_Rig {
 	height: 100%;

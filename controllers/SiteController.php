@@ -1,11 +1,11 @@
 <?php
 namespace app\controllers;
 
+use app\models\LoginForm;
 use Yii;
 use yii\filters\AccessControl;
-use yii\web\Controller;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
+use yii\web\Controller;
 
 //网页的首页
 
@@ -15,43 +15,43 @@ class SiteController extends Controller {
 	public $defaultAction        = 'index';
 
 	public function behaviors() {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout','index','login'],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'actions' => ['login'],
-                        'roles' => ['?'],
-                    ],
-                    //1级管理员权限控制
-                    [
-                        'actions' => ['logout','index'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
-                            return Yii::$app->user->identity->status == 1;
-                        }
-                    ],
-                    //2级管理员权限控制
-                    [
-                        'actions' => ['logout','index'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
-                            return Yii::$app->user->identity->status == 2;
-                        }
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
+		return [
+			'access' => [
+				'class' => AccessControl::className(),
+				'only'  => ['logout', 'index', 'login'],
+				'rules' => [
+					[
+						'allow'   => true,
+						'actions' => ['login'],
+						'roles'   => ['?'],
+					],
+					//1级管理员权限控制
+					[
+						'actions'       => ['logout', 'index'],
+						'allow'         => true,
+						'roles'         => ['@'],
+						'matchCallback' => function ($rule, $action) {
+							return Yii::$app->user->identity->status == 1;
+						}
+					],
+					//2级管理员权限控制
+					[
+						'actions'       => ['logout', 'index'],
+						'allow'         => true,
+						'roles'         => ['@'],
+						'matchCallback' => function ($rule, $action) {
+							return Yii::$app->user->identity->status == 2;
+						}
+					],
+				],
+			],
+			'verbs'    => [
+				'class'   => VerbFilter::className(),
+				'actions' => [
+					'logout' => ['post'],
+				],
+			],
+		];
 	}
 
 	public function actions() {
@@ -70,8 +70,7 @@ class SiteController extends Controller {
 		return $this->renderPartial('index');
 	}
 
-	public function actionLogin()
-	{
+	public function actionLogin() {
 		if (!\Yii::$app->user->isGuest) {
 			return $this->goHome();
 		}
@@ -81,16 +80,23 @@ class SiteController extends Controller {
 			return $this->goBack();
 		}
 		return $this->renderPartial('login', [
-			'model' => $model,
-		]);
+				'model' => $model,
+			]);
 	}
 	public function actionLogout() {
-        Yii::$app->user->logout();
+		Yii::$app->user->logout();
 
-        return $this->goHome();
+		return $this->goHome();
 	}
 
 	public function actionTest() {
 		return $this->renderPartial('post');
+	}
+
+	public function actionTest1() {
+		$uploadfile = new upload('myFile', 'files');
+		$dest       = $uploadfile->uploadFile();
+		print_r($dest);
+		return $this->renderPartial('index');
 	}
 }

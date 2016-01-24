@@ -1,6 +1,7 @@
 <?php
 namespace app\controllers;
 use app\models\Moments;
+use app\models\TestTb;
 use app\models\UserTb;
 use yii;
 use yii\filters\AccessControl;
@@ -79,6 +80,12 @@ class JsonController extends Controller {
 		$result = $usertb->getPageMomentWithOrder(1, 5);
 		$result = '{"users":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
 		echo $result;
+	}
+
+	public function actionGetitemdetail() {
+		$testTb  = new TestTb();
+		$content = $testTb->getTestData();
+		echo $content;
 	}
 
 	//这下面都不属于这边，以后更换位置
