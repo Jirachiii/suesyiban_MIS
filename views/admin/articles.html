@@ -7,6 +7,7 @@
 		<link rel="stylesheet" href="css/main/bootstrap.css">
 		<link rel="stylesheet" href="css/main/normalize.css">
 		<link rel="stylesheet" href="css/admin/adminMain.css">
+		<link rel="stylesheet" href="css/admin/adminArticle.css">
 		<title>管理员</title>
 	</head>
 	<body>
@@ -49,11 +50,76 @@
 		</div>
 		<div class="col-xs-10 Ad_Rig">
 			<h2>库存管理</h2><br>
+			<div class="Ad_RShow">
+				<span class="Ad_btns">
+					<a class="nav_btn" onclick="getRawArticleData()">所有库存</a>
+					<a class="nav_btn" onclick="addArticle()">物品添加</a>
+					<input class="" type="text" id="searchArticle" placeholder="输入查询内容" onkeydown='if(event.keyCode==13){searchArticlehandle()}'>
+					<a class="nav_btn" onclick="searchArticlehandle()">搜索</a>
+				</span><hr>
+				<div class="Ad_Article_Main">
+					<table id="articleMsgShow" class="table table-condensed table-hover">
 
+					</table>
+				</div>
+			</div>
 		</div>
+		<!-- 以下为库存添加，默认隐藏 -->
+		<section class="cover" id="coverDiv" onclick="hideAll()"></section>
+		<section class="showSetting" id="SetDiv">
+			<div class="Set_pic articlebk" ;">
+				<p class="Set_tit">物品添加</p>
+			</div>
+			<section class="Set_xm">
+				<div class="Set_sp">物品名称：</div><input class="form-control" type="text" placeholder="请输入物品名称" id="insertItemname">
+				<div class="Set_sp">数量：</div><input class="form-control" type="text" placeholder="请输入物品数量" id="insertNumber">
+			</section>
+			<p id="createResult" class="Set_btn_P"></p><br>
+			<div class="Set_btn_M">
+				<button class="Set_btn col-xs-6 handlegreen" onclick="insertArticle()">插入</button>
+				<button class="Set_btn col-xs-6" onclick="hideAll()">取消</button>
+			</div>
+		</section>
         <script src="js/adminHref.js"></script>
-        <script src="js/jquery.min.js"></script>
+		<script src="js/adminArticle.js"></script>
+		<script src="js/jquery.min.js"></script>
 		<script>
+			$(function(){
+				getRawArticleData();
+			})
+			function getRawArticleData(){
+				$("articleMsgShow").empty();
+				$.getJSON('index.php?r=json/getarticledata', function(data, textStatus) {
+					if (textStatus == 'success') {
+						var tableHead = '<thead><tr><td>编号</td><td>物品</td><td>数量</td><td>第一次添加时间</td><td>状态</td><td>添加/减少/删除</td></tr></thead>';
+						var tableBody = '<tbody>';
+						for (var i = 0; i < data.articles.length; i++) {
+							switch(data.articles[i].status){
+								case "1":
+									data.articles[i].status='有库存';
+									break;
+								case "2":
+									data.articles[i].status='无库存';
+									break;
+								case "3":
+									data.articles[i].status='已下架';
+									break;
+							}
+							tableBody += '<tr><td>'+(i+1)+'</td><td>'+data.articles[i].Art_Name+'</td><td>'+data.articles[i].Art_Num+'</td><td>'+data.articles[i].Art_Time+'</td><td>'+data.articles[i].status+'</td><td><div class="glyphicon glyphicon-plus" onclick=""></div> | <div class="glyphicon glyphicon-minus" onclick=""> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteArticle(&quot;'+data.articles[i].Art_Id+'&quot;)"></div></td></tr>';
+						};
+						tableBody += '</tbody>';
+						document.getElementById('articleMsgShow').innerHTML = tableHead+tableBody;
+					} else {
+						alert("系统错误" + textStatus);
+					}
+				});
+			};
+			function hideAll() {
+				document.getElementById("coverDiv").style.top = '-999px';
+				document.getElementById("SetDiv").style.top = '-600px';
+				document.getElementById("SetDiv").style.opacity = 0;
+			}
+
 			var show = 0;
 			function tiggle() {
 				if (this.show == 0) {

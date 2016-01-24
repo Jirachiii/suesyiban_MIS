@@ -2,8 +2,9 @@
 namespace app\controllers;
 use app\models\TestTb;
 use app\models\UserTb;
+use app\models\articles;
 use yii\web\Controller;
-
+use yii\db\Query;
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:POST,GET');
 header('Access-Control-Allow-Credentials:true');
@@ -44,7 +45,7 @@ class AjaxuserController extends Controller {
 			return;
 		}
 		//TODO: 获取GET表单数据并搜索数据库
-		$XH_ID     = $_GET["searchuser"].'%';
+		$XH_ID     = $_GET["searchuser"];
 		$sql       = 'SELECT XH_ID,Name,phone,status FROM user_tb WHERE XH_ID LIKE \'%'.$XH_ID.'%\'';
 		$Dbfactory = DbFactory::getinstance();
 		$result    = $Dbfactory->doQuery($sql);
@@ -83,6 +84,54 @@ class AjaxuserController extends Controller {
 		} else {
 			echo '{"success":false}';
 		}
+	}
+	/**
+	 * 	          库存管理
+	 */
+
+//搜索库存
+
+	public function actionAdminsearcharticle() {
+		if (!isset($_GET["searcharticle"]) || empty($_GET["searcharticle"])) {
+			echo '{"success":false,"msg":"请输查询入内容"}';
+			return;
+		}
+		$Art_Name  = $_GET["searcharticle"];
+		$result = (new Query())
+//			->select(['Art_Name', 'status'])
+			->from('articles')
+			->where(['like', 'Art_Name', $Art_Name])
+			->all();
+		$result    = '{"success":true,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
+		echo $result;
+	}
+	public function actionAdmininsertarticle() {
+		//判断信息是否填写完全
+		if (!isset($_POST["itemname"]) || empty($_POST["itemname"])
+			|| !isset($_POST["number"]) || empty($_POST["number"])) {
+			echo '{"success":false,"msg":"信息填写不全"}';
+			return;
+		}
+		$article = new articles();
+//		$article->Art_Id = $_POST["itemname"];
+		$article->Art_Name = $_POST["itemname"];
+		$article->Art_Num = $_POST["number"];
+		$article->Art_Time = date("y-m-d",time());
+		$article->status = 1;
+
+//		$article->email = 'james@example.com';
+		$article->save();  // 等同于 $customer->insert();
+		//TODO: 获取POST表单数据并保存到数据库
+
+		//提示保存成功
+		echo '{"success":true,"msg":"用户：'.$_POST["itemname"].' 信息保存成功！"}';
+	}
+	//删除库存
+	public function actionDeletearticle() {
+		$art_id = $_POST['art_id'];
+		$article=Articles::findOne($art_id);
+		$article->delete();
+		echo '{"success":true}';
 	}
 
 }

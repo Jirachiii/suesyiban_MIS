@@ -3,11 +3,11 @@ namespace app\controllers;
 use app\models\Moments;
 use app\models\TestTb;
 use app\models\UserTb;
+use app\models\Articles;
 use yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
-
 date_default_timezone_set("PRC");
 header('Content-type: application/json');
 header('Access-Control-Allow-Origin:*');
@@ -25,7 +25,7 @@ class JsonController extends Controller {
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only'  => ['logout', 'login', 'getuserdata', 'getmomentdata', 'addmoment', 'getmoment'],
+				'only'  => ['logout', 'login', 'getuserdata','getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
 				'rules' => [
 					[
 						'allow'   => true,
@@ -34,7 +34,7 @@ class JsonController extends Controller {
 					],
 					//只有1级管理员有权限
 					[
-						'actions'       => ['logout', 'getuserdata', 'getmomentdata', 'addmoment', 'getmoment'],
+						'actions'       => ['logout', 'getuserdata','getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
 						'allow'         => true,
 						'roles'         => ['@'],
 						'matchCallback' => function ($rule, $action) {
@@ -75,10 +75,17 @@ class JsonController extends Controller {
 		echo $content;
 	}
 
+
 	public function actionGetuserdata() {
 		$usertb = new UserTb();
 		$result = $usertb->getPageMomentWithOrder(1, 5);
 		$result = '{"users":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
+		echo $result;
+	}
+	//获取article物品
+	public function actionGetarticledata() {
+		$result=Articles::find()->asArray()->orderBy('status ASC')->all();
+		$result = '{"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
 		echo $result;
 	}
 
