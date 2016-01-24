@@ -9,10 +9,10 @@
 	<link rel="stylesheet" href="css/teambition.css">
 	<title>teamBition</title>
 	<style>
-		body{  
+/*		body{  
 	    	overflow-x: hidden;
 	    	overflow-y: hidden;
-		}  
+		} */ 
 	</style>
 </head>
 <body onload="getMomentData()">
@@ -67,13 +67,12 @@
 					var completed = '<div class="mask_div"><p class="mask_tit">已完成</p></div>';
 					for(var i=0;i<data.getStarted.length;i++) {
 						start += '<div class="mask_tip" draggable="true" id="'+data.getStarted[i].id+'" ondragstart="drag(event)"><p class="mask_tipp">'+data.getStarted[i].Content+'</p></div>';
-						document.getElementById('getStarted').innerHTML = start;
 					}
 					for(var i=0;i<data.Completed.length;i++) {
 						completed += '<div class="mask_tip" draggable="true" id="'+data.Completed[i].id+'" ondragstart="drag(event)"><p class="mask_tipp">'+data.Completed[i].Content+'</p></div>';
-						document.getElementById('Completed').innerHTML = completed;
 					}
-
+					document.getElementById('Completed').innerHTML = completed;
+					document.getElementById('getStarted').innerHTML = start;
 				} else {
 					alert("系统错误" + textStatus);
 				}
