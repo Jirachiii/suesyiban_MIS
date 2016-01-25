@@ -68,18 +68,22 @@ class JsonController extends Controller {
 	}
 
 	public function actionGetmomentdata() {
-		$moments = new Moments();
-		$content = $moments->getPageMomentWithOrder(1, 5);
-		$allPage = $moments->getAllPage(5);
-		$content = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).',"allPage":"'.$allPage.'"}';
+		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
+		$rightNowUserName = Yii::$app->user->identity->Name;
+		$moments          = new Moments();
+		$content          = $moments->getPageMomentWithOrder(1, 5);
+		$allPage          = $moments->getAllPage(5);
+		$content          = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).',"allPage":"'.$allPage.'","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
 		echo $content;
 	}
 
 
 	public function actionGetuserdata() {
-		$usertb = new UserTb();
-		$result = $usertb->getPageMomentWithOrder(1, 5);
-		$result = '{"users":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
+		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
+		$rightNowUserName = Yii::$app->user->identity->Name;
+		$usertb           = new UserTb();
+		$result           = $usertb->getPageMomentWithOrder(1, 5);
+		$result           = '{"users":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
 		echo $result;
 	}
 	//获取article物品
@@ -97,16 +101,14 @@ class JsonController extends Controller {
 
 	//这下面都不属于这边，以后更换位置
 	public function actionAddmoment() {
-		$content = '测试';
-		$XH_ID   = \Yii::$app->session->get('username');
-		\Yii::$app->session->close();
+		$content            = '测试';
 		$moment             = new Moments();
 		$RightNow           = $moment->getDateAndTime();
-		$momentMsg['XH_ID'] = $XH_ID;
+		$momentMsg['XH_ID'] = Yii::$app->user->identity->XH_ID;
 		$momentMsg['Mdate'] = $RightNow['date'];
 		$momentMsg['Time']  = $RightNow['time'];
 		//以后解决，request过来的值
-		$momentMsg['Content']  = '测试';
+		$momentMsg['Content']  = $_POST['Content'];
 		$momentMsg['like_Num'] = 0;
 		echo $moment->insertMomentData($momentMsg);
 	}
