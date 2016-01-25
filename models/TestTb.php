@@ -46,15 +46,17 @@ class TestTb extends \yii\db\ActiveRecord {
 	}
 
 	public function getPageMomentWithOrder($page, $number) {
-		$front      = ($page-1)*$number;
-		$sqlA       = 'SELECT id,Content,status FROM test_tb WHERE status = 1 LIMIT '.$front.','.$number;
-		$sqlB       = 'SELECT id,Content,status FROM test_tb WHERE status = 2 LIMIT '.$front.','.$number;
-		$Dbfactory  = DbFactory::getinstance();
-		$contentOne = $Dbfactory->findBySql($sqlA);
-		$contentTwo = $Dbfactory->findBySql($sqlB);
-		$contentOne = '"getStarted":'.json_encode($contentOne, JSON_UNESCAPED_UNICODE);
-		$contentTwo = '"Completed":'.json_encode($contentTwo, JSON_UNESCAPED_UNICODE);
-		$contents   = '{'.$contentOne.','.$contentTwo.'}';
+		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
+		$rightNowUserName = Yii::$app->user->identity->Name;
+		$front            = ($page-1)*$number;
+		$sqlA             = 'SELECT id,Content,status FROM test_tb WHERE status = 1 LIMIT '.$front.','.$number;
+		$sqlB             = 'SELECT id,Content,status FROM test_tb WHERE status = 2 LIMIT '.$front.','.$number;
+		$Dbfactory        = DbFactory::getinstance();
+		$contentOne       = $Dbfactory->findBySql($sqlA);
+		$contentTwo       = $Dbfactory->findBySql($sqlB);
+		$contentOne       = '"getStarted":'.json_encode($contentOne, JSON_UNESCAPED_UNICODE);
+		$contentTwo       = '"Completed":'.json_encode($contentTwo, JSON_UNESCAPED_UNICODE);
+		$contents         = '{'.$contentOne.','.$contentTwo.',"userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
 		return $contents;
 	}
 

@@ -12,7 +12,7 @@
 		<title>管理员</title>
 	</head>
 	<body onload="getRawData()">
-		<header class="Ad_head">
+		<header class="Ad_head" id="head">
 			<button class="btn btn-primary hd_downbtn" onclick="tiggle()">下拉</button>
 		</header>
 		<section class="col-xs-2 Ad_Lef" id="showandhide">
@@ -98,6 +98,7 @@
 						};
 						tableBody += '</tbody>';
 						document.getElementById('userMsgShow').innerHTML = tableHead+tableBody;
+						document.getElementById('head').innerHTML += '<a class="nav_btn" id="'+data.userIdNow+'" >'+data.userName+'</a>';
 					} else {
 						alert("系统错误" + textStatus);
 					}

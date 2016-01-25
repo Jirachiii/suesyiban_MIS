@@ -66,46 +66,6 @@
 			document.getElementById("createItem").style.top = '-600px';
 			document.getElementById("createItem").style.opacity = 0;
 		}
-
-
-		//拖放，以后完成对象的处理
-		var i = '';
-		function drop(ev) {
-			ev.preventDefault();
-			var data = ev.dataTransfer.getData("Text");
-			ev.target.appendChild(document.getElementById(data));
-			//与数据库进行交换
-			console.log(data);
-			console.log(this.i);
-			// dbStatusChange(data,this.i);
-			
-		}
-		function allowDrop(ev) {
-			ev.preventDefault();
-		}
-		function drag(ev) {
-			ev.dataTransfer.setData("Text",ev.target.id);
-			this.i = ev.dataTransfer.setData("Text",ev.target.id);
-		}
-		//ajax实现和数据库的交换，传参，第一个为状态，第二个为事件
-		function dbStatusChange(status,event) {
-			$.ajax({
-				url: '/path/to/file',
-				type: 'default GET (Other values: POST)',
-				dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
-				data: {param1: 'value1'},
-			})
-			.done(function() {
-				console.log("success");
-			})
-			.fail(function() {
-				console.log("error");
-			})
-			.always(function() {
-				console.log("complete");
-			});
-		}
-
 	</script>
 </body>
 </html>

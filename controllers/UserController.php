@@ -30,6 +30,10 @@ class UserController extends Controller {
 		return $this->renderPartial('message.html');
 	}
 
+	public function actionHomepage() {
+		return $this->renderPartial('homepage.html');
+	}
+
 	public function behaviors() {
 		return [
 			'verbs'    => [

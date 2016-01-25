@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/main/bootstrap.css">
+	<link rel="stylesheet" href="css/main/normalize.css">
+	<link rel="stylesheet" href="css/Main.css">
+	<link rel="stylesheet" href="css/teambition.css">
+	<link rel="stylesheet" href="css/user/userHomepage.css">
+	<title>teamBition</title>
+</head>
+<body>
+	<header>
+		<nav>
+			<div onclick="indexShow()" class="nav_pic" style="background-image: url(images/SuesYiBanteam.png);"></div>
+			<section class="nav_sec1">
+				<a class="nav_btn" href="index.php?r=user/item">项目</a>
+				<a class="nav_btn" href="index.php?r=user/homepage">我的</a>
+				<a class="nav_btn" href="index.php?r=user/order">排班</a>
+				<a class="nav_btn" href="index.php?r=user/getmess">收件箱</a>
+			</section>
+			<section class="nav_right">
+				<a class="nav_btn glyphicon glyphicon-th-list" onclick="showThing()"><span aria-hidden="true"></span></a>
+			</section>
+		</nav>
+	</header>
+	<section class="col-xs-12 home_first">
+		<div class="circle" id="circleShow" draggable="false">
+			<div class="circle_tougle" id="clickthing">
+				<span class="glyphicon glyphicon-plus circle_tougle_plus" aria-hidden="true"></span>
+			</div>
+			<div class="borderhandle" id="eventShow">
+				<h3 class="circle_h3">插入今日事件</h3>
+				<textarea class="circle_text" name="insertInPersonal" id="insertInPersonal" cols="30" rows="3" placeholder="添加事件..."></textarea>
+				<button id="InsertIn" class="circle_btn">插入</button>
+			</div>
+			<div class="centerIst_btn">
+				
+			</div>
+		</div>
+	</section>
+	<section class="col-xs-12 home_Main">
+		<section class="col-xs-1 blockThing"></section>
+		<section class="col-xs-10 todayShow" id="today_Show" ondrop="drop(event)" ondragover="allowDrop(event)" dragleave="leaveDrop(event)">
+		<br>
+			<p class="TS_head">今天的任务</p><hr>
+			<div class="mission_type" draggable="true" ondragstart="drag(event)" id="mission">
+				<span class="mission_SpDes">你的任务</span>
+				<span class="mission_SpDate">2015-01-25</span>
+			</div>
+			<div class="mission_type" draggable="true" ondragstart="drag(event)" id="mission">
+				<span class="mission_SpDes">你的任务</span>
+				<span class="mission_SpDate">2015-01-25</span>
+			</div>
+		</section>
+		<section class="col-xs-1 blockThing" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" id="deleteTodo">
+			<span class="glyphicon glyphicon-trash trash_style" id="deleteIcon" aria-hidden="true"></span>
+		</section>
+	</section>
+    <script src="js/jquery.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$("#clickthing").click(function(){
+				$("#circleShow").toggleClass("circlechange");
+		 		$("#eventShow").toggleClass("borderchange");
+				$("#clickthing").toggleClass("getithide");
+			});
+			$("#InsertIn").click(function(){
+		  		$("#circleShow").toggleClass("circlechange");
+		  		$("#eventShow").toggleClass("borderchange");
+		  		$("#clickthing").toggleClass("getithide");
+			});
+		});
+		//拖放，以后完成对象的处理
+		var i = '';
+		function drop(Dropevent) {
+			Dropevent.preventDefault();
+			var data = Dropevent.dataTransfer.getData("Text");
+			if (Dropevent.target.id == 'deleteTodo') {
+				Dropevent.target.style.background  = "#EEE";
+				document.getElementById('deleteIcon').style.color = '#333';
+			}
+			Dropevent.target.appendChild(document.getElementById(data));
+			//与数据库进行交换
+			// dbStatusChange(data,Dropevent.target.id);
+		}
+		function allowDrop(Dropevent) {
+			Dropevent.preventDefault();
+			if (Dropevent.target.id == 'deleteTodo') {
+				Dropevent.target.style.background  = "#AAA";
+				document.getElementById('deleteIcon').style.color = '#FFF';
+			}
+		}
+		function drag(Dropevent) {
+			Dropevent.dataTransfer.setData("Text",Dropevent.target.id);
+			this.i = Dropevent.dataTransfer.setData("Text",Dropevent.target.id);
+			Dropevent.target.style.opacity = "0.4";
+		}
+		function leaveDrop(Dropevent) {
+			if (Dropevent.target.id == 'deleteTodo') {
+				Dropevent.target.style.background  = "#EEE";
+				document.getElementById('deleteIcon').style.color = '#333';
+			}
+		}
+		document.addEventListener("dragend", function(Dropevent) {
+		    Dropevent.target.style.opacity = "1";
+		});
+	</script>
+</body>
+</html>
