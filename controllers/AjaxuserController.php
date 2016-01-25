@@ -105,6 +105,22 @@ class AjaxuserController extends Controller {
 		$result    = '{"success":true,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
 		echo $result;
 	}
+	//状态筛选
+	public function actionAdminselectarticle() {
+		if (!isset($_GET["searcharticle"]) || empty($_GET["searcharticle"])) {
+			echo '{"success":false,"msg":"请选择查询状态"}';
+			return;
+		}
+		if($_GET["searcharticle"]==4){
+			$result=Articles::find()->asArray()->all();
+			$result    = '{"success":true,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
+		}else{
+		$status  = $_GET["searcharticle"];
+		$result=Articles::find()->where(['status' =>$status])->asArray()->all();
+		$result    = '{"success":true,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';}
+		echo $result;
+	}
+	//插入库存
 	public function actionAdmininsertarticle() {
 		//判断信息是否填写完全
 		if (!isset($_POST["itemname"]) || empty($_POST["itemname"])
@@ -132,6 +148,67 @@ class AjaxuserController extends Controller {
 		$article=Articles::findOne($art_id);
 		$article->delete();
 		echo '{"success":true}';
+	}
+	//添加库存
+	public function actionAdminupdatearticle() {
+		//判断信息是否填写完全
+		if ((empty($_POST["changeart_sel"])&&empty($_POST["changeart_inp"]))||
+			(!empty($_POST["changeart_sel"])&&!empty($_POST["changeart_inp"]))||
+			(!isset($_POST["changeart_sel"])&&!isset($_POST["changeart_inp"]))) {
+			echo '{"success":false,"msg":"信息填写错误"}';
+			return;
+		}
+		$aimarticle=Articles::findOne($_POST['articleid']);
+		$aimarticle->Art_Num = $_POST['total'];
+		if($aimarticle->Art_Num>0&&$aimarticle->status!=3){
+			$aimarticle->status=1;
+		}
+		$aimarticle->save(false);
+		echo '{"success":true,"msg":"添加成功！"}';
+	}
+	//减少库存
+	public function actionAdminupdatearticle2() {
+		//判断信息是否填写完全
+		if ((empty($_POST["changeart_sel"])&&empty($_POST["changeart_inp"]))||
+			(!empty($_POST["changeart_sel"])&&!empty($_POST["changeart_inp"]))||
+			(!isset($_POST["changeart_sel"])&&!isset($_POST["changeart_inp"]))) {
+			echo '{"success":false,"msg":"信息填写错误"}';
+			return;
+		}
+		if($_POST['total']<0){
+			echo '{"success":false,"msg":"没有这么多库存啦"}';
+			return;
+		}
+		$aimarticle=Articles::findOne($_POST['articleid']);
+		$aimarticle->Art_Num = $_POST['total'];
+		if($aimarticle->Art_Num==0&&$aimarticle->status!=3){
+			$aimarticle->status=2;
+		}
+		$aimarticle->save(false);
+		echo '{"success":true,"msg":"扣除成功！"}';
+	}
+	//更改库存上架状态
+	public function actionAdminupdatearticle3() {
+		//判断信息是否填写完全
+		if ((empty($_POST["changeart_sel"])||!isset($_POST["changeart_sel"]))) {
+			echo '{"success":false,"msg":"请选择"}';
+			return;
+		}
+		$aimarticle=Articles::findOne($_POST['id']);
+		if($_POST['changeart_sel']=="1"){
+//			if($aimarticle->Art_Num>0){
+//				$aimarticle->status=1;
+//			}else{
+//				$aimarticle->status=2;
+//			}
+			($aimarticle->Art_Num>0)?$aimarticle->status=1:$aimarticle->status=2;
+		}else if($_POST['changeart_sel']=="2"){
+			$aimarticle->status=3;
+		}
+
+		$aimarticle->save(false);
+//		$a=$aimarticle->status;
+		echo '{"success":true,"msg":"更改成功！"}';
 	}
 
 }
