@@ -128,6 +128,10 @@ class AjaxuserController extends Controller {
 			echo '{"success":false,"msg":"信息填写不全"}';
 			return;
 		}
+		if(!is_numeric($_POST["number"])){
+			echo '{"success":false,"msg":"数量填写错误"}';
+			return;
+		}
 		$article = new articles();
 //		$article->Art_Id = $_POST["itemname"];
 		$article->Art_Name = $_POST["itemname"];
@@ -158,6 +162,10 @@ class AjaxuserController extends Controller {
 			echo '{"success":false,"msg":"信息填写错误"}';
 			return;
 		}
+		if(!is_numeric($_POST["changeart_sel"])&&!is_numeric($_POST["changeart_inp"])){
+			echo '{"success":false,"msg":"数量填写错误"}';
+			return;
+		}
 		$aimarticle=Articles::findOne($_POST['articleid']);
 		$aimarticle->Art_Num = $_POST['total'];
 		if($aimarticle->Art_Num>0&&$aimarticle->status!=3){
@@ -173,6 +181,10 @@ class AjaxuserController extends Controller {
 			(!empty($_POST["changeart_sel"])&&!empty($_POST["changeart_inp"]))||
 			(!isset($_POST["changeart_sel"])&&!isset($_POST["changeart_inp"]))) {
 			echo '{"success":false,"msg":"信息填写错误"}';
+			return;
+		}
+		if(!is_numeric($_POST["changeart_sel"])&&!is_numeric($_POST["changeart_inp"])){
+			echo '{"success":false,"msg":"数量填写错误"}';
 			return;
 		}
 		if($_POST['total']<0){
