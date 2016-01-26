@@ -1,10 +1,13 @@
 <?php
 namespace app\controllers;
+use app\models\articles;
+use app\models\OwnTodos;
 use app\models\TestTb;
 use app\models\UserTb;
-use app\models\articles;
-use yii\web\Controller;
 use yii\db\Query;
+
+use yii\web\Controller;
+date_default_timezone_set("PRC");
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:POST,GET');
 header('Access-Control-Allow-Credentials:true');
@@ -74,6 +77,35 @@ class AjaxuserController extends Controller {
 		echo '{"success":true}';
 	}
 
+	public function actionInserttodo() {
+		$owntodos              = new OwnTodos();
+		$content['XH_ID']      = \Yii::$app->user->identity->XH_ID;
+		$content['CreateDate'] = date('Y-m-d');
+		$content['Num']        = intval($owntodos->findTodayMissionCount())+1;
+		$content['content']    = $_POST['content'];
+		$content['urgentLev']  = 1;
+		if ($owntodos->insertTodoData($content)) {
+			$result = '{"success":true,"msg":"<div data-Num=\"'.$content['Num'].'\" class=\"mission_type\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$content['content'].'</span><span class=\"mission_SpDate\">'.$content['CreateDate'].'</span>';
+			$result .= '<div onclick=\"Urgenthandle(this,1)\" class=\"mission_SpUrgent normal\" data-Num=\"'.$content['Num'].'\"></div><div onclick=\"Urgenthandle(this,2)\" class=\"mission_SpUrgent urgenter\" data-Num=\"'.$content['Num'].'\"></div><div onclick=\"Urgenthandle(this,3)\" class=\"mission_SpUrgent urgentest\" data-Num=\"'.$content['Num'].'\"></div></div>"}';
+			echo $result;
+		} else {
+			echo '{"success":false}';
+		}
+	}
+	//改变todo的状态，分为非常紧急、紧急、正常和完成这四种
+	public function actionChangetodostatus() {
+		$Num       = $_POST['Num'];
+		$urgentLev = $_POST['urgentLev'];
+		$owntodo   = new OwnTodos();
+		$result    = $owntodo->changeStatus($Num, $urgentLev);
+		if ($result == true) {
+			echo '{"success":true}';
+		} else {
+			echo '{"success":false}';
+		}
+	}
+
+	//测试改变状态
 	public function actionChangestatus() {
 		$testTb = new TestTb();
 		$id     = $_POST['id'];
@@ -89,38 +121,39 @@ class AjaxuserController extends Controller {
 	 * 	          库存管理
 	 */
 
-//搜索库存
+	//搜索库存
 
 	public function actionAdminsearcharticle() {
 		if (!isset($_GET["searcharticle"]) || empty($_GET["searcharticle"])) {
 			echo '{"success":false,"msg":"请输查询入内容"}';
 			return;
 		}
-		$Art_Name  = $_GET["searcharticle"];
-		$result = (new Query())
-//			->select(['Art_Name', 'status'])
+		$Art_Name = $_GET["searcharticle"];
+		$result   = (new Query())
+		//			->select(['Art_Name', 'status'])
 			->from('articles')
 			->where(['like', 'Art_Name', $Art_Name])
 			->all();
-		$result    = '{"success":true,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
+		$result = '{"success":true,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
 		echo $result;
 	}
 	public function actionAdmininsertarticle() {
 		//判断信息是否填写完全
 		if (!isset($_POST["itemname"]) || empty($_POST["itemname"])
-			|| !isset($_POST["number"]) || empty($_POST["number"])) {
+			 || !isset($_POST["number"]) || empty($_POST["number"])) {
 			echo '{"success":false,"msg":"信息填写不全"}';
 			return;
 		}
 		$article = new articles();
-//		$article->Art_Id = $_POST["itemname"];
+		//		$article->Art_Id = $_POST["itemname"];
 		$article->Art_Name = $_POST["itemname"];
-		$article->Art_Num = $_POST["number"];
-		$article->Art_Time = date("y-m-d",time());
-		$article->status = 1;
+		$article->Art_Num  = $_POST["number"];
+		$article->Art_Time = date("y-m-d", time());
+		$article->status   = 1;
 
-//		$article->email = 'james@example.com';
-		$article->save();  // 等同于 $customer->insert();
+		//		$article->email = 'james@example.com';
+		$article->save();
+		// 等同于 $customer->insert();
 		//TODO: 获取POST表单数据并保存到数据库
 
 		//提示保存成功
@@ -128,10 +161,9 @@ class AjaxuserController extends Controller {
 	}
 	//删除库存
 	public function actionDeletearticle() {
-		$art_id = $_POST['art_id'];
-		$article=Articles::findOne($art_id);
+		$art_id  = $_POST['art_id'];
+		$article = Articles::findOne($art_id);
 		$article->delete();
 		echo '{"success":true}';
 	}
-
 }

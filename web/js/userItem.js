@@ -26,3 +26,27 @@ function dbStatusChange(itemId,divId) {
 		},
 	});
 }
+//改变事件状态(非常紧急、紧急、正常)
+function Urgenthandle(ev,urgentLev) {
+	$.ajax({
+	    type: "POST",
+		url: "index.php?r=ajaxuser/changetodostatus",
+		data: {
+			Num: ev.getAttribute("data-Num"),
+			urgentLev: urgentLev,
+		},
+		dataType: "json",
+		success: function(data){
+			if (data.success) {
+				getRawData();
+			} else {
+				alert('不能改变此状态');
+				window.location.reload();
+			}  
+		},
+		error: function(jqXHR){
+			alert("发生错误：" + jqXHR.status);
+			window.location.reload();
+		},
+	});
+}

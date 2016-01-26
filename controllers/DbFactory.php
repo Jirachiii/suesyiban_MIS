@@ -109,7 +109,7 @@ class DbFactory {
 		$values     = implode(',', $keyValue);
 		$connection = \Yii::$app->db;
 		$sql        = 'insert into '.$table.'('.$keys.') values('.$values.')';
-		$this->doQuery($sql);
+		return $this->doQuery($sql);
 	}
 	//更新数据
 	public function updateTheDbRecord($table, $KeyName, $id, $arrUpdate) {
@@ -142,16 +142,5 @@ class DbFactory {
 			$list[] = $rs;
 		}
 		return isset($list)?$list:"";
-	}
-	//测试方法
-	public function selectTest() {
-		// $connection = \Yii::$app->db;
-		$connection = $this->DatabaseConnection();
-		// $user = mysqli_escape_string($connection, $user);
-		$sql   = 'SELECT * FROM item WHERE id = 2';
-		$query = mysqli_query($connection, $sql);
-		$arr   = mysqli_fetch_array($query, MYSQL_ASSOC);
-		mysqli_close($connection);
-		return $arr;
 	}
 }

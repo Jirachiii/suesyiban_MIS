@@ -2,6 +2,7 @@
 namespace app\controllers;
 use app\models\Articles;
 use app\models\Moments;
+use app\models\OwnTodos;
 use app\models\TestTb;
 use app\models\UserTb;
 use yii\web\Controller;
@@ -41,5 +42,10 @@ class TestController extends Controller {
 	public function actionDroptest() {
 		$testTb = new TestTb();
 		echo $testTb->getPageMomentWithOrder(1, 6);
+	}
+
+	public function actionTesttodo() {
+		$owntodo = new OwnTodos();
+		echo $owntodo->changeStatus(4, 4);
 	}
 }
