@@ -52,10 +52,18 @@
 			<h2>库存管理</h2><br>
 			<div class="Ad_RShow"><br>
 				<span class="Ad_btns">
-					<a class="nav_btn" onclick="getRawArticleData()">所有库存</a>
+					<a class="nav_btn" onclick="getRawArticleData(4)">所有库存</a>
 					<a class="nav_btn" onclick="addArticle()">物品添加</a>
 					<input class="" type="text" id="searchArticle" placeholder="输入查询内容" onkeydown='if(event.keyCode==13){searchArticlehandle()}'>
 					<a class="nav_btn" onclick="searchArticlehandle()">搜索</a>
+					<span>状态选择：</span>
+					<select name="sel_status" id="sel_status" onchange="selectArticle()">
+						<option value="4">显示全部</option>
+						<option value="1">有库存</option>
+						<option value="2">无库存</option>
+						<option value="3">已下架</option>
+
+					</select>
 				</span><hr>
 				<div class="Ad_Article_Main">
 					<table id="articleMsgShow" class="table table-condensed table-hover">
@@ -64,15 +72,15 @@
 				</div>
 			</div>
 		</div>
-		<!-- 以下为库存添加，默认隐藏 -->
+		<!-- 以下为库存种类添加，默认隐藏 -->
 		<section class="cover" id="coverDiv" onclick="hideAll()"></section>
 		<section class="showSetting" id="SetDiv">
 			<div class="Set_pic articlebk">
 				<p class="Set_tit">物品添加</p>
 			</div>
-			<section class="Set_xm">
+			<section class="Set_xm" onclick="">
 				<div class="Set_sp">物品名称：</div><input class="form-control" type="text" placeholder="请输入物品名称" id="insertItemname">
-				<div class="Set_sp">数量：</div><input class="form-control" type="text" placeholder="请输入物品数量" id="insertNumber">
+				<div class="Set_sp">数量：</div><input class="form-control" type="number" placeholder="请输入物品数量" id="insertNumber">
 			</section>
 			<p id="createResult" class="Set_btn_P"></p><br>
 			<div class="Set_btn_M">
@@ -80,6 +88,89 @@
 				<button class="Set_btn col-xs-6" onclick="hideAll()">取消</button>
 			</div>
 		</section>
+		<!-- 以下为库存数量添加，默认隐藏 -->
+		<section class="cover" id="coverDiv_ch" onclick="hideAll_ch()"></section>
+		<section class="showSetting" id="SetDiv_ch">
+			<div class="Set_pic articlebk">
+			<p class="Set_tit">添加物品数量</p>
+			</div>
+			<span id="showarticlename" class=""></span><span>:目前库存数量为：</span><span id="showarticlenumber"></span>
+			<!--用于等会ajax传输数据-->
+			<span id="articleid" style="display: none"></span>
+			<section class="Set_xm">
+				<select class="form-control" name="changeart" id="changeart_sel" onclick="clearvalue(this)">
+					<option value="" selected="true" disabled="true">—选择添加数量—</option>
+					<option value="1">1</option>
+					<option value="5">5</option>
+					<option value="15">15</option>
+					<option value="20">20</option>
+					<option value="30">30</option>
+					<option value="50">50</option>
+					<option value="100">100</option>
+				</select>
+				<p class="set_de" >或手动输入添加数量</p>
+				</div><input class="form-control" type="number" placeholder="手动输入数量" id="changeart_inp" onclick="clearvalue(this)">
+			</section>
+			<p id="changeResult" class="Set_btn_P"></p><br>
+			<div class="Set_btn_M">
+				<button class="Set_btn col-xs-6 handlegreen" onclick="updateArticle()">添加</button>
+				<button class="Set_btn col-xs-6" onclick="hideAll_ch()">取消</button>
+			</div>
+		</section>
+
+		<!-- 以下为库存数量减少，默认隐藏 -->
+		<section class="cover" id="coverDiv_ch_2" onclick="hideAll_ch_2()"></section>
+		<section class="showSetting" id="SetDiv_ch_2">
+			<div class="Set_pic articlebk">
+				<p class="Set_tit">减少物品数量</p>
+			</div>
+			<span id="showarticlename_2" class=""></span><span>:目前库存数量为：</span><span id="showarticlenumber_2"></span>
+			<!--用于等会ajax传输数据-->
+			<span id="articleid_2" style="display: none"></span>
+			<section class="Set_xm">
+				<select class="form-control" name="changeart" id="changeart_sel_2" onclick="clearvalue(this)">
+					<option value="" selected="true" disabled="true">—选择减少数量—</option>
+					<option value="1">1</option>
+					<option value="5">5</option>
+					<option value="15">15</option>
+					<option value="20">20</option>
+					<option value="30">30</option>
+					<option value="50">50</option>
+					<option value="100">100</option>
+				</select>
+				<p class="set_de" >或手动输入减少数量</p>
+				</div><input class="form-control" type="number" placeholder="手动输入数量" id="changeart_inp_2" onclick="clearvalue_2(this)">
+			</section>
+			<p id="changeResult_2" class="Set_btn_P"></p><br>
+			<div class="Set_btn_M">
+				<button class="Set_btn col-xs-6 handlegreen" onclick="updateArticle_2()">减少</button>
+				<button class="Set_btn col-xs-6" onclick="hideAll_ch_2()">取消</button>
+			</div>
+		</section>
+
+		<!-- 以下为更改库存状态，默认隐藏 -->
+		<section class="cover_3" id="coverDiv_ch_3" onclick="hideAll_ch_3()"></section>
+		<section class="showSetting_3" id="SetDiv_ch_3">
+
+			<p class="Set_tit_3">更改物品状态</p>
+
+			<span>目前为：</span><span id="showarticlestatus_3" class=""></span><span id="showarticlenumber_3"></span>
+			<!--用于等会ajax传输数据-->
+			<span id="articleid_3" style="display: none"></span>
+			<section class="Set_xm">
+				<select class="form-control" name="changeart" id="changeart_sel_3">
+					<option value="" selected="true" disabled="true">—选择状态—</option>
+					<option value="1">上架</option>
+					<option value="2">下架</option>
+				</select>
+			</section>
+			<p id="changeResult_3" class="Set_btn_P"></p><br>
+			<div class="Set_btn_M">
+				<button class="Set_btn col-xs-6 handlegreen" onclick="updateArticle_3()">确定</button>
+				<button class="Set_btn col-xs-6" onclick="hideAll_ch_3()">取消</button>
+			</div>
+		</section>
+
         <script src="js/adminHref.js"></script>
 		<script src="js/adminArticle.js"></script>
 		<script src="js/jquery.min.js"></script>
@@ -87,49 +178,11 @@
 			$(function(){
 				getRawArticleData();
 			})
-			function getRawArticleData(){
-				$("articleMsgShow").empty();
-				$.getJSON('index.php?r=json/getarticledata', function(data, textStatus) {
-					if (textStatus == 'success') {
-						var tableHead = '<thead><tr><td>编号</td><td>物品</td><td>数量</td><td>第一次添加时间</td><td>状态</td><td>添加/减少/删除</td></tr></thead>';
-						var tableBody = '<tbody>';
-						for (var i = 0; i < data.articles.length; i++) {
-							switch(data.articles[i].status){
-								case "1":
-									data.articles[i].status='有库存';
-									break;
-								case "2":
-									data.articles[i].status='无库存';
-									break;
-								case "3":
-									data.articles[i].status='已下架';
-									break;
-							}
-							tableBody += '<tr><td>'+(i+1)+'</td><td>'+data.articles[i].Art_Name+'</td><td>'+data.articles[i].Art_Num+'</td><td>'+data.articles[i].Art_Time+'</td><td>'+data.articles[i].status+'</td><td><div class="glyphicon glyphicon-plus" onclick=""></div> | <div class="glyphicon glyphicon-minus" onclick=""> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteArticle(&quot;'+data.articles[i].Art_Id+'&quot;)"></div></td></tr>';
-						};
-						tableBody += '</tbody>';
-						document.getElementById('articleMsgShow').innerHTML = tableHead+tableBody;
-					} else {
-						alert("系统错误" + textStatus);
-					}
-				});
-			};
-			function hideAll() {
-				document.getElementById("coverDiv").style.top = '-999px';
-				document.getElementById("SetDiv").style.top = '-600px';
-				document.getElementById("SetDiv").style.opacity = 0;
-			}
 
-			var show = 0;
-			function tiggle() {
-				if (this.show == 0) {
-					document.getElementById("showandhide").style.top = '51px';
-					this.show = 1;
-				} else {
-					document.getElementById("showandhide").style.top = '-100%';
-					this.show = 0;
-				}
-			}
+
+
+
+
 		</script>
 	</body>
 </html>

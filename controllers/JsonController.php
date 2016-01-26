@@ -88,7 +88,7 @@ class JsonController extends Controller {
 	}
 	//获取article物品
 	public function actionGetarticledata() {
-		$result = Articles::find()->asArray()->orderBy('status ASC')->all();
+		$result = Articles::find()->asArray()->orderBy('status ASC,Art_Num DESC')->all();
 		$result = '{"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
 		echo $result;
 	}
