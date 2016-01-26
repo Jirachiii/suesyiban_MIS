@@ -112,11 +112,11 @@ class AjaxuserController extends Controller {
 			return;
 		}
 		if($_GET["searcharticle"]==4){
-			$result=Articles::find()->asArray()->all();
+			$result=Articles::find()->asArray()->orderBy('status ASC,Art_Num DESC')->all();
 			$result    = '{"success":true,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
 		}else{
 		$status  = $_GET["searcharticle"];
-		$result=Articles::find()->where(['status' =>$status])->asArray()->all();
+		$result=Articles::find()->where(['status' =>$status])->asArray()->orderBy('status ASC,Art_Num DESC')->all();
 		$result    = '{"success":true,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';}
 		echo $result;
 	}

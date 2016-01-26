@@ -1,6 +1,9 @@
 //显示所有库存
-function getRawArticleData(){
+function getRawArticleData(a){
     $("articleMsgShow").empty();
+    if(a==4){
+        document.getElementById('sel_status').value=a;
+    }
     $.getJSON('index.php?r=json/getarticledata', function(data, textStatus) {
         if (textStatus == 'success') {
             var tableHead = '<thead><tr><td>编号</td><td>物品</td><td>数量</td><td>第一次添加时间</td><td>状态</td><td>添加/减少/更改状态/删除</td></tr></thead>';
@@ -164,10 +167,12 @@ function deleteArticle(article_id,article_name){
             success: function(data) {
                 if (data.success) {
                     alert('删除成功');
-                    window.location.reload();
+                    selectArticle();
+                    // window.location.reload();
                 } else {
                     alert('删除失败');
-                    window.location.reload();
+                    selectArticle();
+                    // window.location.reload();
                 }
             },
             error: function(jqXHR){
@@ -226,15 +231,29 @@ var daojishinum2=1;
 function daojishi2 () {
     $("#changeResult").html("修改成功！"+daojishinum2+"秒后将自动关闭此页面");
     daojishinum2=daojishinum2-1;
-    setTimeout("daojishi2()",1000);
+    if(daojishinum2<0){
+        clearTimeout(i);
+        daojishinum2=1;
+        $("#changeart_sel option:first").prop("selected", 'selected');
+        $("#changeResult").html("");
+    }else{
+        var i=setTimeout("daojishi2()",1000);
 
+    }
 }
 var daojishinum3=1;
 function daojishi3 () {
     $("#changeResult_2").html("修改成功！"+daojishinum3+"秒后将自动关闭此页面");
     daojishinum3=daojishinum3-1;
-    setTimeout("daojishi3()",1000);
+    if(daojishinum3<0){
+        clearTimeout(i);
+        daojishinum3=1;
+        $("#changeart_sel_2 option:first").prop("selected", 'selected');
+        $("#changeResult_2").html("");
+    }else{
+        var i= setTimeout("daojishi3()",1000);
 
+    }
 }
 
 //插入库存
@@ -254,7 +273,7 @@ function insertArticle(){
                 setTimeout("hideAll()",3500);
                 $("#createResult").html("保存成功！3秒后将自动关闭此页面");
                 setTimeout("daojishi()",1000);
-                setTimeout("window.location.reload();",3800);
+                setTimeout("window.location.reload();",3000);
 
 
             } else {
@@ -288,10 +307,10 @@ function updateArticle(){
         dataType: "json",
         success: function(data){
             if (data.success) {
-                setTimeout("hideAll_ch()",2600);
+                setTimeout("hideAll_ch()",2000);
                 $("#changeResult").html("修改成功！2秒后将自动关闭此页面");
                 setTimeout("daojishi2()",1000);
-                setTimeout("window.location.reload();",2800);
+                setTimeout("selectArticle();",1000);
 
 
             } else {
@@ -318,10 +337,10 @@ function updateArticle_2(){
         dataType: "json",
         success: function(data){
             if (data.success) {
-                setTimeout("hideAll_ch_2()",2600);
+                setTimeout("hideAll_ch_2()",2000);
                 $("#changeResult_2").html("修改成功！2秒后将自动关闭此页面");
                 setTimeout("daojishi3()",1000);
-                setTimeout("window.location.reload();",2800);
+                setTimeout("selectArticle();",1000);//回到原先的界面
 
 
             } else {
@@ -346,9 +365,12 @@ function updateArticle_3(){
         dataType: "json",
         success: function(data){
             if (data.success) {
-                setTimeout("hideAll_ch_3()",1500);
+                setTimeout(function(){
+                    hideAll_ch_3()
+                    $("#changeResult_3").html("");
+                },1500);
                 $("#changeResult_3").html("修改成功！1秒后将自动关闭此页面");
-                setTimeout("window.location.reload();",1500);
+                setTimeout("selectArticle();",1500);
 
 
             } else {
