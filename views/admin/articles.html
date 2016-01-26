@@ -52,7 +52,7 @@
 			<h2>库存管理</h2><br>
 			<div class="Ad_RShow">
 				<span class="Ad_btns">
-					<a class="nav_btn" onclick="getRawArticleData()">所有库存</a>
+					<a class="nav_btn" onclick="getRawArticleData(4)">所有库存</a>
 					<a class="nav_btn" onclick="addArticle()">物品添加</a>
 					<input class="" type="text" id="searchArticle" placeholder="输入查询内容" onkeydown='if(event.keyCode==13){searchArticlehandle()}'>
 					<a class="nav_btn" onclick="searchArticlehandle()">搜索</a>
@@ -117,6 +117,7 @@
 				<button class="Set_btn col-xs-6" onclick="hideAll_ch()">取消</button>
 			</div>
 		</section>
+
 		<!-- 以下为库存数量减少，默认隐藏 -->
 		<section class="cover" id="coverDiv_ch_2" onclick="hideAll_ch_2()"></section>
 		<section class="showSetting" id="SetDiv_ch_2">
