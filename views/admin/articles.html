@@ -8,6 +8,7 @@
 		<link rel="stylesheet" href="css/main/normalize.css">
 		<link rel="stylesheet" href="css/admin/adminMain.css">
 		<link rel="stylesheet" href="css/admin/adminArticle.css">
+		<link rel="stylesheet" href="css/Main.css">
 		<title>管理员</title>
 	</head>
 	<body>
@@ -54,10 +55,10 @@
 				<span class="Ad_btns">
 					<a class="nav_btn" onclick="getRawArticleData(4)">所有库存</a>
 					<a class="nav_btn" onclick="addArticle()">物品添加</a>
-					<input class="" type="text" id="searchArticle" placeholder="输入查询内容" onkeydown='if(event.keyCode==13){searchArticlehandle()}'>
+					<input class="enjoy-css" type="text" id="searchArticle" placeholder="输入查询内容" onkeydown='if(event.keyCode==13){searchArticlehandle()}'>
 					<a class="nav_btn" onclick="searchArticlehandle()">搜索</a>
-					<span>状态选择：</span>
-					<select name="sel_status" id="sel_status" onchange="selectArticle()">
+					<span class="myword">状态选择：</span>
+					<select name="sel_status" class="myselect" id="sel_status" onchange="selectArticle()" onclick='document.getElementById("searchArticle").value=""'>
 						<option value="4">显示全部</option>
 						<option value="1">有库存</option>
 						<option value="2">无库存</option>

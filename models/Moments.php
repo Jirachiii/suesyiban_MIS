@@ -101,7 +101,7 @@ class Moments extends \yii\db\ActiveRecord {
 	public function getPageMomentWithOrder($page, $number) {
 		if ($this->decideGetMomentContinue($page, $number)) {
 			$front     = ($page-1)*$number;
-			$sql       = 'SELECT id,XH_ID,Content,like_Num FROM Moments ORDER BY Mdate DESC,Time DESC LIMIT '.$front.','.$number;
+			$sql       = 'SELECT id,XH_ID,Content,Mdate FROM Moments ORDER BY Mdate DESC,Time DESC LIMIT '.$front.','.$number;
 			$Dbfactory = DbFactory::getinstance();
 			$Moments   = $Dbfactory->findBySql($sql);
 			$user      = new UserTb();

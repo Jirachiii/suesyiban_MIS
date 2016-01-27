@@ -8,9 +8,12 @@
 		<link rel="stylesheet" href="css/main/normalize.css">
 		<link rel="stylesheet" href="css/admin/adminMain.css">
 		<link rel="stylesheet" href="css/admin/adminUser.css">
+		<link rel="stylesheet" href="css/admin/adminMoments.css">
+		<link rel="stylesheet" href="css/Main.css">
+
 		<title>管理员</title>
 	</head>
-	<body onload="getMomentData()">
+	<body>
 		<header class="Ad_head">
 			<button class="btn btn-primary hd_downbtn" onclick="tiggle()">下拉</button>
 		</header>
@@ -52,55 +55,54 @@
 			<h2>动态管理</h2><br>
 			<div class="Ad_RShow"><br>
 				<span class="Ad_btns">
-						<a class="nav_btn" onclick="getMomentData()">所有动态</a>
+						<a class="nav_btn" onclick="getMomentData_dongtai()">所有动态</a>
 						<a class="nav_btn" onclick="addUser()">动态置顶</a>
-						<a class="nav_btn" onclick="?">动态搜索</a>
+						<input class="enjoy-css" type="text" id="searchMoment" placeholder="输入查询内容" onkeydown='if(event.keyCode==13){searchMoment()}'>
+						<a class="nav_btn" onclick="searchMoment()">动态搜索</a>
 				</span><hr><br>
 				<div class="Ad_User_Main">
 					<table id="MomentsData" class="table table-condensed table-hover">
 					</table>
-					<div class="pageStyle">
+					<div class="pageStyle" id="pagenav">
 						<button onclick="beforePage()">上一页</button>
+						<span id="页码"></span>
+						<button onclick="afterPage()">下一页</button>
 						<div id="thePage">
 
 						</div>
-						<button onclick="afterPage()">下一页</button>
 					</div>
 				</div>
 			</div>
 		</div>
+		<!--文章修改，默认隐藏-->
+		<section class="cover" id="coverDiv_mom" onclick="hideAll_mom()"></section>
+		<section class="showSetting" id="SetDiv_mom">
+			<div class="Set_pic momentsbk">
+				<p class="Set_tit">修改动态内容</p>
+			</div>
+			<span id="userid_mom" class="">测试学号</span><span>：</span><span id="username_mom">测试名字</span><span>发表于 </span><span id="date_mom">测试时间</span>
+			<button>置顶按钮预留</button>
+			<!--用于等会ajax传输数据-->
+			<span id="momentid" style="display: none"></span>
+			<section class="Set_xm">
+				<textarea name="" id="moment_content" cols="53" rows="3"></textarea>
+			</section>
+			<p id="changeResult_mom" class="Set_btn_P"></p><br>
+			<div class="Set_btn_M">
+				<button class="Set_btn col-xs-6 handlegreen" onclick="updateMoment()">提交</button>
+				<button class="Set_btn col-xs-6" onclick="hideAll_mom()">取消</button>
+			</div>
+		</section>
         <script src="js/adminHref.js"></script>
         <script src="js/adminMoments.js"></script>
         <script src="js/jquery.min.js"></script>
 		<script>
-			var show = 0;
-			var nowPage = 1;
-			var allpage = 1;
-			function tiggle() {
-				if (this.show == 0) {
-					document.getElementById("showandhide").style.top = '51px';
-					this.show = 1;
-				} else {
-					document.getElementById("showandhide").style.top = '-100%';
-					this.show = 0;
-				}
-			}
-			function getMomentData() {
-				$.getJSON('index.php?r=json/getmomentdata', function(data, textStatus) {
-					if (textStatus == 'success') {
-						this.allpage = data.allPage;
-						var tableHead = '<thead><tr><td>学号</td><td>内容</td><td>点赞数</td><td>姓名</td><td>删除</td></tr></thead>';
-						var tableBody = '<tbody>';
-						for (var i = 0; i < data.moments.length; i++) {
-							tableBody += '<tr><td>'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].like_Num+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
-						};
-						tableBody += '</tbody>';
-						document.getElementById('MomentsData').innerHTML = tableHead+tableBody;
-					} else {
-						alert("系统错误" + textStatus);
-					}
-				});
-			}
+			$(function(){
+				getMomentData_dongtai();
+//				getAllyema();
+			})
+
+
 		</script>
 	</body>
 </html>
