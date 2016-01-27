@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="css/user/userHomepage.css">
 	<title>teamBition</title>
 </head>
-<body>
+<body onload="getRawData()" style="overflow:hidden">
 	<header>
 		<nav>
 			<div onclick="indexShow()" class="nav_pic" style="background-image: url(images/SuesYiBanteam.png);"></div>
@@ -33,33 +33,38 @@
 			</div>
 			<div class="borderhandle" id="eventShow">
 				<h3 class="circle_h3">插入今日事件</h3>
-				<textarea class="circle_text" name="insertInPersonal" id="insertInPersonal" cols="30" rows="3" placeholder="添加事件..."></textarea>
+				<textarea class="circle_text" name="insertInPersonal" id="insertInPersonal" cols="30" rows="3" placeholder="添加事件(小于15个字)"></textarea>
 				<button id="InsertIn" class="circle_btn">插入</button>
 			</div>
-			<div class="centerIst_btn">
-				
-			</div>
+		</div>
+		<div class="centerIst_btn">
+			<a class="nav_btn">今日</a>
+			<a class="nav_btn">已完成</a>
+			<a class="nav_btn">过去一个月</a>
+			<a class="nav_btn">所有未完成任务</a>
 		</div>
 	</section>
-	<section class="col-xs-12 home_Main">
+	<section class="col-xs-12 home_Main" id="home_Main">
 		<section class="col-xs-1 blockThing"></section>
-		<section class="col-xs-10 todayShow" id="today_Show" ondrop="drop(event)" ondragover="allowDrop(event)" dragleave="leaveDrop(event)">
-		<br>
-			<p class="TS_head">今天的任务</p><hr>
-			<div class="mission_type" draggable="true" ondragstart="drag(event)" id="mission">
-				<span class="mission_SpDes">你的任务</span>
-				<span class="mission_SpDate">2015-01-25</span>
-			</div>
-			<div class="mission_type" draggable="true" ondragstart="drag(event)" id="mission">
-				<span class="mission_SpDes">你的任务</span>
-				<span class="mission_SpDate">2015-01-25</span>
+		<section class="col-xs-10 todayShow" id="today_Show">
+			<br><p class="TS_head">今天的任务</p><hr>
+			<div class="today_Show_miss" id="today_Show_miss">
+<!-- 				<div id="mission" class="mission_type" draggable="true" ondragstart="drag(event)">
+				<span class="mission_SpDes">烧水</span>
+				<span class="mission_SpDate">2016-01-26</span>
+				<div onclick="Urgenthandle(this,1)" class="mission_SpUrgent normal" data-Num="1"></div>
+				<div onclick="Urgenthandle(this,2)" class="mission_SpUrgent urgenter" data-Num="1"></div>
+				<div onclick="Urgenthandle(this,3)" class="mission_SpUrgent urgentest" data-Num="1"></div>
+				</div> -->
 			</div>
 		</section>
 		<section class="col-xs-1 blockThing" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" id="deleteTodo">
 			<span class="glyphicon glyphicon-trash trash_style" id="deleteIcon" aria-hidden="true"></span>
 		</section>
+		<section class="cover"></section>
 	</section>
     <script src="js/jquery.min.js"></script>
+    <script src="js/userItem.js"></script>
 	<script>
 		$(document).ready(function() {
 			$("#clickthing").click(function(){
@@ -71,20 +76,54 @@
 		  		$("#circleShow").toggleClass("circlechange");
 		  		$("#eventShow").toggleClass("borderchange");
 		  		$("#clickthing").toggleClass("getithide");
+		  		if ($("#insertInPersonal").val() == '' || $("#insertInPersonal").val().length > 15) {
+		  			alert('为空或者超过！');
+		  			return;
+		  		}
+		  		$.ajax({
+			        type: "POST",
+			        url: "index.php?r=ajaxuser/inserttodo",
+			        data: {
+			            content: $("#insertInPersonal").val(),
+			        },
+			        dataType: "json",
+			        success: function(data){
+			            if (data.success) {
+			            	document.getElementById('today_Show_miss').innerHTML += data.msg;
+			            } else {
+			                alert('录入失败！');
+			            }
+			        },
+			        error: function(jqXHR){
+			            alert("发生错误：" + jqXHR.status);
+			        },
+			    });
 			});
 		});
+		function getRawData() {
+			var height = document.body.clientHeight -110;
+			document.getElementById('home_Main').style.height =  height+'px';
+			$("#today_Show_miss").empty();
+			$.getJSON('index.php?r=json/owntodos', function(data, textStatus) {
+				if (textStatus == 'success') {
+					document.getElementById('today_Show_miss').innerHTML = data.msg;
+				} else {
+					alert("系统错误" + textStatus);
+				}
+			});
+		}
 		//拖放，以后完成对象的处理
 		var i = '';
 		function drop(Dropevent) {
 			Dropevent.preventDefault();
-			var data = Dropevent.dataTransfer.getData("Text");
+			// var data = Dropevent.dataTransfer.getData("Text");
 			if (Dropevent.target.id == 'deleteTodo') {
 				Dropevent.target.style.background  = "#EEE";
 				document.getElementById('deleteIcon').style.color = '#333';
 			}
-			Dropevent.target.appendChild(document.getElementById(data));
+			// Dropevent.target.appendChild(document.getElementById(data));
 			//与数据库进行交换
-			// dbStatusChange(data,Dropevent.target.id);
+			Urgenthandle(this.i, 4);
 		}
 		function allowDrop(Dropevent) {
 			Dropevent.preventDefault();
@@ -94,9 +133,10 @@
 			}
 		}
 		function drag(Dropevent) {
-			Dropevent.dataTransfer.setData("Text",Dropevent.target.id);
-			this.i = Dropevent.dataTransfer.setData("Text",Dropevent.target.id);
+			// Dropevent.dataTransfer.setData("Text",Dropevent.target.id);
+			// this.i = Dropevent.dataTransfer.setData("Text",Dropevent.target.id);
 			Dropevent.target.style.opacity = "0.4";
+			this.i = Dropevent.target;
 		}
 		function leaveDrop(Dropevent) {
 			if (Dropevent.target.id == 'deleteTodo') {

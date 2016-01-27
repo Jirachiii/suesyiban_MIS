@@ -1,9 +1,10 @@
 <?php
 namespace app\controllers;
+use app\models\Articles;
 use app\models\Moments;
+use app\models\OwnTodos;
 use app\models\TestTb;
 use app\models\UserTb;
-use app\models\Articles;
 use yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -25,7 +26,7 @@ class JsonController extends Controller {
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only'  => ['logout', 'login', 'getuserdata','getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
+				'only'  => ['logout', 'login', 'getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
 				'rules' => [
 					[
 						'allow'   => true,
@@ -34,7 +35,7 @@ class JsonController extends Controller {
 					],
 					//只有1级管理员有权限
 					[
-						'actions'       => ['logout', 'getuserdata','getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
+						'actions'       => ['logout', 'getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
 						'allow'         => true,
 						'roles'         => ['@'],
 						'matchCallback' => function ($rule, $action) {
@@ -77,7 +78,6 @@ class JsonController extends Controller {
 		echo $content;
 	}
 
-
 	public function actionGetuserdata() {
 		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
 		$rightNowUserName = Yii::$app->user->identity->Name;
@@ -88,7 +88,7 @@ class JsonController extends Controller {
 	}
 	//获取article物品
 	public function actionGetarticledata() {
-		$result=Articles::find()->asArray()->orderBy('status ASC,Art_Num DESC')->all();
+		$result = Articles::find()->asArray()->orderBy('status ASC,Art_Num DESC')->all();
 		$result = '{"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
 		echo $result;
 	}
@@ -97,6 +97,42 @@ class JsonController extends Controller {
 		$testTb  = new TestTb();
 		$content = $testTb->getTestData();
 		echo $content;
+	}
+
+	public function actionOwntodos() {
+		$owntodos = new ownTodos();
+		$query    = $owntodos->findTodayMission();
+		if ($query) {
+			$msg = $this->getItWithOrder($query);
+			echo '{"success":true,"msg":"'.$msg.'"}';
+		} else {
+			echo '{"success":false,"msg":"没有任务"}';
+		}
+	}
+
+	private function getItWithOrder($query) {
+		$urgentLev1 = '';
+		$urgentLev2 = '';
+		$urgentLev3 = '';
+		foreach ($query as $key => $value) {
+			switch ($value['urgentLev']) {
+				case '1':
+					$urgentLev1 .= '<div id=\"mission'.$value['Num'].$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\" class=\"mission_type\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$value['content'].'</span><span class=\"mission_SpDate\">'.$value['CreateDate'].'</span>';
+					$urgentLev1 .= '<div onclick=\"Urgenthandle(this,1)\" class=\"mission_SpUrgent normal\" data-Num=\"'.$value['Num'].'\"></div><div onclick=\"Urgenthandle(this,2)\" class=\"mission_SpUrgent urgenter\" data-Num=\"'.$value['Num'].'\"></div><div onclick=\"Urgenthandle(this,3)\" class=\"mission_SpUrgent urgentest\" data-Num=\"'.$value['Num'].'\"></div></div>';
+					break;
+				case '2':
+					$urgentLev2 .= '<div id=\"mission'.$value['Num'].$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\" class=\"mission_type UrgenterBorder\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$value['content'].'</span><span class=\"mission_SpDate\">'.$value['CreateDate'].'</span>';
+					$urgentLev2 .= '<div onclick=\"Urgenthandle(this,1)\" class=\"mission_SpUrgent normal\" data-Num=\"'.$value['Num'].'\"></div><div onclick=\"Urgenthandle(this,2)\" class=\"mission_SpUrgent urgenter\" data-Num=\"'.$value['Num'].'\"></div><div onclick=\"Urgenthandle(this,3)\" class=\"mission_SpUrgent urgentest\" data-Num=\"'.$value['Num'].'\"></div></div>';
+					break;
+				case '3':
+					$urgentLev3 .= '<div id=\"mission'.$value['Num'].$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\" class=\"mission_type UrgentestBorder\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$value['content'].'</span><span class=\"mission_SpDate\">'.$value['CreateDate'].'</span>';
+					$urgentLev3 .= '<div onclick=\"Urgenthandle(this,1)\" class=\"mission_SpUrgent normal\" data-Num=\"'.$value['Num'].'\"></div><div onclick=\"Urgenthandle(this,2)\" class=\"mission_SpUrgent urgenter\" data-Num=\"'.$value['Num'].'\"></div><div onclick=\"Urgenthandle(this,3)\" class=\"mission_SpUrgent urgentest\" data-Num=\"'.$value['Num'].'\"></div></div>';
+					break;
+				case '4':
+					break;
+			}
+		}
+		return $urgentLev3.$urgentLev2.$urgentLev1;
 	}
 
 	//这下面都不属于这边，以后更换位置
