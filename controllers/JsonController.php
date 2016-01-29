@@ -69,12 +69,19 @@ class JsonController extends Controller {
 	}
 
 	public function actionGetmomentdata() {
-		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
-		$rightNowUserName = Yii::$app->user->identity->Name;
-		$moments          = new Moments();
-		$content          = $moments->getPageMomentWithOrder(1, 5);
-		$allPage          = $moments->getAllPage(5);
-		$content          = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).',"allPage":"'.$allPage.'","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
+//		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
+//		$rightNowUserName = Yii::$app->user->identity->Name;
+//		$moments          = new Moments();
+//		$content          = $moments->getPageMomentWithOrder(1, 5);
+//		$allPage          = $moments->getAllPage(5);
+//		$content = Moments::find()->asArray()->join('LEFT JOIN','user_tb','moments.XH_ID=user_tb.XH_ID')->orderBy('Mdate DESC,Time DESC')->all();
+		$content = Moments::find()->asArray()->orderBy('Mdate DESC,Time DESC')->all();
+		foreach($content as $key=>$value){
+			$name=UserTb::findOne($value['XH_ID']);
+			$content[$key]['username']=$name['Name'];
+		}
+		$content = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).'}';
+//		$content          = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).',"allPage":"'.$allPage.'","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
 		echo $content;
 	}
 

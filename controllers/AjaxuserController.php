@@ -57,7 +57,7 @@ class AjaxuserController extends Controller {
 		$XH_ID     = $_GET["searchuser"];
 		$result   = (new Query())
 			->from('user_tb')
-			->where(['like', 'XH_ID', $XH_ID])
+			->where(['or',['like', 'XH_ID', $XH_ID],['like', 'Name', $XH_ID]])
 			->all();
 		//TODO: 获取GET表单数据并搜索数据库
 
