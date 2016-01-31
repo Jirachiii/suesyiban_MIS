@@ -56,7 +56,7 @@
 			<div class="Ad_RShow"><br>
 				<span class="Ad_btns">
 						<a class="nav_btn" onclick="getMomentData_dongtai()">所有动态</a>
-						<a class="nav_btn" onclick="addUser()">动态置顶</a>
+						<a class="nav_btn" onclick="addMoment()">添加动态</a>
 						<input class="enjoy-css" type="text" id="searchMoment" placeholder="学号或内容" onkeydown='if(event.keyCode==13){searchMoment()}'>
 						<a class="nav_btn" onclick="searchMoment()">动态搜索</a>
 				</span><hr><br>
@@ -64,7 +64,7 @@
 					<table id="MomentsData" class="table table-condensed table-hover">
 					</table>
 					<div class="pageStyle" id="pagenav">
-						<button onclick="beforePage()">上一页</button>
+						<button onclick="beforePage()">上一页（感觉有问题 后面弄）</button>
 						<span id="页码"></span>
 						<button onclick="afterPage()">下一页</button>
 						<div id="thePage">
@@ -74,14 +74,13 @@
 				</div>
 			</div>
 		</div>
-		<!--文章修改，默认隐藏-->
+		<!--状态修改，默认隐藏-->
 		<section class="cover" id="coverDiv_mom" onclick="hideAll_mom()"></section>
 		<section class="showSetting" id="SetDiv_mom">
 			<div class="Set_pic momentsbk">
 				<p class="Set_tit">修改动态内容</p>
 			</div>
 			<span id="userid_mom" class="">测试学号</span><span>：</span><span id="username_mom">测试名字</span><span>发表于 </span><span id="date_mom">测试时间</span>
-			<button>置顶按钮预留</button>
 			<!--用于等会ajax传输数据-->
 			<span id="momentid" style="display: none"></span>
 			<section class="Set_xm">
@@ -91,6 +90,46 @@
 			<div class="Set_btn_M">
 				<button class="Set_btn col-xs-6 handlegreen" onclick="updateMoment()">提交</button>
 				<button class="Set_btn col-xs-6" onclick="hideAll_mom()">取消</button>
+			</div>
+		</section>
+		<!--状态添加，默认隐藏-->
+		<section class="cover" id="coverDiv_mom_1" onclick="hideAll_mom_1()"></section>
+		<section class="showSetting" id="SetDiv_mom_1">
+			<div class="Set_pic momentsbk">
+				<p class="Set_tit">添加系动态</p>
+			</div>
+			<span id="momentid_1" style="display: none"></span>
+			<section class="Set_xm">
+				<textarea name="" id="moment_content_1" cols="53" rows="3"></textarea>
+			</section>
+			<p id="changeResult_mom_1" class="Set_btn_P"></p><br>
+			<div class="Set_btn_M">
+				<button class="Set_btn col-xs-6 handlegreen" onclick="updateMoment_1()">提交</button>
+				<button class="Set_btn col-xs-6" onclick="hideAll_mom_1()">取消</button>
+			</div>
+		</section>
+		<!-- 以下置顶状态，默认隐藏 -->
+		<section class="cover_2" id="coverDiv_mom_2" onclick="hideAll_mom_2()"></section>
+		<section class="showSetting_2" id="SetDiv_mom_2">
+
+			<p class="Set_tit_2">置顶文章</p>
+
+			<span id="username_mom_2">测试名字</span><span>发表于 </span><span id="date_mom_2">测试时间</span>
+			<!--用于等会ajax传输数据-->
+			<span id="momentid_2" style="display: none"></span>
+			<section class="Set_xm">
+				<!--<select class="form-control" name="" id="momenttop_2">-->
+					<!--<option value="" selected="true" disabled="true">—选择状态—</option>-->
+					<!--<option value="1">置顶</option>-->
+					<!--<option value="2">取消置顶</option>-->
+				<!--</select>-->
+				<!--<button value="1"  class="btn btn-primary">置顶</button>-->
+			</section>
+			<p id="changeResult_mom_2" class="Set_btn_P"></p><br>
+			<br>
+			<div class="Set_btn_M">
+				<button class="Set_btn col-xs-6 handlegreen" id="momenttop_2" onclick="updateMoment_2()" value="1">置顶</button>
+				<button class="Set_btn col-xs-6" onclick="hideAll_mom_2()">取消</button>
 			</div>
 		</section>
         <script src="js/adminHref.js"></script>
