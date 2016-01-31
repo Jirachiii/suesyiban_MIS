@@ -7,10 +7,12 @@ function getMomentData_dongtai() {
 			var tableHead = '<thead><tr><td>学号</td><td>内容</td><td>时间</td><td>姓名</td><td>修改/置顶/删除</td></tr></thead>';
 			var tableBody = '<tbody>';
 			for (var i = 0; i < data.moments.length; i++) {
-				tableBody += '<tr><td>'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].Mdate+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-pencil" onclick="changeMoment(&quot;'+data.moments[i].id+'&quot;,&quot;'+data.moments[i].XH_ID+'&quot;,&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].Content+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-sort" onclick="changeMomentTop('+data.moments[i].id+')"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
+				tableBody += '<tr><td ><span style="display: none">'+data.moments[i].status+'</span>&nbsp;'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].Mdate+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-pencil" onclick="changeMoment(&quot;'+data.moments[i].id+'&quot;,&quot;'+data.moments[i].XH_ID+'&quot;,&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].Content+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-sort" onclick="changeMomentTop('+data.moments[i].id+',&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].status+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
 			};
 			tableBody += '</tbody>';
 			document.getElementById('MomentsData').innerHTML = tableHead+tableBody;
+			$("td span:contains(1)").addClass("glyphicon glyphicon-fire myred").show().empty();
+			$("td span[class='glyphicon glyphicon-fire myred']").parent().parent().insertBefore($("tbody tr:eq(0)"))
 		} else {
 			alert("系统错误" + textStatus);
 		}
@@ -34,11 +36,19 @@ function deleteMom(monentsId) {
 			dataType: "json",
 			success: function(data) {
 				if (data.success) {
+					if($("#searchMoment").val()!=""){
+						searchMoment();
+					}else {
+						getMomentData_dongtai();
+					}
 					alert('删除成功');
-					getMomentData_dongtai();
 				} else {
+					if($("#searchMoment").val()!=""){
+						searchMoment();
+					}else {
+						getMomentData_dongtai();
+					}
 					alert('删除失败');
-					getMomentData_dongtai();
 				}
 			},
 			error: function(jqXHR){
@@ -113,7 +123,7 @@ function afterPage() {
 				var tableHead = '<thead><tr><td>学号</td><td>内容</td><td>时间</td><td>姓名</td><td>修改/置顶/删除</td></tr></thead>';
 				var tableBody = '<tbody>';
 				for (var i = 0; i < data.moments.length; i++) {
-					tableBody += '<tr><td>'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].Mdate+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-pencil" onclick="changeMoment(&quot;'+data.moments[i].id+'&quot;,&quot;'+data.moments[i].XH_ID+'&quot;,&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].Content+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-sort" onclick="changeMomentTop('+data.moments[i].id+')"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
+					tableBody += '<tr><td>'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].Mdate+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-pencil" onclick="changeMoment()"></div> | <div class="Set_dele glyphicon glyphicon-sort" onclick="changeMomentTop()"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
 				};
 				tableBody += '</tbody>';
 				document.getElementById('MomentsData').innerHTML = tableHead+tableBody;
@@ -140,13 +150,13 @@ function searchMoment(){
 				} else {
 					var tableBody = '<thead><tr><td>学号</td><td>内容</td><td>时间</td><td>姓名</td><td>修改/置顶/删除</td></tr></thead>';
 					for (var i = 0; i < data.moments.length; i++) {
-						tableBody += '<tr><td>'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].Mdate+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-pencil" onclick="changeMoment(&quot;'+data.moments[i].id+'&quot;,&quot;'+data.moments[i].XH_ID+'&quot;,&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].Content+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-sort" onclick="changeMomentTop('+data.moments[i].id+')"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
-
-
+						tableBody += '<tr><td ><span style="display: none">'+data.moments[i].status+'</span>&nbsp;'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].Mdate+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-pencil" onclick="changeMoment(&quot;'+data.moments[i].id+'&quot;,&quot;'+data.moments[i].XH_ID+'&quot;,&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].Content+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-sort" onclick="changeMomentTop('+data.moments[i].id+',&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].status+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
 					};
 					tableBody += '</tbody>';
+					document.getElementById('MomentsData').innerHTML = tableBody;
+					$("td span:contains(1)").addClass("glyphicon glyphicon-fire myred").show().empty();
+					$("td span[class='glyphicon glyphicon-fire myred']").parent().parent().insertBefore($("tbody tr:eq(0)"))
 				};
-				document.getElementById('MomentsData').innerHTML = tableBody;
 			} else {
 				document.getElementById('MomentsData').innerHTML = "出现错误：" + data.msg;
 			}
@@ -162,7 +172,19 @@ function hideAll_mom() {
 	document.getElementById("SetDiv_mom").style.top = '-600px';
 	document.getElementById("SetDiv_mom").style.opacity = 0;
 }
-//更改动态页面
+function hideAll_mom_1() {
+	document.getElementById("coverDiv_mom_1").style.top = '-999px';
+	document.getElementById("SetDiv_mom_1").style.top = '-600px';
+	document.getElementById("SetDiv_mom_1").style.opacity = 0;
+}
+隐藏置顶页面
+function hideAll_mom_2() {
+	document.getElementById("coverDiv_mom_2").style.top = '-999px';
+	document.getElementById("SetDiv_mom_2").style.top = '-600px';
+	document.getElementById("SetDiv_mom_2").style.opacity = 0;
+	$("#changeResult_mom_2").html("")
+}
+//显示更改页
 function changeMoment(obj1,obj2,obj3,obj4,obj5){
 	document.getElementById("coverDiv_mom").style.top = '0px';
 	document.getElementById("SetDiv_mom").style.top = '5%';
@@ -176,7 +198,31 @@ function changeMoment(obj1,obj2,obj3,obj4,obj5){
 
 
 }
-//动态内容提交方法
+//显示添加页
+function addMoment(){
+	document.getElementById("coverDiv_mom_1").style.top = '0px';
+	document.getElementById("SetDiv_mom_1").style.top = '5%';
+	document.getElementById("SetDiv_mom_1").style.opacity = 1;
+}
+//显示置顶页面
+function changeMomentTop(obj1,obj2,obj3,obj4){
+	//1:momentid,2:username,3:date,4:is top
+	document.getElementById("coverDiv_mom_2").style.top = '0px';
+	document.getElementById("SetDiv_mom_2").style.top = '40%';
+	document.getElementById("SetDiv_mom_2").style.left = '70%';
+	document.getElementById("SetDiv_mom_2").style.opacity = 1;
+	document.getElementById("momentid_2").innerHTML=obj1;
+	//document.getElementById("userid_mom").innerHTML=obj2;
+	document.getElementById("username_mom_2").innerHTML=obj2;
+	document.getElementById("date_mom_2").innerHTML=obj3;
+	if(obj4==1){
+		$("#momenttop_2").html("取消置顶").val(2)
+	}else{
+		$("#momenttop_2").html("置顶").val(1)
+	}
+}
+
+//动态内容修改提交方法
 function updateMoment(){
 	$.ajax({
 		type: "POST",
@@ -205,11 +251,74 @@ function updateMoment(){
 		},
 	});
 }
-//置顶动态
-function changeMomentTop(){
+//动态添加倒计时
+var daojishinum1=1;
+function daojishi1 () {
+	$("#changeResult_mom_1").html("添加成功！"+daojishinum1+"秒后将自动关闭此页面");
+	daojishinum1=daojishinum1-1;
+	if(daojishinum1<0){
+		clearTimeout();
+		daojishinum1=1;
+		$("#moment_content_1").val("");
+		$("#changeResult_mom_1").html("");
+	}else{
+		var i=setTimeout("daojishi1()",1000);
+
+	}
 
 }
-
+//添加新动态方法
+function updateMoment_1(){
+	$.ajax({
+		type: "POST",
+		url: "index.php?r=ajaxmoments/adminupdatemoment_1",
+		data: {
+			moment_content: $("#moment_content_1").val(),
+		},
+		dataType: "json",
+		success: function(data){
+			if (data.success) {
+				setTimeout("hideAll_mom_1()",2000);
+				$("#changeResult_mom_1").html("添加成功！2秒后将自动关闭此页面");
+				setTimeout("daojishi1()",1000);
+				getMomentData_dongtai();
+			} else {
+				$("#changeResult_mom_1").html("出现错误：" + data.msg);
+			}
+		},
+		error: function(jqXHR){
+			alert("发生错误：" + jqXHR.status);
+		},
+	});
+}
+//动态置顶提交方法
+function updateMoment_2(){
+	$.ajax({
+		type: "POST",
+		url: "index.php?r=ajaxmoments/adminupdatemoment_2",
+		data: {
+			momentid: $("#momentid_2").text(),
+			status: $("#momenttop_2").val(),
+		},
+		dataType: "json",
+		success: function(data){
+			if (data.success) {
+				setTimeout("hideAll_mom_2()",1300);
+				$("#changeResult_mom_2").html("修改成功！1秒后将自动关闭此页面");
+				if($("#searchMoment").val()!=""){
+					searchMoment();
+				}else {
+					getMomentData_dongtai();
+				}
+			} else {
+				$("#changeResult_mom_2").html("出现错误：" + data.msg);
+			}
+		},
+		error: function(jqXHR){
+			alert("发生错误：" + jqXHR.status);
+		},
+	});
+}
 
 //倒计时
 var daojishinum_mom=1;
