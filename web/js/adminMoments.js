@@ -195,6 +195,7 @@ function changeMoment(obj1,obj2,obj3,obj4,obj5){
 	document.getElementById("date_mom").innerHTML=obj4;
 	document.getElementById("moment_content").value=obj5;
 	//document.getElementById("changeResult_mom").value=null;
+	$("#changeResult_mom").html(" ");
 
 
 }
@@ -203,6 +204,8 @@ function addMoment(){
 	document.getElementById("coverDiv_mom_1").style.top = '0px';
 	document.getElementById("SetDiv_mom_1").style.top = '5%';
 	document.getElementById("SetDiv_mom_1").style.opacity = 1;
+	$("#moment_content_1").val("");
+	$("#changeResult_mom_1").html("");
 }
 //显示置顶页面
 function changeMomentTop(obj1,obj2,obj3,obj4){
@@ -236,7 +239,7 @@ function updateMoment(){
 			if (data.success) {
 				setTimeout("hideAll_mom()",2000);
 				$("#changeResult_mom").html("修改成功！2秒后将自动关闭此页面");
-				setTimeout("daojishi_mom()",1000);
+				setTimeout(function daojishi_(){$("#changeResult_mom").html("修改成功！1秒后将自动关闭此页面")},1000);
 				if($("#searchMoment").val()!=""){
 					searchMoment();
 				}else {
@@ -251,22 +254,7 @@ function updateMoment(){
 		},
 	});
 }
-//动态添加倒计时
-var daojishinum1=1;
-function daojishi1 () {
-	$("#changeResult_mom_1").html("添加成功！"+daojishinum1+"秒后将自动关闭此页面");
-	daojishinum1=daojishinum1-1;
-	if(daojishinum1<0){
-		clearTimeout();
-		daojishinum1=1;
-		$("#moment_content_1").val("");
-		$("#changeResult_mom_1").html("");
-	}else{
-		var i=setTimeout("daojishi1()",1000);
 
-	}
-
-}
 //添加新动态方法
 function updateMoment_1(){
 	$.ajax({
@@ -280,7 +268,7 @@ function updateMoment_1(){
 			if (data.success) {
 				setTimeout("hideAll_mom_1()",2000);
 				$("#changeResult_mom_1").html("添加成功！2秒后将自动关闭此页面");
-				setTimeout("daojishi1()",1000);
+				setTimeout(function daojishi_1(){$("#changeResult_mom_1").html("添加成功！1秒后将自动关闭此页面")},1000);
 				getMomentData_dongtai();
 			} else {
 				$("#changeResult_mom_1").html("出现错误：" + data.msg);
@@ -318,21 +306,6 @@ function updateMoment_2(){
 			alert("发生错误：" + jqXHR.status);
 		},
 	});
-}
-
-//倒计时
-var daojishinum_mom=1;
-function daojishi_mom () {
-	$("#changeResult_mom").html("修改成功！"+daojishinum_mom+"秒后将自动关闭此页面");
-	daojishinum_mom=daojishinum_mom-1;
-	if(daojishinum_mom<0){
-		clearTimeout(i);
-		daojishinum_mom=1;
-		//document.getElementById("changeResult_mom").value="";
-		$("#changeResult_mom").html(" ");
-	}else{
-		var i= setTimeout("daojishi_mom()",1000);
-	}
 }
 
 

@@ -220,7 +220,7 @@ function changeArticle_2(obj,obj2,obj3) {
     document.getElementById("articleid_2").innerHTML=obj3;
     $("#changeart_sel_2 option:first").prop("selected", 'selected');
     $("#changeResult_2").html("");
-
+    $("#changeart_inp_2").val("");
 }
 function changeArticle_3(obj,obj3) {
     //obj:status,obj2:;obj3:id
@@ -274,8 +274,6 @@ function daojishi3 () {
     if(daojishinum3<0){
         clearTimeout(i);
         daojishinum3=1;
-        $("#changeart_sel_2 option:first").prop("selected", 'selected');
-        $("#changeResult_2").html("");
     }else{
         var i= setTimeout("daojishi3()",1000);
 
