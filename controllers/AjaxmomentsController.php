@@ -27,6 +27,9 @@ class AjaxmomentsController extends Controller {
 //		$momenttop=new MomentTop();
 //		$thetop=MomentTop::find(['moment_id'=>$id]);
 //		$thetop->delete();
+		if($thetop=MomentTop::find()->where(['moment_id'=>$id])->one()){
+			$thetop->delete();
+		}
 		$moment->deleteOneMoment($id);
 		echo '{"success":true}';
 	}
