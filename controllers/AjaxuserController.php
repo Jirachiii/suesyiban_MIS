@@ -30,14 +30,21 @@ class AjaxuserController extends Controller {
 			echo '{"success":false,"msg":"参数错误，信息填写不全"}';
 			return;
 		}
+		$usertb=new UserTb();
+		$usertb->XH_ID= $_POST["classmark"];
+		$usertb->XH_PW=md5('123456');
+		$usertb->Name=$_POST["name"];
+		$usertb->phone=$_POST["phone"];
+		$usertb->status=2;
+		$usertb->save();
 		//TODO: 获取POST表单数据并保存到数据库
-		$user['XH_ID']  = $_POST["classmark"];
-		$user['XH_PW']  = md5('123456');
-		$user['Name']   = $_POST["name"];
-		$user['phone']  = $_POST["phone"];
-		$user['status'] = 2;
-		$usertb         = new UserTb();
-		$usertb->insertMomentData($user);
+//		$user['XH_ID']  = $_POST["classmark"];
+//		$user['XH_PW']  = md5('123456');
+//		$user['Name']   = $_POST["name"];
+//		$user['phone']  = $_POST["phone"];
+//		$user['status'] = 2;
+//		$usertb         = new UserTb();
+//		$usertb->insertMomentData($user);
 		//提示保存成功
 		echo '{"success":true,"msg":"用户：'.$_POST["name"].' 信息保存成功！"}';
 	}
@@ -47,12 +54,13 @@ class AjaxuserController extends Controller {
 			echo '{"success":false,"msg":"你输入了空值"}';
 			return;
 		}
-		//TODO: 获取GET表单数据并搜索数据库
 		$XH_ID     = $_GET["searchuser"];
-		$sql       = 'SELECT XH_ID,Name,phone,status FROM user_tb WHERE XH_ID LIKE \'%'.$XH_ID.'%\'';
-		$Dbfactory = DbFactory::getinstance();
-		$result    = $Dbfactory->doQuery($sql);
-		$result    = $Dbfactory->findAll($result);
+		$result   = (new Query())
+			->from('user_tb')
+			->where(['or',['like', 'XH_ID', $XH_ID],['like', 'Name', $XH_ID]])
+			->all();
+		//TODO: 获取GET表单数据并搜索数据库
+
 		$result    = '{"success":true,"users":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
 		echo $result;
 	}

@@ -7,7 +7,7 @@
 
 .articlebk{
     background-image: url("../../images/1.jpg");
-    opacity:0.7;
+    /*opacity:0.7;*/
 }
 
 .set_de{
@@ -49,4 +49,18 @@
     text-shadow: 5px 5px 5px #000;
     top: 13px;
     -webkit-transform: translateY(-50%);
+}
+
+.myword{
+    border-radius: 7px;
+    font-size: 1.2em;
+    padding: 1%;
+    color: #666;
+    text-decoration: none;
+    margin: 10px;
+}
+.myselect{
+    font-size: larger;
+    padding: 5px;
+    border-radius: 30px;
 }

@@ -1,5 +1,6 @@
 //显示所有库存
 function getRawArticleData(a){
+    document.getElementById("searchArticle").value="";
     $("articleMsgShow").empty();
     if(a==4){
         document.getElementById('sel_status').value=a;
@@ -167,11 +168,19 @@ function deleteArticle(article_id,article_name){
             success: function(data) {
                 if (data.success) {
                     alert('删除成功');
-                    selectArticle();
+                    if($("#searchArticle").val()!=""){
+                        searchArticlehandle();//回到模糊搜索界面
+                    }else{
+                        selectArticle();//回到筛选界面
+                    }
                     // window.location.reload();
                 } else {
                     alert('删除失败');
-                    selectArticle();
+                    if($("#searchArticle").val()!=""){
+                        searchArticlehandle();//回到模糊搜索界面
+                    }else{
+                        selectArticle();//回到筛选界面
+                    }
                     // window.location.reload();
                 }
             },
@@ -187,6 +196,7 @@ function addArticle() {
     document.getElementById("SetDiv").style.top = '5%';
     document.getElementById("SetDiv").style.opacity = 1;
 }
+//加的页面出来
 function changeArticle(obj,obj2,obj3) {
     //obj:name,obj2:number;obj3:id
     document.getElementById("coverDiv_ch").style.top = '0px';
@@ -195,9 +205,11 @@ function changeArticle(obj,obj2,obj3) {
     document.getElementById("showarticlename").innerHTML=obj;
     document.getElementById("showarticlenumber").innerHTML=obj2;
     document.getElementById("articleid").innerHTML=obj3;
-    //document.getElementById("showarticlenum").innerHTML=obj.parentNode.parentNode.cells[1].innerHTML+":目前可修改数量为："+obj.parentNode.parentNode.cells[2].innerHTML;
-    //alert(obj.parentNode.parentNode.cells[2].innerHTML);
+    $("#changeart_sel option:first").prop("selected", 'selected');
+    $("#changeResult").html("");
+
 }
+//减的页面出来
 function changeArticle_2(obj,obj2,obj3) {
     //obj:name,obj2:number;obj3:id
     document.getElementById("coverDiv_ch_2").style.top = '0px';
@@ -206,6 +218,9 @@ function changeArticle_2(obj,obj2,obj3) {
     document.getElementById("showarticlename_2").innerHTML=obj;
     document.getElementById("showarticlenumber_2").innerHTML=obj2;
     document.getElementById("articleid_2").innerHTML=obj3;
+    $("#changeart_sel_2 option:first").prop("selected", 'selected');
+    $("#changeResult_2").html("");
+    $("#changeart_inp_2").val("");
 }
 function changeArticle_3(obj,obj3) {
     //obj:status,obj2:;obj3:id
@@ -219,14 +234,24 @@ function changeArticle_3(obj,obj3) {
     //document.getElementById("showarticlenumber_3").innerHTML=obj2;
     document.getElementById("articleid_3").innerHTML=obj3;
 }
-
-var daojishinum=2;
+//插入倒计时
+var daojishinum=1;
 function daojishi () {
     $("#createResult").html("保存成功！"+daojishinum+"秒后将自动关闭此页面");
     daojishinum=daojishinum-1;
-    setTimeout("daojishi()",1000);
+    if(daojishinum<0){
+        clearTimeout(i);
+        daojishinum=1;
+        $("#insertItemname").val("");
+        $("#insertNumber").val("");
+        $("#createResult").html("");
+    }else{
+        var i=setTimeout("daojishi()",1000);
+
+    }
 
 }
+//增加倒计时
 var daojishinum2=1;
 function daojishi2 () {
     $("#changeResult").html("修改成功！"+daojishinum2+"秒后将自动关闭此页面");
@@ -241,6 +266,7 @@ function daojishi2 () {
 
     }
 }
+//减少倒计时
 var daojishinum3=1;
 function daojishi3 () {
     $("#changeResult_2").html("修改成功！"+daojishinum3+"秒后将自动关闭此页面");
@@ -248,8 +274,6 @@ function daojishi3 () {
     if(daojishinum3<0){
         clearTimeout(i);
         daojishinum3=1;
-        $("#changeart_sel_2 option:first").prop("selected", 'selected');
-        $("#changeResult_2").html("");
     }else{
         var i= setTimeout("daojishi3()",1000);
 
@@ -270,12 +294,11 @@ function insertArticle(){
         dataType: "json",
         success: function(data){
             if (data.success) {
-                setTimeout("hideAll()",3500);
-                $("#createResult").html("保存成功！3秒后将自动关闭此页面");
+                setTimeout("hideAll()",2000);
+                $("#createResult").html("保存成功！2秒后将自动关闭此页面");
                 setTimeout("daojishi()",1000);
-                setTimeout("window.location.reload();",3000);
-
-
+                getRawArticleData();
+                //setTimeout("window.location.reload();",3000);
             } else {
                 $("#createResult").html("出现错误：" + data.msg);
             }
@@ -310,8 +333,11 @@ function updateArticle(){
                 setTimeout("hideAll_ch()",2000);
                 $("#changeResult").html("修改成功！2秒后将自动关闭此页面");
                 setTimeout("daojishi2()",1000);
-                setTimeout("selectArticle();",1000);
-
+                if($("#searchArticle").val()!=""){
+                    searchArticlehandle();//回到模糊搜索界面
+                }else{
+                    selectArticle();//回到筛选界面
+                }
 
             } else {
                 $("#changeResult").html("出现错误：" + data.msg);
@@ -340,7 +366,11 @@ function updateArticle_2(){
                 setTimeout("hideAll_ch_2()",2000);
                 $("#changeResult_2").html("修改成功！2秒后将自动关闭此页面");
                 setTimeout("daojishi3()",1000);
-                setTimeout("selectArticle();",1000);//回到原先的界面
+                if($("#searchArticle").val()!=""){
+                    searchArticlehandle();//回到模糊搜索界面
+                }else{
+                    selectArticle();//回到筛选界面
+                }
 
 
             } else {
@@ -370,7 +400,11 @@ function updateArticle_3(){
                     $("#changeResult_3").html("");
                 },1500);
                 $("#changeResult_3").html("修改成功！1秒后将自动关闭此页面");
-                setTimeout("selectArticle();",1500);
+                if($("#searchArticle").val()!=""){
+                    searchArticlehandle();//回到模糊搜索界面
+                }else{
+                    selectArticle();//回到筛选界面
+                }
 
 
             } else {
