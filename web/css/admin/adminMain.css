@@ -115,6 +115,8 @@ td {
 .Ad_btns {
 }
 .nav_btn {
+	z-index: 20;
+	cursor: pointer !important;
 	border-radius: 7px;
 	font-size: 1.2em;
 	padding: 1%;

@@ -114,10 +114,11 @@
 	border-bottom: 1px solid #AAA;
 }
 .home_Main {
-	height: 530px;
+	height: 100%;
 	background-color: #EEE;
 }
 .todayShow {
+	overflow: hidden;
 	border-radius: 5px;
 	position: relative;
 	top: 5%;
@@ -176,7 +177,7 @@
 	-webkit-transition:all .3s ease-in-out;
 }
 .centerIst_btn {
-	z-index: 2;
+	cursor: pointer;
 	position: absolute;
 	top: 30%;
 	left: 50%;

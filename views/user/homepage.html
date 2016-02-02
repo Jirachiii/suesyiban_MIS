@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="css/teambition.css">
 	<link rel="stylesheet" href="css/user/userHomepage.css">
 	<title>teamBition</title>
+	<style>html,body{height:100%;}</style>
 </head>
 <body onload="getRawData()" style="overflow:hidden">
 	<header>
@@ -38,17 +39,15 @@
 			</div>
 		</div>
 		<div class="centerIst_btn">
-			<a class="nav_btn">今日</a>
-			<a class="nav_btn">已完成</a>
-			<a class="nav_btn">过去一个月</a>
-			<a class="nav_btn">所有未完成任务</a>
+			<a class="nav_btn" onclick="getRawData()">今日</a>
+			<a class="nav_btn" onclick="Completed()">已完成</a>
+			<a class="nav_btn" onclick="pastOneMonth()">过去一个月</a>
+			<a class="nav_btn" onclick="maskhaveToBeDone()">所有未完成任务</a>
 		</div>
 	</section>
 	<section class="col-xs-12 home_Main" id="home_Main">
 		<section class="col-xs-1 blockThing"></section>
 		<section class="col-xs-10 todayShow" id="today_Show">
-			<br><p class="TS_head">今天的任务</p><hr>
-			<div class="today_Show_miss" id="today_Show_miss">
 <!-- 				<div id="mission" class="mission_type" draggable="true" ondragstart="drag(event)">
 				<span class="mission_SpDes">烧水</span>
 				<span class="mission_SpDate">2016-01-26</span>
@@ -58,9 +57,7 @@
 				</div> -->
 			</div>
 		</section>
-		<section class="col-xs-1 blockThing" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" id="deleteTodo">
-			<span class="glyphicon glyphicon-trash trash_style" id="deleteIcon" aria-hidden="true"></span>
-		</section>
+		<section class="col-xs-1 blockThing" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" id="deleteTodo"></section>
 		<section class="cover"></section>
 	</section>
     <script src="js/jquery.min.js"></script>
@@ -101,9 +98,12 @@
 			});
 		});
 		function getRawData() {
+			$("#today_Show").empty();
+			$("#deleteTodo").empty();
+			document.getElementById('today_Show').innerHTML = '<br><p class="TS_head">今天的任务</p><hr><div class="today_Show_miss" id="today_Show_miss">';
+			document.getElementById('deleteTodo').innerHTML = '<span class="glyphicon glyphicon-trash trash_style" id="deleteIcon" aria-hidden="true"></span>';
 			var height = document.body.clientHeight -110;
 			document.getElementById('home_Main').style.height =  height+'px';
-			$("#today_Show_miss").empty();
 			$.getJSON('index.php?r=json/owntodos', function(data, textStatus) {
 				if (textStatus == 'success') {
 					document.getElementById('today_Show_miss').innerHTML = data.msg;

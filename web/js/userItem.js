@@ -50,3 +50,34 @@ function Urgenthandle(ev,urgentLev) {
 		},
 	});
 }
+//今日已完成
+function Completed() {
+	$.ajax({
+	    type: "GET",
+		url: "index.php?r=ajaxuser/getdonemask",
+		dataType: "json",
+		success: function(data){
+			if (data.success) {
+				$("#today_Show").empty();
+				$("#deleteTodo").empty();
+				document.getElementById('today_Show').innerHTML = '<br><p class="TS_head">今天已完成任务</p><hr><div class="today_Show_miss" id="today_Show_miss">';
+				document.getElementById('today_Show_miss').innerHTML = data.msg;
+			} else {
+				alert('错误的数据');
+				window.location.reload();
+			}  
+		},
+		error: function(jqXHR){
+			alert("发生错误：" + jqXHR.status);
+			window.location.reload();
+		},
+	});
+}
+//近一个月
+function pastOneMonth() {
+	
+}
+//未完成任务
+function maskhaveToBeDone() {
+	
+}

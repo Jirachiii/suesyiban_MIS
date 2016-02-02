@@ -11,7 +11,7 @@ use yii\web\Controller;
 class UserController extends Controller {
 
 	public $enableCsrfValidation = false;
-	public $defaultAction        = 'index';
+	public $defaultAction        = 'item';
 
 	//用户首页
 	public function actionIndex() {

@@ -117,6 +117,28 @@ class AjaxuserController extends Controller {
 			echo '{"success":false}';
 		}
 	}
+	//获取今日已完成数据
+	public function actionGetdonemask() {
+		$owntodo = new OwnTodos();
+		$content = $owntodo->findTodayDoneMission();
+		if ($content) {
+			$result = '{"success":true,"msg":"';
+			foreach ($content as $key => $value) {
+				$result .= '<div data-Num=\"'.$value['Num'].'\" class=\"mission_type\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$value['content'].'</span><span class=\"mission_SpDate\">'.$value['CreateDate'].'</span></div>';
+			}
+			$result .= '"}';
+			echo $result;
+		} else {
+			echo '{"success":false}';
+		}
+	}
+	public function handleLength($data, $maxNum) {
+		if (strlen($data) > $maxNum) {
+			$data = substr($data, 0, $maxNum);
+			$data .= '...';
+		}
+		return $data;
+	}
 	/**
 	 * 	          库存管理
 	 */

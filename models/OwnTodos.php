@@ -89,4 +89,13 @@ class OwnTodos extends \yii\db\ActiveRecord {
 		$Dbfactory      = DbFactory::getinstance();
 		return $Dbfactory->doQuery($sql);
 	}
+	//获取今日已完成内容
+	public function findTodayDoneMission() {
+		$rightNowUserId = Yii::$app->user->identity->XH_ID;
+		$CreateDate     = date('Y-m-d');
+		$sql            = 'SELECT CreateDate,Num,content,urgentLev FROM OwnTodos WHERE XH_ID = \''.$rightNowUserId.'\' and CreateDate = \''.$CreateDate.'\' and urgentLev = 4';
+		$Dbfactory      = DbFactory::getinstance();
+		$query          = $Dbfactory->doQuery($sql);
+		return $Dbfactory->findAll($query);
+	}
 }
