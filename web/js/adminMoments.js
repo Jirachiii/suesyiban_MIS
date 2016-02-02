@@ -89,7 +89,11 @@ function beforePage() {
 				var tableHead = '<thead><tr><td>学号</td><td>内容</td><td>时间</td><td>姓名</td><td>修改/置顶/删除</td></tr></thead>';
 				var tableBody = '<tbody>';
 				for (var i = 0; i < data.moments.length; i++) {
+<<<<<<< HEAD
+					tableBody += '<tr><td>'+data.moments[i].XH_ID+'</td><td>'+handleLength(data.moments[i].Content,5)+'</td><td>'+data.moments[i].like_Num+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
+=======
 					tableBody += '<tr><td>'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].Mdate+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-pencil" onclick="changeMoment(&quot;'+data.moments[i].id+'&quot;,&quot;'+data.moments[i].XH_ID+'&quot;,&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].Content+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-sort" onclick="changeMomentTop('+data.moments[i].id+')"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
+>>>>>>> origin/master
 				};
 				tableBody += '</tbody>';
 				document.getElementById('MomentsData').innerHTML = tableHead+tableBody;
