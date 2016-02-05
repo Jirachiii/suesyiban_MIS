@@ -1,6 +1,7 @@
 <?php
 namespace app\controllers;
 use app\models\Articles;
+use app\models\Items;
 use app\models\Moments;
 use app\models\OwnTodos;
 use app\models\TestTb;
@@ -24,6 +25,7 @@ class TestController extends Controller {
 		$article = new Articles();
 		$moment  = new Moments();
 		$upload  = new upload();
+		$item    = new Items();
 	}
 
 	public function actionArticlechange() {
@@ -47,5 +49,10 @@ class TestController extends Controller {
 	public function actionTesttodo() {
 		$owntodo = new OwnTodos();
 		echo $owntodo->changeStatus(4, 4);
+	}
+
+	public function actionTestitem() {
+		$item = new Items();
+		$item->searchAllItems();
 	}
 }

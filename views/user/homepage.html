@@ -41,7 +41,7 @@
 		<div class="centerIst_btn">
 			<a class="nav_btn" onclick="getRawData()">今日</a>
 			<a class="nav_btn" onclick="Completed()">已完成</a>
-			<a class="nav_btn" onclick="pastOneMonth()">过去一个月</a>
+			<a class="nav_btn" onclick="pastOneMonth()">过去一星期</a>
 			<a class="nav_btn" onclick="maskhaveToBeDone()">所有未完成任务</a>
 		</div>
 	</section>
@@ -86,7 +86,7 @@
 			        dataType: "json",
 			        success: function(data){
 			            if (data.success) {
-			            	document.getElementById('today_Show_miss').innerHTML += data.msg;
+			            	getRawData();
 			            } else {
 			                alert('录入失败！');
 			            }

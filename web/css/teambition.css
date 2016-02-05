@@ -178,3 +178,83 @@ nav ,.sec_nav{
 .Set_btn:hover {
 	background-color: #09F;
 }
+.detailShow {
+	position: absolute;
+	top: 0%;
+	top: -100%;
+	left: 0%;
+	z-index: 1000;
+	width: 100%;
+	height: 92%;
+	background-color: rgba(120,120,120,0.5);
+	-webkit-transition:all 0.7s ease-in-out;
+}
+.det_block {
+	border-radius: 7px;
+	margin:2.5% 1%;
+	width: 30%;
+	height: 90%;
+	float: left;
+	background-color: #FFF;
+	position: relative;
+}
+.delete_span {
+	top: 2%;
+	right: 2%;
+	float: right;
+	-webkit-transition:all .2s ease-in-out;
+}
+.delete_span:hover {
+	color: #C66;
+}
+.Detail_sty {
+	width: 100%;
+	height: 80%;
+}
+.det_h3 {
+	margin-left: 10%;
+}
+.Thedetail {
+	margin: 10px 0px;
+	cursor: pointer;
+	border-left: 10px solid #CCC;
+	width: 100%;
+	height: 50px;
+	-webkit-transition:all .2s ease-in-out;
+}
+.Thedetail:hover {
+	background-color: #EEE;
+}
+.Thedetail_p {
+	position: relative;
+	margin-left: 10px;
+	font-size: 1.4em;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+}
+.detail_add {
+	height: 45px;
+	cursor: pointer;
+	-webkit-transition:all .2s ease-in-out;
+}
+.detail_add:hover {
+	background-color: #ABCDEF;
+	border-radius: 22.5px;
+	color: #FFF;
+}
+.detailadd_p {
+	text-align: center;
+}
+.detail_model {
+	border-radius: 7px;
+	position: absolute;
+	top: 50%;
+	/*left: 50%;*/
+	left: -100%;
+	z-index: 1001;
+	width: 500px;
+	height: 500px;
+	background-color: #EEE;
+	-webkit-transition:all .7s ease-in-out;
+	-webkit-transform: translateX(-50%) translateY(-50%);
+}

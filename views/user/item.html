@@ -9,8 +9,9 @@
 	<link rel="stylesheet" href="css/Main.css">
 	<link rel="stylesheet" href="css/teambition.css">
 	<title>teamBition</title>
+	<style>html,body{height:100%;overflow: hidden;}</style>
 </head>
-<body>
+<body onload="getOwnItem()">
 	<header>
 		<nav>
 			<div onclick="indexShow()" class="nav_pic" style="background-image: url(images/SuesYiBanteam.png);"></div>
@@ -26,15 +27,10 @@
 		</nav>
 	</header>
 	<section class="mask_main">
-		<div>
-			<div class="item_show" style="background-image: url(images/itemImg.jpeg);">
+		<div id="item_showbox">
+<!-- 			<div class="item_show" style="background-image: url(images/itemImg.jpeg);">
 				<h3 class="item_showtit">示例项目</h3>
-			</div>
-			<div class="item_show" style="background-image: url(images/itemImg.jpeg);"></div>
-			<div class="item_show" style="background-image: url(images/itemImg.jpeg);"></div>
-			<div class="item_show" onclick="createItem()" style="background-color: #EEE;"><br><br>
-				<img src="images/addicon.png" class="item_Addicon">
-			</div>
+			</div> -->
 		</div>
 	</section>
 	<section class="cover" id="coverDiv" onclick="hideAll()"></section>
@@ -44,17 +40,45 @@
 		</div>
 		<section class="Set_xm">
 			<div class="Set_sp">项目名：</div><input class="form-control" type="text" placeholder="项目名" id="insertItemName">
-			<div class="Set_sp">项目简介：</div><textarea class="form-control" rows="4" placeholder="项目简介(不能超过64个字)" id="insertPhone"></textarea>
+			<div class="Set_sp">项目简介：</div><textarea class="form-control" rows="4" placeholder="项目简介(不能超过64个字)" id="insertiIntro"></textarea>
 		</section>
 		<p id="createResult" class="Set_btn_P"></p><br>
 		<div class="Set_btn_M">
-			<button class="Set_btn col-xs-6 handlegreen" onclick="insertItem()">创建</button>
+			<button class="Set_btn col-xs-6 handlegreen" onclick="InsertItem()">创建</button>
 			<button class="Set_btn col-xs-6" onclick="hideAll()">取消</button>
 		</div>
 	</section>
+	<section class="detailShow" id="detailShow">
+		<span onclick="closeDet()" class="glyphicon glyphicon-remove delete_span"></span>
+		<section class="det_block">
+			<h3 class="det_h3">进行中</h3><br>
+			<div class="Detail_sty" id="Detail_Doing" ondrop="drop(event)" ondragover="allowDrop(event)">
+<!-- 				<div class="Thedetail" onclick="detailDet()" draggable="true" id="get1" ondragstart="drag(event)">
+					<p class="Thedetail_p">123</p>
+				</div>
+				<div class="detail_add"><p class="Thedetail_p detailadd_p">添加...</p></div> -->
+			</div>
+		</section>
+		<section class="det_block">
+			<h3 class="det_h3">已完成</h3><br>
+			<div class="Detail_sty" id="Detail_Done" ondrop="drop(event)" ondragover="allowDrop(event)">
+			</div>
+		</section>
+	</section>
+	<section class="detail_model" id="detail_model">
+		<span onclick="closeModel()" class="glyphicon glyphicon-remove delete_span"></span>
+	</section>
 	<script src="js/userHref.js"></script>
-    <script src="js/jquery.min.js"></script>
+	<script src="js/userItem.js"></script>
+	<script src="js/jquery.min.js"></script>
 	<script>
+		//关闭这个项目显示的细节
+		function closeDet() {
+			document.getElementById('detailShow').style.top = '-100%';
+		}
+		function closeModel() {
+			document.getElementById('detail_model').style.left = '-100%';
+		}
 		//显示状态栏
 		function createItem() {
 			document.getElementById("coverDiv").style.top = '0px';
@@ -65,6 +89,41 @@
 			document.getElementById("coverDiv").style.top = '-999px';
 			document.getElementById("createItem").style.top = '-600px';
 			document.getElementById("createItem").style.opacity = 0;
+		}
+
+		function getOwnItem() {
+			$.getJSON('index.php?r=json/getitems', function(data, textStatus) {
+				if (textStatus == 'success') {
+					if (data.success) {
+						$("#item_showbox").empty();
+						var msg = data.msg + '<div class="item_show" onclick="createItem()" style="background-color: #EEE;"><br><br><img src="images/addicon.png" class="item_Addicon"></div>';
+						$("#item_showbox").append(msg);
+					} else {
+						$("#item_showbox").append('<div class="item_show" onclick="createItem()" style="background-color: #EEE;"><br><br><img src="images/addicon.png" class="item_Addicon"></div>');
+					}
+				} else {
+					alert("系统错误" + textStatus);
+				}
+			});
+		}
+		//拖放，以后完成对象的处理
+		// var i = '';
+		function drop(ev) {
+			ev.preventDefault();
+			var ChangeStatus = ev.target.id;
+			var data = ev.dataTransfer.getData("Text");
+			$('#'+ChangeStatus).append(document.getElementById(data));
+			console.log(document.getElementById(data));
+			//与数据库进行交换
+			dbStatusChange(data,ev.target.id);
+			
+		}
+		function allowDrop(ev) {
+			ev.preventDefault();
+		}
+		function drag(ev) {
+			ev.dataTransfer.setData("Text",ev.target.id);
+			this.i = ev.dataTransfer.setData("Text",ev.target.id);
 		}
 	</script>
 </body>

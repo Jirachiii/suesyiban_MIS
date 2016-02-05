@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="css/admin/adminMain.css">
 		<link rel="stylesheet" href="css/Main.css">
 		<title>管理员</title>
+		<style>html,body {width: 100%; height: 100%;}</style>
 	</head>
 	<body>
 		<header class="Ad_head">
@@ -73,11 +74,12 @@
 			</section>
 			<p id="createResult" class="Set_btn_P"></p><br>
 			<div class="Set_btn_M">
-				<button class="Set_btn col-xs-6 handlegreen" onclick="insertItem()" style="top:10px;">创建</button>
+				<button class="Set_btn col-xs-6 handlegreen" onclick="InsertItem()" style="top:10px;">创建</button>
 				<button class="Set_btn col-xs-6" onclick="hideAll()">取消</button>
 			</div>
 		</section>
         <script src="js/adminHref.js"></script>
+        <script src="js/userItem.js"></script>
         <script src="js/jquery.min.js"></script>
 		<script>
 			var show = 0;
