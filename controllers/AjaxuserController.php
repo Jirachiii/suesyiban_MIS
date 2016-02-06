@@ -1,6 +1,9 @@
 <?php
 namespace app\controllers;
 use app\models\articles;
+use app\models\Files;
+use app\models\Itemdetails;
+use app\models\Items;
 use app\models\OwnTodos;
 use app\models\TestTb;
 use app\models\UserTb;
@@ -30,21 +33,21 @@ class AjaxuserController extends Controller {
 			echo '{"success":false,"msg":"参数错误，信息填写不全"}';
 			return;
 		}
-		$usertb=new UserTb();
-		$usertb->XH_ID= $_POST["classmark"];
-		$usertb->XH_PW=md5('123456');
-		$usertb->Name=$_POST["name"];
-		$usertb->phone=$_POST["phone"];
-		$usertb->status=2;
+		$usertb         = new UserTb();
+		$usertb->XH_ID  = $_POST["classmark"];
+		$usertb->XH_PW  = md5('123456');
+		$usertb->Name   = $_POST["name"];
+		$usertb->phone  = $_POST["phone"];
+		$usertb->status = 2;
 		$usertb->save();
 		//TODO: 获取POST表单数据并保存到数据库
-//		$user['XH_ID']  = $_POST["classmark"];
-//		$user['XH_PW']  = md5('123456');
-//		$user['Name']   = $_POST["name"];
-//		$user['phone']  = $_POST["phone"];
-//		$user['status'] = 2;
-//		$usertb         = new UserTb();
-//		$usertb->insertMomentData($user);
+		//		$user['XH_ID']  = $_POST["classmark"];
+		//		$user['XH_PW']  = md5('123456');
+		//		$user['Name']   = $_POST["name"];
+		//		$user['phone']  = $_POST["phone"];
+		//		$user['status'] = 2;
+		//		$usertb         = new UserTb();
+		//		$usertb->insertMomentData($user);
 		//提示保存成功
 		echo '{"success":true,"msg":"用户：'.$_POST["name"].' 信息保存成功！"}';
 	}
@@ -54,14 +57,14 @@ class AjaxuserController extends Controller {
 			echo '{"success":false,"msg":"你输入了空值"}';
 			return;
 		}
-		$XH_ID     = $_GET["searchuser"];
-		$result   = (new Query())
+		$XH_ID  = $_GET["searchuser"];
+		$result = (new Query())
 			->from('user_tb')
-			->where(['or',['like', 'XH_ID', $XH_ID],['like', 'Name', $XH_ID]])
+			->where(['or', ['like', 'XH_ID', $XH_ID], ['like', 'Name', $XH_ID]])
 			->all();
 		//TODO: 获取GET表单数据并搜索数据库
 
-		$result    = '{"success":true,"users":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
+		$result = '{"success":true,"users":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
 		echo $result;
 	}
 	//重置密码
@@ -93,7 +96,7 @@ class AjaxuserController extends Controller {
 		$content['content']    = $_POST['content'];
 		$content['urgentLev']  = 1;
 		if ($owntodos->insertTodoData($content)) {
-			$result = '{"success":true,"msg":"<div data-Num=\"'.$content['Num'].'\" class=\"mission_type\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$content['content'].'</span><span class=\"mission_SpDate\">'.$content['CreateDate'].'</span>';
+			$result = '{"success":true,"msg":"<div data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$content['Num'].'\" class=\"mission_type\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$content['content'].'</span><span class=\"mission_SpDate\">'.$content['CreateDate'].'</span>';
 			$result .= '<div onclick=\"Urgenthandle(this,1)\" class=\"mission_SpUrgent normal\" data-Num=\"'.$content['Num'].'\"></div><div onclick=\"Urgenthandle(this,2)\" class=\"mission_SpUrgent urgenter\" data-Num=\"'.$content['Num'].'\"></div><div onclick=\"Urgenthandle(this,3)\" class=\"mission_SpUrgent urgentest\" data-Num=\"'.$content['Num'].'\"></div></div>"}';
 			echo $result;
 		} else {
@@ -102,10 +105,11 @@ class AjaxuserController extends Controller {
 	}
 	//改变todo的状态，分为非常紧急、紧急、正常和完成这四种
 	public function actionChangetodostatus() {
-		$Num       = $_POST['Num'];
-		$urgentLev = $_POST['urgentLev'];
-		$owntodo   = new OwnTodos();
-		$result    = $owntodo->changeStatus($Num, $urgentLev);
+		$Num        = $_POST['Num'];
+		$CreateDate = $_POST['CreateDate'];
+		$urgentLev  = $_POST['urgentLev'];
+		$owntodo    = new OwnTodos();
+		$result     = $owntodo->changeStatus($Num, $CreateDate, $urgentLev);
 		if ($result == true) {
 			echo '{"success":true}';
 		} else {
@@ -132,12 +136,12 @@ class AjaxuserController extends Controller {
 		if ($content) {
 			$result = '{"success":true,"msg":"';
 			foreach ($content as $key => $value) {
-				$result .= '<div data-Num=\"'.$value['Num'].'\" class=\"mission_type\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$value['content'].'</span><span class=\"mission_SpDate\">'.$value['CreateDate'].'</span></div>';
+				$result .= '<div data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\" class=\"mission_type\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$value['content'].'</span><span class=\"mission_SpDate\">'.$value['CreateDate'].'</span></div>';
 			}
 			$result .= '"}';
 			echo $result;
 		} else {
-			echo '{"success":false}';
+			echo '{"success":true,"msg":"没有任务"}';
 		}
 	}
 	public function handleLength($data, $maxNum) {
@@ -146,6 +150,112 @@ class AjaxuserController extends Controller {
 			$data .= '...';
 		}
 		return $data;
+	}
+
+	public function actionInsertitem() {
+		$arr['XH_ID']      = \Yii::$app->user->identity->XH_ID;
+		$arr['Item_Name']  = $_POST["ItemName"];
+		$arr['Item_Intro'] = $_POST["ItemIntro"];
+		$arr['Status']     = 1;
+		$arr['Date']       = date('y-m-d');
+		$item              = new Items();
+		if ($item->insertItem($arr)) {
+			echo '{"success": true}';
+		} else {
+			echo '{"success": false}';
+		}
+	}
+	//todo近一周
+	public function actionTodopastoneweek() {
+		$oneWeek  = date('Y-m-d', strtotime("-1 week"));
+		$today    = date('Y-m-d', strtotime("-1 day"));
+		$ownTodos = new OwnTodos();
+		$result   = $ownTodos->dateSearch($oneWeek, $today);
+		if ($result) {
+			$msg = '{"success":true,"msg":"';
+			foreach ($result as $value) {
+				$msg .= '<div data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\" class=\"mission_type\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$value['content'].'</span><span class=\"mission_SpDate\">'.$value['CreateDate'].'</span></div>';
+			}
+			$msg .= '"}';
+			echo $msg;
+		} else {
+			echo '{"success": false, "msg":"没有任务"}';
+		}
+	}
+	//所有未完成
+	public function actionTodowillhandle() {
+		$ownTodos = new OwnTodos();
+		$result   = $ownTodos->willHandle();
+		$result   = $this->TodoGetItWithOrder($result);
+		if ($result) {
+			$result = '{"success":true,"msg":"'.$result.'"}';
+		} else {
+			$result = '{"success":false,"msg":"没有任务"}';
+		}
+		echo $result;
+	}
+	//TODO排序
+	private function TodoGetItWithOrder($query) {
+		$urgentLev1 = '';
+		$urgentLev2 = '';
+		$urgentLev3 = '';
+		foreach ($query as $key => $value) {
+			switch ($value['urgentLev']) {
+				case '1':
+					$urgentLev1 .= '<div id=\"mission'.$value['Num'].$value['CreateDate'].'\" data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\" class=\"mission_type\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$value['content'].'</span><span class=\"mission_SpDate\">'.$value['CreateDate'].'</span></div>';
+					break;
+				case '2':
+					$urgentLev2 .= '<div id=\"mission'.$value['Num'].$value['CreateDate'].'\" data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\" class=\"mission_type UrgenterBorder\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$value['content'].'</span><span class=\"mission_SpDate\">'.$value['CreateDate'].'</span></div>';
+					break;
+				case '3':
+					$urgentLev3 .= '<div id=\"mission'.$value['Num'].$value['CreateDate'].'\" data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\" class=\"mission_type UrgentestBorder\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$value['content'].'</span><span class=\"mission_SpDate\">'.$value['CreateDate'].'</span></div>';
+					break;
+				case '4':
+					break;
+			}
+		}
+		return $urgentLev3.$urgentLev2.$urgentLev1;
+	}
+	//项目细节展示
+	public function actionDetailshow() {
+		$id         = $_GET['id'];
+		$itemdetail = new Itemdetails();
+		$result     = $itemdetail->detailAll($id);
+		if ($result) {
+			$result = $this->itemDetailGetItWithOrder($result);
+			echo $result;
+		} else {
+			echo '{"success":true, "msg1":"没有任务"}';
+		}
+	}
+	//项目细节排序
+	private function itemDetailGetItWithOrder($query) {
+		$Lev1 = '';
+		$Lev2 = '';
+		foreach ($query as $value) {
+			switch ($value['status']) {
+				case '1':
+					$Lev1 .= '<div class=\"Thedetail\" onclick=\"detailDet('.$value['ItemDetail_Id'].')\" draggable=\"true\" id=\"Detail'.$value['ItemDetail_Id'].'\" data-id=\"'.$value['ItemDetail_Id'].'\" ondragstart=\"drag(event)\"><p class=\"Thedetail_p\">'.$value['discribe'].'</p></div>';
+					break;
+				case '2':
+					$Lev2 .= '<div class=\"Thedetail\" onclick=\"detailDet('.$value['ItemDetail_Id'].')\" draggable=\"true\" id=\"Detail'.$value['ItemDetail_Id'].'\" data-id=\"'.$value['ItemDetail_Id'].'\" ondragstart=\"drag(event)\"><p class=\"Thedetail_p\">'.$value['discribe'].'</p></div>';
+					break;
+			}
+		}
+		return '{"success":true, "msg1":"'.$Lev1.'", "msg2":"'.$Lev2.'"}';
+	}
+	//显示细节并且渲染
+	public function actionDetaildetshow() {
+		$id           = $_GET['id'];
+		$itemdetail   = new Itemdetails();
+		$detail       = $itemdetail->detailDet($id);
+		$file         = new Files();
+		$filelocation = $file->fileLocation($id);
+		if ($filelocation) {
+			echo '{"success":true,"msg":"请输查询入内容"}';
+		} else {
+			echo '{"success":true,"msg":"请输查询入内容"}';
+		}
 	}
 	/**
 	 * 	          库存管理

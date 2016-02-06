@@ -1,6 +1,7 @@
 <?php
 namespace app\controllers;
 use app\models\Articles;
+use app\models\Items;
 use app\models\Moments;
 use app\models\MomentTop;
 use app\models\OwnTodos;
@@ -23,6 +24,7 @@ header("Content-Type: application/json;charset=utf-8");
  */
 
 class JsonController extends Controller {
+
 	public function behaviors() {
 		return [
 			'access' => [
@@ -68,28 +70,28 @@ class JsonController extends Controller {
 			],
 		];
 	}
-//获取动态
+	//获取动态
 	public function actionGetmomentdata() {
-//		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
-//		$rightNowUserName = Yii::$app->user->identity->Name;
-//		$moments          = new Moments();
-//		$content          = $moments->getPageMomentWithOrder(1, 5);
-//		$allPage          = $moments->getAllPage(5);
-//		$content = Moments::find()->asArray()->join('LEFT JOIN','user_tb','moments.XH_ID=user_tb.XH_ID')->orderBy('Mdate DESC,Time DESC')->all();
+		//		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
+		//		$rightNowUserName = Yii::$app->user->identity->Name;
+		//		$moments          = new Moments();
+		//		$content          = $moments->getPageMomentWithOrder(1, 5);
+		//		$allPage          = $moments->getAllPage(5);
+		//		$content = Moments::find()->asArray()->join('LEFT JOIN','user_tb','moments.XH_ID=user_tb.XH_ID')->orderBy('Mdate DESC,Time DESC')->all();
 		$content = Moments::find()->asArray()->orderBy('Mdate DESC,Time DESC')->all();
-		$istop = MomentTop::find()->all();
-		foreach($content as $key=>$value){
-			foreach($istop as $key1=>$value1){
-				if($value1['moment_id']==$value['id']){
-					$content[$key]['status']=$value1['status'];
+		$istop   = MomentTop::find()->all();
+		foreach ($content as $key => $value) {
+			foreach ($istop as $key1 => $value1) {
+				if ($value1['moment_id'] == $value['id']) {
+					$content[$key]['status'] = $value1['status'];
 				}
 			}
-			$name=UserTb::findOne($value['XH_ID']);
-			$content[$key]['username']=$name['Name'];
+			$name                      = UserTb::findOne($value['XH_ID']);
+			$content[$key]['username'] = $name['Name'];
 		}
 
 		$content = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).'}';
-//		$content          = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).',"allPage":"'.$allPage.'","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
+		//		$content          = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).',"allPage":"'.$allPage.'","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
 		echo $content;
 	}
 
@@ -132,22 +134,36 @@ class JsonController extends Controller {
 		foreach ($query as $key => $value) {
 			switch ($value['urgentLev']) {
 				case '1':
-					$urgentLev1 .= '<div id=\"mission'.$value['Num'].$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\" class=\"mission_type\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$value['content'].'</span><span class=\"mission_SpDate\">'.$value['CreateDate'].'</span>';
-					$urgentLev1 .= '<div onclick=\"Urgenthandle(this,1)\" class=\"mission_SpUrgent normal\" data-Num=\"'.$value['Num'].'\"></div><div onclick=\"Urgenthandle(this,2)\" class=\"mission_SpUrgent urgenter\" data-Num=\"'.$value['Num'].'\"></div><div onclick=\"Urgenthandle(this,3)\" class=\"mission_SpUrgent urgentest\" data-Num=\"'.$value['Num'].'\"></div></div>';
+					$urgentLev1 .= '<div id=\"mission'.$value['Num'].$value['CreateDate'].'\" data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\" class=\"mission_type\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$value['content'].'</span><span class=\"mission_SpDate\">'.$value['CreateDate'].'</span>';
+					$urgentLev1 .= '<div onclick=\"Urgenthandle(this,1)\" class=\"mission_SpUrgent normal\" data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\"></div><div onclick=\"Urgenthandle(this,2)\" class=\"mission_SpUrgent urgenter\" data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\"></div><div onclick=\"Urgenthandle(this,3)\" class=\"mission_SpUrgent urgentest\" data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\"></div></div>';
 					break;
 				case '2':
-					$urgentLev2 .= '<div id=\"mission'.$value['Num'].$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\" class=\"mission_type UrgenterBorder\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$value['content'].'</span><span class=\"mission_SpDate\">'.$value['CreateDate'].'</span>';
-					$urgentLev2 .= '<div onclick=\"Urgenthandle(this,1)\" class=\"mission_SpUrgent normal\" data-Num=\"'.$value['Num'].'\"></div><div onclick=\"Urgenthandle(this,2)\" class=\"mission_SpUrgent urgenter\" data-Num=\"'.$value['Num'].'\"></div><div onclick=\"Urgenthandle(this,3)\" class=\"mission_SpUrgent urgentest\" data-Num=\"'.$value['Num'].'\"></div></div>';
+					$urgentLev2 .= '<div id=\"mission'.$value['Num'].$value['CreateDate'].'\" data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\" class=\"mission_type UrgenterBorder\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$value['content'].'</span><span class=\"mission_SpDate\">'.$value['CreateDate'].'</span>';
+					$urgentLev2 .= '<div onclick=\"Urgenthandle(this,1)\" class=\"mission_SpUrgent normal\" data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\"></div><div onclick=\"Urgenthandle(this,2)\" class=\"mission_SpUrgent urgenter\" data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\"></div><div onclick=\"Urgenthandle(this,3)\" class=\"mission_SpUrgent urgentest\" data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\"></div></div>';
 					break;
 				case '3':
-					$urgentLev3 .= '<div id=\"mission'.$value['Num'].$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\" class=\"mission_type UrgentestBorder\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$value['content'].'</span><span class=\"mission_SpDate\">'.$value['CreateDate'].'</span>';
-					$urgentLev3 .= '<div onclick=\"Urgenthandle(this,1)\" class=\"mission_SpUrgent normal\" data-Num=\"'.$value['Num'].'\"></div><div onclick=\"Urgenthandle(this,2)\" class=\"mission_SpUrgent urgenter\" data-Num=\"'.$value['Num'].'\"></div><div onclick=\"Urgenthandle(this,3)\" class=\"mission_SpUrgent urgentest\" data-Num=\"'.$value['Num'].'\"></div></div>';
+					$urgentLev3 .= '<div id=\"mission'.$value['Num'].$value['CreateDate'].'\" data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\" class=\"mission_type UrgentestBorder\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$value['content'].'</span><span class=\"mission_SpDate\">'.$value['CreateDate'].'</span>';
+					$urgentLev3 .= '<div onclick=\"Urgenthandle(this,1)\" class=\"mission_SpUrgent normal\" data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\"></div><div onclick=\"Urgenthandle(this,2)\" class=\"mission_SpUrgent urgenter\" data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\"></div><div onclick=\"Urgenthandle(this,3)\" class=\"mission_SpUrgent urgentest\" data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$value['Num'].'\"></div></div>';
 					break;
 				case '4':
 					break;
 			}
 		}
 		return $urgentLev3.$urgentLev2.$urgentLev1;
+	}
+
+	public function actionGetitems() {
+		$msg    = '';
+		$item   = new Items();
+		$result = $item->searchAllItems();
+		if ($result) {
+			foreach ($result as $value) {
+				$msg .= '<div onclick=\"detailShow('.$value['Item_Id'].')\" id=\"'.$value['Item_Id'].'\" class=\"item_show\" style=\"background-image: url(images/itemImg.jpeg);\"><h3 class=\"item_showtit\">'.$value['Item_Name'].'</h3></div>';
+			}
+			echo '{"success":true,"msg": "'.$msg.'"}';
+		} else {
+			echo '{"success":false}';
+		}
 	}
 
 	//这下面都不属于这边，以后更换位置

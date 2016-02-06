@@ -1,18 +1,19 @@
 <?php
 namespace app\models;
 use app\controllers\DbFactory;
-use yii\db\ActiveRecord;
 use Yii;
+use yii\db\ActiveRecord;
 header("Content-Type: application/json;charset=utf-8");
 
 /**
  * This is the model class for table "user_tb".
  *
- * @property string $XH_ID		用户主键（学号）
- * @property string $XH_PW		用户密码
- * @property string $Name 		姓名
- * @property string $phone 		联系方式
- * @property integer $status 	权限
+ * @property string $XH_ID			用户主键（学号）
+ * @property string $XH_PW			用户密码
+ * @property string $Name 			姓名
+ * @property string $phone 			联系方式
+ * @property integer $status 		权限
+ * @property integer $department 	部门
  */
 
 class UserTb extends \yii\db\ActiveRecord {

@@ -90,7 +90,7 @@ class SiteController extends Controller {
 	}
 
 	public function actionTest() {
-		return $this->renderPartial('post');
+		return $this->renderPartial('test.html');
 	}
 
 	public function actionTest1() {
@@ -98,5 +98,11 @@ class SiteController extends Controller {
 		$dest       = $uploadfile->uploadFile();
 		print_r($dest);
 		return $this->renderPartial('index');
+	}
+
+	public function actionGetfile() {
+		$filename = $_GET['filename'];
+		$res      = \YII::$app->response;
+		$res->sendFile('./files/3619c1121fe5828573f628984482ae56.m4a');
 	}
 }

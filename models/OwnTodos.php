@@ -82,9 +82,8 @@ class OwnTodos extends \yii\db\ActiveRecord {
 		return $message;
 	}
 	//修改状态
-	public function changeStatus($Num, $urgentLev) {
+	public function changeStatus($Num, $CreateDate, $urgentLev) {
 		$rightNowUserId = Yii::$app->user->identity->XH_ID;
-		$CreateDate     = date('Y-m-d');
 		$sql            = 'update OwnTodos set `urgentLev`=\''.$urgentLev.'\' WHERE XH_ID = \''.$rightNowUserId.'\' and CreateDate = \''.$CreateDate.'\' and Num = '.$Num;
 		$Dbfactory      = DbFactory::getinstance();
 		return $Dbfactory->doQuery($sql);
@@ -96,6 +95,22 @@ class OwnTodos extends \yii\db\ActiveRecord {
 		$sql            = 'SELECT CreateDate,Num,content,urgentLev FROM OwnTodos WHERE XH_ID = \''.$rightNowUserId.'\' and CreateDate = \''.$CreateDate.'\' and urgentLev = 4';
 		$Dbfactory      = DbFactory::getinstance();
 		$query          = $Dbfactory->doQuery($sql);
+		return $Dbfactory->findAll($query);
+	}
+	//取出7天内的数据
+	public function dateSearch($oneWeek, $today) {
+		$XH_ID     = \Yii::$app->user->identity->XH_ID;
+		$sql       = 'SELECT * FROM OwnTodos WHERE XH_ID = \''.$XH_ID.'\' AND CreateDate BETWEEN \''.$oneWeek.'\' AND \''.$today.'\' ORDER BY CreateDate DESC';
+		$Dbfactory = DbFactory::getinstance();
+		$query     = $Dbfactory->doQuery($sql);
+		return $Dbfactory->findAll($query);
+	}
+	//所有未完成
+	public function willHandle() {
+		$XH_ID     = \Yii::$app->user->identity->XH_ID;
+		$sql       = 'SELECT * FROM OwnTodos WHERE XH_ID = \''.$XH_ID.'\' AND urgentLev BETWEEN \'1\' AND \'3\' ORDER BY CreateDate DESC';
+		$Dbfactory = DbFactory::getinstance();
+		$query     = $Dbfactory->doQuery($sql);
 		return $Dbfactory->findAll($query);
 	}
 }
