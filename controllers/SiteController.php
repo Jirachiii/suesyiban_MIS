@@ -103,6 +103,6 @@ class SiteController extends Controller {
 	public function actionGetfile() {
 		$filename = $_GET['filename'];
 		$res      = \YII::$app->response;
-		$res->sendFile('./files/3619c1121fe5828573f628984482ae56.m4a');
+		$res->sendFile('./files/'.$filename);
 	}
 }

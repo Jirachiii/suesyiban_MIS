@@ -155,7 +155,7 @@ class JsonController extends Controller {
 	public function actionGetitems() {
 		$msg    = '';
 		$item   = new Items();
-		$result = $item->searchAllItems();
+		$result = $item->searchAllItems(2);
 		if ($result) {
 			foreach ($result as $value) {
 				$msg .= '<div onclick=\"detailShow('.$value['Item_Id'].')\" id=\"'.$value['Item_Id'].'\" class=\"item_show\" style=\"background-image: url(images/itemImg.jpeg);\"><h3 class=\"item_showtit\">'.$value['Item_Name'].'</h3></div>';
@@ -165,7 +165,38 @@ class JsonController extends Controller {
 			echo '{"success":false}';
 		}
 	}
+	//管理员审核项目
+	public function actionAdmingetallitems() {
+		$item   = new Items();
+		$result = $item->AdminAllItems(1, 5);
+		if ($result) {
+			$msg = '<thead><tr><td>编号</td><td>状态</td><td>姓名</td><td>项目名</td><td>时间</td><td>通过|不通过|详细</td></tr></thead><tbody>';
+			foreach ($result as $key => $value) {
+				$msg .= '<tr><td>'.($key+1).'</td><td>'.$this->adminStatusThatHumanCanRead($value['status']).'</td><td>'.$value['username'].'</td><td>'.$value['Item_Name'].'</td><td>'.$value['Date'].'</td><td><div class=\"Set_dele glyphicon glyphicon-ok\" onclick=\"ItemPass('.$value['Item_Id'].')\"></div>｜<div class=\"Set_dele glyphicon glyphicon-remove\" onclick=\"ItemFail('.$value['Item_Id'].')\"></div>｜<div class=\"Set_dele glyphicon glyphicon-eye-open\" onclick=\"ItemDescribe('.$value['Item_Id'].')\"></div></td></tr>';
+			}
+			echo '{"success":true,"msg":"'.$msg.'"}';
+		} else {
+			echo '{"success":true,"msg":"获取不到"}';
+		}
 
+	}
+	//管理员项目状态
+	private function adminStatusThatHumanCanRead($status) {
+		switch ($status) {
+			case 1:
+				return '待审核';
+				break;
+			case 2:
+				return '已审核';
+				break;
+			case 3:
+				return '已完成';
+				break;
+			case 4:
+				return '未通过';
+				break;
+		}
+	}
 	//这下面都不属于这边，以后更换位置
 	public function actionAddmoment() {
 		$content            = '测试';

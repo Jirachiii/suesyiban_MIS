@@ -7,10 +7,13 @@
 		<link rel="stylesheet" href="css/main/bootstrap.css">
 		<link rel="stylesheet" href="css/main/normalize.css">
 		<link rel="stylesheet" href="css/admin/adminMain.css">
+		<link rel="stylesheet" href="css/admin/adminUser.css">
+		<link rel="stylesheet" href="css/admin/adminArticle.css">
+		<link rel="stylesheet" href="css/Main.css">
 		<title>管理员</title>
 		<style>html,body {width: 100%; height: 100%;}</style>
 	</head>
-	<body>
+	<body onload="selectAllItem()">
 		<header class="Ad_head">
 			<button class="btn btn-primary hd_downbtn" onclick="tiggle()">下拉</button>
 		</header>
@@ -48,12 +51,39 @@
 			</div>
 			<br>
 		</div>
-		<div class="col-xs-10 Ad_Rig">
+		<section class="col-xs-10 Ad_Rig">
 			<h2>项目查看</h2><br>
-
-		</div>
-        <script src="js/adminHref.js"></script>
+			<div class="Ad_RShow"><br>
+				<span class="Ad_btns">
+					<a class="nav_btn" onclick="selectAllItem()">所有项目</a>
+					<input class="enjoy-css" type="text" id="searchUser" placeholder="项目名" onkeydown='if(event.keyCode==13){searchUserhandle()}'>
+					<a class="nav_btn" onclick="searchUserhandle()">搜索</a>
+					<span class="myword">状态选择：</span>
+					<select name="sel_status" class="myselect" id="sel_status" onchange="selectItem()" onclick='document.getElementById("searchUser").value=""'>
+						<option value="4">显示全部</option>
+						<option value="1">待审核</option>
+						<option value="2">已审核</option>
+						<option value="3">已完成</option>
+					</select>
+				</span><hr>
+				<br>
+				<div class="Ad_User_Main">
+					<table id="userMsgShow" class="table table-condensed table-hover">
+					</table>
+				</div>
+			</div>
+		</section>
+		<section class="detail_model" id="detail_model">
+	<!-- 		<span onclick="closeModel()" class="glyphicon glyphicon-remove delete_span"></span>
+			<div class="" id="detailmodel_Main">
+				<textarea name="" id="" cols="30" rows="3" class="detail_Maintext"></textarea>
+				<button class="detailmodel_btn" id="" onclick="addInTodo()">添加入今日任务</button>
+				<button class="detailmodel_btn" id="">修改</button>
+			</div> -->
+		</section>
         <script src="js/jquery.min.js"></script>
+        <script src="js/adminHref.js"></script>
+        <script src="js/adminItem.js"></script>
 		<script>
 			var show = 0;
 			function tiggle() {
@@ -64,6 +94,9 @@
 					document.getElementById("showandhide").style.top = '-100%';
 					this.show = 0;
 				}
+			}
+			function closeModel() {
+				document.getElementById('detail_model').style.left = '-100%';
 			}
 		</script>
 	</body>

@@ -58,12 +58,74 @@ class Items extends \yii\db\ActiveRecord {
 		return $Dbfactory->insertIntoDb('items', $arr);
 	}
 
-	public function searchAllItems() {
+	public function searchAllItems($status) {
 		$XH_ID     = \Yii::$app->user->identity->XH_ID;
-		$sql       = 'SELECT Item_Id,Item_Name FROM items WHERE XH_ID = \''.$XH_ID.'\' and Status = 2';
+		$sql       = 'SELECT Item_Id,Item_Name FROM items WHERE XH_ID = \''.$XH_ID.'\' and Status = '.$status;
 		$Dbfactory = DbFactory::getinstance();
 		$query     = $Dbfactory->doQuery($sql);
 		return $Dbfactory->findAll($query);
+	}
+	//
+	public function searchItemsDetail($Item_Id) {
+		$sql       = 'SELECT * FROM items WHERE  Item_Id = '.$Item_Id;
+		$Dbfactory = DbFactory::getinstance();
+		$query     = $Dbfactory->doQuery($sql);
+		return $Dbfactory->findAll($query);
+	}
+	//更新项目状态
+	public function updateStatus($id, $arrUpdate) {
+		$Dbfactory = DbFactory::getinstance();
+		return $Dbfactory->updateTheDbRecord('items', 'Item_Id', $id, $arrUpdate);
+	}
+	//获取状态项目
+	public function AdminSearchAllItems($status, $page, $number) {
+		if ($this->decideGetMomentContinue($page, $number)) {
+			$front     = ($page-1)*$number;
+			$sql       = 'SELECT XH_ID,Item_Name,Item_Intro,Date FROM items WHERE Status = '.$status.' ORDER BY Date DESC LIMIT '.$front.','.$number;
+			$Dbfactory = DbFactory::getinstance();
+			$items     = $Dbfactory->findBySql($sql);
+			$user      = new UserTb();
+			foreach ($items as $key => $value) {
+				$XH                      = $value['XH_ID'];
+				$username                = $user->getName($XH);
+				$items[$key]['username'] = $username;
+			}
+			return $items;
+		} else {
+			return false;
+		}
+	}
+	//获取所有项目
+	public function AdminAllItems($page, $number) {
+		if ($this->decideGetMomentContinue($page, $number)) {
+			$front     = ($page-1)*$number;
+			$sql       = 'SELECT Item_Id,XH_ID,Item_Name,Item_Intro,Date,status FROM items ORDER BY Date DESC LIMIT '.$front.','.$number;
+			$Dbfactory = DbFactory::getinstance();
+			$items     = $Dbfactory->findBySql($sql);
+			$user      = new UserTb();
+			foreach ($items as $key => $value) {
+				$XH                      = $value['XH_ID'];
+				$username                = $user->getName($XH);
+				$items[$key]['username'] = $username;
+			}
+			return $items;
+		} else {
+			return false;
+		}
+	}
+	private function decideGetMomentContinue($page, $number) {
+		$frontCount = ($page-1)*$number;
+		$Count      = $this->getCount();
+		if ($frontCount >= $Count) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	//获取个数
+	public function getCount() {
+		$Dbfactory = DbFactory::getinstance();
+		return $Dbfactory->tableCount('items');
 	}
 
 	/**

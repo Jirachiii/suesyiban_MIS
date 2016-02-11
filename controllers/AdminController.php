@@ -93,10 +93,6 @@ class AdminController extends Controller {
 		$login = new UserTb();
 
 	}
-	//修改权限
-	public function actionChangeStatus() {
-
-	}
 	//确定权限
 	private function SureAuthority() {
 		$username  = \Yii::$app->session->get('username');
