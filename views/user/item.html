@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="css/main/normalize.css">
 	<link rel="stylesheet" href="css/Main.css">
 	<link rel="stylesheet" href="css/teambition.css">
-	<title>teamBition</title>
+	<title>工程大易班</title>
 	<style>html,body{height:100%;overflow: hidden;}</style>
 </head>
 <body onload="getOwnItem()">
@@ -26,6 +26,13 @@
 			</section>
 		</nav>
 	</header>
+	<section class="col-xs-12 home_first sec_nav">
+		<div class="centerGet_btn">
+			<a class="nav_btn" onclick="getOwnItem()">正在进行</a>
+			<a class="nav_btn" onclick="ItemWillStart()">待审核</a>
+			<a class="nav_btn" onclick="ItemCompleted()">已归档项目</a>
+		</div>
+	</section>
 	<section class="mask_main">
 		<div id="item_showbox">
 <!-- 			<div class="item_show" style="background-image: url(images/itemImg.jpeg);">
@@ -66,7 +73,12 @@
 		</section>
 	</section>
 	<section class="detail_model" id="detail_model">
-		<span onclick="closeModel()" class="glyphicon glyphicon-remove delete_span"></span>
+<!-- 		<span onclick="closeModel()" class="glyphicon glyphicon-remove delete_span"></span>
+		<div class="" id="detailmodel_Main">
+			<textarea name="" id="" cols="30" rows="3" class="detail_Maintext"></textarea>
+			<button class="detailmodel_btn" id="" onclick="addInTodo()">添加入今日任务</button>
+			<button class="detailmodel_btn" id="">修改</button>
+		</div> -->
 	</section>
 	<script src="js/userHref.js"></script>
 	<script src="js/userItem.js"></script>
@@ -107,23 +119,24 @@
 			});
 		}
 		//拖放，以后完成对象的处理
-		// var i = '';
+		var i = '';
 		function drop(ev) {
 			ev.preventDefault();
 			var ChangeStatus = ev.target.id;
 			var data = ev.dataTransfer.getData("Text");
 			$('#'+ChangeStatus).append(document.getElementById(data));
-			console.log(document.getElementById(data));
+			// console.log(data);
+			// console.log(ev.target.id);
 			//与数据库进行交换
-			dbStatusChange(data,ev.target.id);
-			
+			dbStatusChange(ev.target.id, this.i);
 		}
 		function allowDrop(ev) {
 			ev.preventDefault();
 		}
 		function drag(ev) {
 			ev.dataTransfer.setData("Text",ev.target.id);
-			this.i = ev.dataTransfer.setData("Text",ev.target.id);
+			this.i = ev.target;
+			// this.i = ev.dataTransfer.setData("Text",ev.target.id);
 		}
 	</script>
 </body>

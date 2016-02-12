@@ -44,10 +44,10 @@ function detailShow(id){
 				if (data.success) {
 					$('#Detail_Doing').empty();
 					$('#Detail_Done').empty();
+					var msg = '<div class="detail_add" onclick="AddDetail('+data.msg3+')"><p class="Thedetail_p detailadd_p">添加...</p></div>';
+					$('#Detail_Doing').append(msg);
 					$('#Detail_Doing').append(data.msg1);
 					$('#Detail_Done').append(data.msg2);
-					var msg = '<div class="detail_add"><p class="Thedetail_p detailadd_p">添加...</p></div>';
-					$('#Detail_Doing').append(msg);
 				} else {
 					alert('获取失败');
 					window.location.reload();
@@ -60,9 +60,10 @@ function detailShow(id){
 	});
 }
 //ajax实现和数据库的交换，传参，第一个为状态，第二个为事件
-function dbStatusChange(itemId,divId) {
+function dbStatusChange(urgentLev,ev) {
+	var itemId = ev.getAttribute("data-id");
 	var status = 1;
-	if (divId == 'Completed') {
+	if (urgentLev == 'Detail_Done') {
 		status = 2;
 	}
 	$.ajax({
@@ -75,7 +76,7 @@ function dbStatusChange(itemId,divId) {
 		dataType: "json",
 		success: function(data){
 			if (data.success) {
-				// alert('状态转换成功');
+
 			} else {
 				alert('出现错误');
 				window.location.reload();
@@ -182,12 +183,12 @@ function maskhaveToBeDone() {
 		},
 	});
 }
-//
+//团队任务的单个细节
 function detailDet(id) {
 	document.getElementById('detail_model').style.left = '50%';
 	$.ajax({
 	    type: "GET",
-		url: "index.php?r=ajaxuser/todowillhandle",
+		url: "index.php?r=ajaxuser/onedetailshow",
 		data: {
 			id: id,
 		},
@@ -198,6 +199,150 @@ function detailDet(id) {
 				$("#detail_model").append(data.msg);
 			} else {
 				alert('错误的数据');
+				window.location.reload();
+			}  
+		},
+		error: function(jqXHR){
+			alert("发生错误：" + jqXHR.status);
+			window.location.reload();
+		},
+	});
+}
+//团队任务添加进个人任务
+function addInTodo() {
+	var discribe = $("#detail_text").val();
+	if (discribe) {
+		$.ajax({
+		    type: "POST",
+			url: "index.php?r=ajaxuser/inserttodo",
+			data: {
+				content: discribe,
+			},
+			dataType: "json",
+			success: function(data){
+				if (data.success) {
+					alert('插入成功');
+					window.location.href='index.php?r=user/homepage';
+				} else {
+					alert('错误的数据');
+					window.location.reload();
+				}  
+			},
+			error: function(jqXHR){
+				alert("发生错误：" + jqXHR.status);
+				window.location.reload();
+			},
+		});
+	} else {
+		alert('不能为空');
+	}
+}
+//修改团队任务描述
+function changeDetail(ItemDetail_Id) {
+	var discribe = $("#detail_text").val();
+	if (discribe) {
+		$.ajax({
+			type: "POST",
+			url: "index.php?r=ajaxuser/changediscribe",
+			data: {
+				ItemDetail_Id: ItemDetail_Id,
+				discribe: discribe,
+			},
+			dataType: "json",
+			success: function(data){
+				if (data.success) {
+					alert('修改成功');
+					window.location.reload();
+				} else {
+					alert('错误的数据');
+					window.location.reload();
+				}  
+			},
+			error: function(jqXHR){
+				alert("发生错误：" + jqXHR.status);
+				window.location.reload();
+			},
+		});
+	} else {
+		alert('描述不能为空!');
+	}
+}
+//添加项目细节
+function AddDetail(itemId) {
+	document.getElementById('detail_model').style.left = '50%';
+	$("#detail_model").empty();
+	var msg = '<span onclick="closeModel()" class="glyphicon glyphicon-remove delete_span"></span><div id="detailmodel_Main"><textarea id="detail_text" cols="30" rows="3" class="detail_Maintext"></textarea><button onclick="addInto('+itemId+')" class="detailmodel_btn">插入</button></div>';
+	$("#detail_model").append(msg);
+}
+//插入项目细节
+function addInto(itemId) {
+	var discribe = $("#detail_text").val();
+	if (discribe) {
+		$.ajax({
+			type: "POST",
+			url: "index.php?r=ajaxuser/insertdetail",
+			data: {
+				item_id: itemId,
+				discribe: discribe,
+			},
+			dataType: "json",
+			success: function(data){
+				if (data.success) {
+					alert('任务添加成功');
+					window.location.reload();
+				} else {
+					alert('添加失败');
+					window.location.reload();
+				}  
+			},
+			error: function(jqXHR){
+				alert("发生错误：" + jqXHR.status);
+				window.location.reload();
+			},
+		});
+	} else {
+		alert('内容为空');
+	}
+}
+//渲染待审核项目
+function ItemWillStart() {
+	$.ajax({
+		type: "GET",
+		url: "index.php?r=ajaxuser/getitembystatus",
+		dataType: "json",
+		data: {
+			status: 1,
+		},
+		success: function(data){
+			if (data.success) {
+				$("#item_showbox").empty();
+				$("#item_showbox").append(data.msg);
+			} else {
+				alert('获取失败');
+				window.location.reload();
+			}  
+		},
+		error: function(jqXHR){
+			alert("发生错误：" + jqXHR.status);
+			window.location.reload();
+		},
+	});
+}
+//渲染归档项目
+function ItemCompleted() {
+	$.ajax({
+		type: "GET",
+		url: "index.php?r=ajaxuser/getitembystatus",
+		dataType: "json",
+		data: {
+			status: 3,
+		},
+		success: function(data){
+			if (data.success) {
+				$("#item_showbox").empty();
+				$("#item_showbox").append(data.msg);
+			} else {
+				alert('获取失败');
 				window.location.reload();
 			}  
 		},

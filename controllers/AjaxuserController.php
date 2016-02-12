@@ -5,7 +5,7 @@ use app\models\Files;
 use app\models\Itemdetails;
 use app\models\Items;
 use app\models\OwnTodos;
-use app\models\TestTb;
+
 use app\models\UserTb;
 use yii\db\Query;
 
@@ -67,6 +67,65 @@ class AjaxuserController extends Controller {
 		$result = '{"success":true,"users":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
 		echo $result;
 	}
+	//获取所有状态
+	public function actionAdminstatusgetitems() {
+		$status = $_GET['status'];
+		$items  = new items();
+		$result = $items->AdminSearchAllItems($status, 1, 5);
+		if ($result) {
+			$msg = '<thead><tr><td>编号</td><td>学号</td><td>姓名</td><td>项目名</td><td>时间</td><td>通过|不通过|详细</td></tr></thead><tbody>';
+			foreach ($result as $key => $value) {
+				$msg .= '<tr><td>'.($key+1).'</td><td>'.$value['XH_ID'].'</td><td>'.$value['username'].'</td><td>'.$value['Item_Name'].'</td><td>'.$value['Date'].'</td><td><div class=\"Set_dele glyphicon glyphicon-ok\" onclick=\"ItemPass('.$value['Item_Id'].')\"></div>｜<div class=\"Set_dele glyphicon glyphicon-remove\" onclick=\"ItemFail('.$value['Item_Id'].')\"></div>｜<div class=\"Set_dele glyphicon glyphicon-eye-open\" onclick=\"ItemDescribe('.$value['Item_Id'].')\"></div></td></tr>';
+			}
+			echo '{"success":true,"msg":"'.$msg.'"}';
+		} else {
+			echo '{"success":true,"msg":"获取不到"}';
+		}
+	}
+	//
+	public function actionChangeitemstatus() {
+		$id                  = $_POST['Item_Id'];
+		$arrUpdate['Status'] = $_POST['status'];
+		$items               = new items();
+		$result              = $items->updateStatus($id, $arrUpdate);
+		if ($result) {
+			echo '{"success":true}';
+		} else {
+			echo '{"success":false}';
+		}
+	}
+
+	//用户获取项目
+	public function actionGetitembystatus() {
+		$status = $_GET['status'];
+		switch ($status) {
+			case 2:
+				//以后改进
+				$items  = new items();
+				$result = $items->searchAllItems($status);
+				if ($result) {
+					foreach ($result as $value) {
+						$msg .= '<div onclick=\"detailShow('.$value['Item_Id'].')\" id=\"'.$value['Item_Id'].'\" class=\"item_show\" style=\"background-image: url(images/itemImg.jpeg);\"><h3 class=\"item_showtit\">'.$value['Item_Name'].'</h3></div>';
+					}
+					echo '{"success":true,"msg": "'.$msg.'"}';
+				} else {
+					echo '{"success":true, "msg":"没有项目"}';
+				}
+				break;
+			default:
+				$items  = new items();
+				$result = $items->searchAllItems($status);
+				if ($result) {
+					foreach ($result as $value) {
+						$msg .= '<div onclick=\"detailShow('.$value['Item_Id'].')\" id=\"'.$value['Item_Id'].'\" class=\"item_show\" style=\"background-image: url(images/itemImg.jpeg);\"><h3 class=\"item_showtit\">'.$value['Item_Name'].'</h3></div>';
+					}
+					echo '{"success":true,"msg": "'.$msg.'"}';
+				} else {
+					echo '{"success":true, "msg":"没有项目"}';
+				}
+				break;
+		}
+	}
 	//重置密码
 	public function actionResetpass() {
 		$user   = new UserTb();
@@ -119,11 +178,11 @@ class AjaxuserController extends Controller {
 
 	//测试改变状态
 	public function actionChangestatus() {
-		$testTb = new TestTb();
-		$id     = $_POST['id'];
-		$status = $_POST['status'];
-		$result = $testTb->changeStatus($id, $status);
-		if ($result == true) {
+		$itemdetails = new Itemdetails();
+		$id          = $_POST['id'];
+		$status      = $_POST['status'];
+		$result      = $itemdetails->changeStatus($id, $status);
+		if ($result) {
 			echo '{"success":true}';
 		} else {
 			echo '{"success":false}';
@@ -151,7 +210,7 @@ class AjaxuserController extends Controller {
 		}
 		return $data;
 	}
-
+	//插入项目
 	public function actionInsertitem() {
 		$arr['XH_ID']      = \Yii::$app->user->identity->XH_ID;
 		$arr['Item_Name']  = $_POST["ItemName"];
@@ -228,6 +287,18 @@ class AjaxuserController extends Controller {
 			echo '{"success":true, "msg1":"没有任务"}';
 		}
 	}
+	//显示项目任务的一个细节（附件之类）
+	public function actionOnedetailshow() {
+		$id         = $_GET['id'];
+		$itemdetail = new Itemdetails();
+		$result     = $itemdetail->detailDet($id);
+		if ($result) {
+			$msg = '<span onclick=\"closeModel()\" class=\"glyphicon glyphicon-remove delete_span\"></span><div class=\"\" id=\"detailmodel_Main\"><textarea name=\"\" id=\"detail_text\" cols=\"30\" rows=\"3\" class=\"detail_Maintext\">'.$result[0]['discribe'].'</textarea><button class=\"detailmodel_btn\" id=\"\" onclick=\"addInTodo()\">添加入今日任务</button><button onclick=\"changeDetail('.$result[0]['ItemDetail_Id'].')\" class=\"detailmodel_btn\" id=\"\">修改</button></div>';
+			echo '{"success":true, "msg":"'.$msg.'"}';
+		} else {
+			echo '{"success":false,"msg":"系统错误"}';
+		}
+	}
 	//项目细节排序
 	private function itemDetailGetItWithOrder($query) {
 		$Lev1 = '';
@@ -242,7 +313,7 @@ class AjaxuserController extends Controller {
 					break;
 			}
 		}
-		return '{"success":true, "msg1":"'.$Lev1.'", "msg2":"'.$Lev2.'"}';
+		return '{"success":true, "msg1":"'.$Lev1.'", "msg2":"'.$Lev2.'","msg3":"'.$query[0]['item_id'].'"}';
 	}
 	//显示细节并且渲染
 	public function actionDetaildetshow() {
@@ -255,6 +326,46 @@ class AjaxuserController extends Controller {
 			echo '{"success":true,"msg":"请输查询入内容"}';
 		} else {
 			echo '{"success":true,"msg":"请输查询入内容"}';
+		}
+	}
+	//插入
+	public function actionInsertdetail() {
+		$arr['item_id']  = $_POST['item_id'];
+		$arr['discribe'] = $_POST['discribe'];
+		$arr['status']   = 1;
+		$arr['Date']     = date('y-m-d');
+		$arr['Time']     = date('H:i:s');
+		$itemdetail      = new Itemdetails();
+		$result          = $itemdetail->insertDetail($arr);
+		if ($result) {
+			echo '{"success":true}';
+		} else {
+			echo '{"success":false}';
+		}
+	}
+	//修改项目任务细节内容
+	public function actionChangediscribe() {
+		$ItemDetail_Id = $_POST['ItemDetail_Id'];
+		$discribe      = $_POST['discribe'];
+		$itemdetail    = new Itemdetails();
+		$result        = $itemdetail->ChangeDetail($ItemDetail_Id, $discribe);
+		if ($result) {
+			echo '{"success":true}';
+		} else {
+			echo '{"success":false}';
+		}
+	}
+	//管理员审核项目
+	public function actionAdminshowitem() {
+		$item_id = $_GET['Item_Id'];
+		$item_id = 1;
+		$item    = new Items();
+		$result  = $item->searchItemsDetail($item_id);
+		if ($result) {
+			$msg = '<span onclick=\"closeModel()\" class=\"glyphicon glyphicon-remove delete_span\"></span><div class=\"\" id=\"detailmodel_Main\"><textarea name=\"\" cols=\"30\" rows=\"3\" class=\"detail_Maintext\">'.$result[0]['Item_Name'].'</textarea><textarea cols=\"30\" rows=\"3\" class=\"detail_Maintext\">'.$result[0]['Item_Intro'].'</textarea></div>';
+			echo '{"success":true, "msg":"'.$msg.'"}';
+		} else {
+			echo '{"success":false}';
 		}
 	}
 	/**
