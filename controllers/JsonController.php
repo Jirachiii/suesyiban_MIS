@@ -8,6 +8,7 @@ use app\models\OwnTodos;
 use app\models\TestTb;
 use app\models\UserTb;
 use yii;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -24,40 +25,42 @@ header("Content-Type: application/json;charset=utf-8");
  */
 
 class JsonController extends Controller {
-
-	public function behaviors() {
-		return [
-			'access' => [
-				'class' => AccessControl::className(),
-				'only'  => ['logout', 'login', 'getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
-				'rules' => [
-					[
-						'allow'   => true,
-						'actions' => ['login'],
-						'roles'   => ['?'],
-					],
-					//只有1级管理员有权限
-					[
-						'actions'       => ['logout', 'getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
-						'allow'         => true,
-						'roles'         => ['@'],
-						'matchCallback' => function ($rule, $action) {
-							return Yii::$app->user->identity->status == 1;
-						}
-					],
-
-				],
-			],
-			//            emptyclassshow/itemshow/itemcreate/articles/signinmene/momentsmene
-
-			'verbs'    => [
-				'class'   => VerbFilter::className(),
-				'actions' => [
-					'logout' => ['post'],
-				],
-			],
-		];
-	}
+	/**权限控制，等项目完成后再填
+	 * @return array
+	 */
+//	public function behaviors() {
+//		return [
+//			'access' => [
+//				'class' => AccessControl::className(),
+//				'only'  => ['logout', 'login', 'getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
+//				'rules' => [
+//					[
+//						'allow'   => true,
+//						'actions' => ['login'],
+//						'roles'   => ['?'],
+//					],
+//					//只有1级管理员有权限
+//					[
+//						'actions'       => ['logout', 'getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
+//						'allow'         => true,
+//						'roles'         => ['@'],
+//						'matchCallback' => function ($rule, $action) {
+//							return Yii::$app->user->identity->status == 1;
+//						}
+//					],
+//
+//				],
+//			],
+//			//            emptyclassshow/itemshow/itemcreate/articles/signinmene/momentsmene
+//
+//			'verbs'    => [
+//				'class'   => VerbFilter::className(),
+//				'actions' => [
+//					'logout' => ['post'],
+//				],
+//			],
+//		];
+//	}
 
 	public function actions() {
 		return [
@@ -70,7 +73,10 @@ class JsonController extends Controller {
 			],
 		];
 	}
-	//获取动态
+
+	/**
+	 * 获取动态
+	 */
 	public function actionGetmomentdata() {
 		//		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
 		//		$rightNowUserName = Yii::$app->user->identity->Name;
@@ -95,6 +101,9 @@ class JsonController extends Controller {
 		echo $content;
 	}
 
+	/**
+	 * 获取用户列表
+	 */
 	public function actionGetuserdata() {
 		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
 		$rightNowUserName = Yii::$app->user->identity->Name;
@@ -103,7 +112,10 @@ class JsonController extends Controller {
 		$result           = '{"users":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
 		echo $result;
 	}
-	//获取article物品
+
+	/**
+	 * 获取article物品
+	 */
 	public function actionGetarticledata() {
 		$result = Articles::find()->asArray()->orderBy('status ASC,Art_Num DESC')->all();
 		$result = '{"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
@@ -185,5 +197,20 @@ class JsonController extends Controller {
 		$count     = $Dbfactory->TableCount('Moments');
 		echo $count;
 	}
+
+//	/**
+//	 * 获取空课表
+//	 */
+//	public function actionGetemptyclass(){
+////		$content = UserTb::find()->asArray()->all();
+//		$content   = (new Query())
+//			->select(['XH_ID', 'Name','status'])
+//			->from('user_tb')
+//			->orderBy('status DESC')
+//			->all();
+//
+//		$content = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).'}';
+//		echo $content;
+//	}
 
 }

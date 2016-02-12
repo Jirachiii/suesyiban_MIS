@@ -6,7 +6,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="css/main/bootstrap.css">
 		<link rel="stylesheet" href="css/main/normalize.css">
+		<link rel="stylesheet" href="css/Main.css">
 		<link rel="stylesheet" href="css/admin/adminMain.css">
+		<link rel="stylesheet" href="css/admin/adminEmptyclass.css">
 		<title>管理员</title>
 		<style>html,body {width: 100%; height: 100%;}</style>
 	</head>
@@ -49,21 +51,123 @@
 			<br>
 		</div>
 		<div class="col-xs-10 Ad_Rig">
-			<h2>空课表管理</h2><br>
+			<h2>值班安排</h2><br>
+			<div class="Ad_RShow_r">
+				<select name="whichweek" id="whichweek_2" class="myselect">
+				</select>
+				<select name="thisweek" id="weekday_2" class="myselect">
+					<option value="1">周一</option>
+					<option value="2">周二</option>
+					<option value="3">周三</option>
+					<option value="4">周四</option>
+					<option value="5">周五</option>
+					<option value="6">周六</option>
+					<option value="7">周日</option>
+				</select>
+				<input type="button" class="btn btn-small btn-primary" onclick="loadanpai()" value="搜索">
+				<input type="button" value="手动排班" class="btn btn-small btn-success" onclick="addAnapi()">
+				<hr>
+				<div id="zhibanshow">
+				<span>12:00-14:00</span><br>
+					<p id="first_arr">
+					</p>
+					<hr>
+				<span>14:00-16:00</span><br>
+					<p id="second_arr">
+					</p>
+					<hr>
+				<span>18:00-20:00</span><br>
+					<p id="third_arr">
+					</p>
+				</div>
+				<hr>
+			</div>
+			<div class="Ad_RShow_l"><br>
+				<span class="Ad_btns">
+						<select name="whichweek" id="whichweek" class="myselect">
+						</select>
+						<select name="weekday" id="weekday" class="myselect">
+							<option value="1">周一</option>
+							<option value="2">周二</option>
+							<option value="3">周三</option>
+							<option value="4">周四</option>
+							<option value="5">周五</option>
+							<option value="6">周六</option>
+							<option value="7">周日</option>
+						</select>
+						<select name="zhibantime" id="zhibantime" class="myselect">
+							<option value="1">12:00-14:00</option>
+							<option value="2">14:00-16:00</option>
+							<option value="3">18:00-20:00</option>
+						</select>
+						<!--<select name="username" id="username" class="myselect">-->
+							<!--<option value="" selected="true" disabled="true">—学生—</option>-->
+							<!--<option value="1">全部</option>-->
+						<!--</select>-->
+						<input type="button" class="btn btn-small btn-primary" onclick="searchEmptyclass()" value="搜索">
+						<a class="btn btn-danger btn-sm" onclick="updateMemberkb()">更新部员课表</a>
+				</span><hr class="hranpai"><br>
+				<div class="Ad_User_Main">
+					<table id="emptyclassdata" class="table table-condensed table-hover">
+						<span id="msg918"><h1>第9、18周为我校考试周。因无考试安排数据，请手动排班。</h1></span>
+					</table>
+					</div>
+				</div>
+			</div>
 		</div>
+		<!-- 以下安排手动添加，默认隐藏 -->
+		<section class="cover" id="coverDiv_anpai" onclick="hideAll_anpai()"></section>
+		<section class="showSetting" id="SetDiv_anpai">
+			<div class="Set_pic articlebk">
+				<p class="Set_tit">手动排班（第9、18周使用）</p>
+			</div>
+			<section class="Set_xm" onclick="">
+				<select name="" id="whichweek_manual" class="form-control">
+					<option value="" selected="selected" disabled="true">--第几周--</option>
+				</select>
+				<br>
+				<select name="" id="weekday_manual" class="form-control">
+					<option value="" selected="selected" disabled="true">--星期几--</option>
+					<option value="1">周一</option>
+					<option value="2">周二</option>
+					<option value="3">周三</option>
+					<option value="4">周四</option>
+					<option value="5">周五</option>
+					<option value="6">周六</option>
+					<option value="7">周日</option>
+				</select>
+				<br>
+				<select name="" id="zhibantime_manual" class="form-control">
+					<option value="" selected="selected" disabled="true">--值班时间--</option>
+					<option value="1">12:00-14:00</option>
+					<option value="2">14:00-16:00</option>
+					<option value="3">18:00-20:00</option>
+				</select>
+				<br>
+				<select name="" id="who_manual" class="form-control"></select>
+
+			</section>
+			<p id="anpai_result" class="Set_btn_P"></p><br>
+			<div class="Set_btn_M">
+				<button class="Set_btn col-xs-6 handlegreen" onclick="insertAnpai()">插入</button>
+				<button class="Set_btn col-xs-6" onclick="hideAll_anpai()">取消</button>
+			</div>
+		</section>
         <script src="js/adminHref.js"></script>
         <script src="js/jquery.min.js"></script>
+		<script src="js/adminEmptyclass.js"></script>
 		<script>
-			var show = 0;
-			function tiggle() {
-				if (this.show == 0) {
-					document.getElementById("showandhide").style.top = '51px';
-					this.show = 1;
-				} else {
-					document.getElementById("showandhide").style.top = '-100%';
-					this.show = 0;
+			$(function(){
+				var week_sel=document.getElementById("whichweek")
+				for(i=1;i<=22;i++){
+					week_sel.options.add(new Option('第'+i+'周',i))
 				}
-			}
+				var week_sel_2=document.getElementById("whichweek_2")
+				for(i=1;i<=22;i++){
+					week_sel_2.options.add(new Option('第'+i+'周',i))
+				}
+				loadanpai()
+			})
 		</script>
 	</body>
 </html>

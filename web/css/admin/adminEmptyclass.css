@@ -1,0 +1,28 @@
+.myselect {
+    font-size: larger;
+    padding: 5px;
+    border-radius: 30px;
+}
+.Ad_RShow_l{
+	background-color: #FFF;
+	width: 60%;
+	border-radius: 5px;
+	box-shadow: 1px 0px 7px #BBB;
+	height: 80%;
+	float: right;
+}
+.Ad_RShow_r{
+	background-color: #FFF;
+	width: 35%;
+	border-radius: 5px;
+	box-shadow: 1px 0px 7px #BBB;
+	height: 80%;
+	float: left;
+}
+.myblue{
+	color: #0880d7;
+}
+.hranpai{
+	margin-top: 14px;
+	margin-bottom: -14px;
+}

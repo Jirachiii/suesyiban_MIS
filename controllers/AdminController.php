@@ -11,6 +11,10 @@ use yii\web\Controller;
  */
 
 class AdminController extends Controller {
+	/**
+	 * 权限设置，添加新方法需在这里“注册”权限
+	 * @return array
+	 */
 	public function behaviors() {
 		return [
 			'access' => [
