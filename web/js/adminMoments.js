@@ -11,8 +11,8 @@ function getMomentData_dongtai() {
 			};
 			tableBody += '</tbody>';
 			document.getElementById('MomentsData').innerHTML = tableHead+tableBody;
-			$("td span:contains(1)").addClass("glyphicon glyphicon-fire myred").show().empty();
-			$("td span[class='glyphicon glyphicon-fire myred']").parent().parent().insertBefore($("tbody tr:eq(0)"))
+				$("td span:contains(1)").addClass("glyphicon glyphicon-fire myred").show().empty();
+				$("td span[class='glyphicon glyphicon-fire myred']").parent().parent().insertBefore($("tbody tr:eq(0)"))
 		} else {
 			alert("系统错误" + textStatus);
 		}
@@ -89,11 +89,8 @@ function beforePage() {
 				var tableHead = '<thead><tr><td>学号</td><td>内容</td><td>时间</td><td>姓名</td><td>修改/置顶/删除</td></tr></thead>';
 				var tableBody = '<tbody>';
 				for (var i = 0; i < data.moments.length; i++) {
-<<<<<<< HEAD
 					tableBody += '<tr><td>'+data.moments[i].XH_ID+'</td><td>'+handleLength(data.moments[i].Content,5)+'</td><td>'+data.moments[i].like_Num+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
-=======
 					tableBody += '<tr><td>'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].Mdate+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-pencil" onclick="changeMoment(&quot;'+data.moments[i].id+'&quot;,&quot;'+data.moments[i].XH_ID+'&quot;,&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].Content+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-sort" onclick="changeMomentTop('+data.moments[i].id+')"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
->>>>>>> origin/master
 				};
 				tableBody += '</tbody>';
 				document.getElementById('MomentsData').innerHTML = tableHead+tableBody;
@@ -181,7 +178,7 @@ function hideAll_mom_1() {
 	document.getElementById("SetDiv_mom_1").style.top = '-600px';
 	document.getElementById("SetDiv_mom_1").style.opacity = 0;
 }
-隐藏置顶页面
+// 隐藏置顶页面
 function hideAll_mom_2() {
 	document.getElementById("coverDiv_mom_2").style.top = '-999px';
 	document.getElementById("SetDiv_mom_2").style.top = '-600px';
@@ -283,11 +280,13 @@ function updateMoment_1(){
 		},
 	});
 }
-//动态置顶提交方法
+/**
+ * 动态置顶
+ */
 function updateMoment_2(){
 	$.ajax({
 		type: "POST",
-		url: "index.php?r=ajaxmoments/adminupdatemoment_2",
+		url: "index.php?r=emptyclass/adminupdatemoment_2",
 		data: {
 			momentid: $("#momentid_2").text(),
 			status: $("#momenttop_2").val(),

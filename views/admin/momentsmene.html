@@ -96,7 +96,7 @@
 		<section class="cover" id="coverDiv_mom_1" onclick="hideAll_mom_1()"></section>
 		<section class="showSetting" id="SetDiv_mom_1">
 			<div class="Set_pic momentsbk">
-				<p class="Set_tit">添加系动态</p>
+				<p class="Set_tit">添加新动态（25字以内）</p>
 			</div>
 			<span id="momentid_1" style="display: none"></span>
 			<section class="Set_xm">
@@ -140,31 +140,7 @@
 			var show = 0;
 			var nowPage = 1;
 			var allpage = 1;
-			function tiggle() {
-				if (this.show == 0) {
-					document.getElementById("showandhide").style.top = '51px';
-					this.show = 1;
-				} else {
-					document.getElementById("showandhide").style.top = '-100%';
-					this.show = 0;
-				}
-			}
-			function getMomentData() {
-				$.getJSON('index.php?r=json/getmomentdata', function(data, textStatus) {
-					if (textStatus == 'success') {
-						this.allpage = data.allPage;
-						var tableHead = '<thead><tr><td>学号</td><td>内容</td><td>点赞数</td><td>姓名</td><td>删除</td></tr></thead>';
-						var tableBody = '<tbody>';
-						for (var i = 0; i < data.moments.length; i++) {
-							tableBody += '<tr><td>'+data.moments[i].XH_ID+'</td><td>'+handleLength(data.moments[i].Content, 5)+'</td><td>'+data.moments[i].like_Num+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
-						};
-						tableBody += '</tbody>';
-						document.getElementById('MomentsData').innerHTML = tableHead+tableBody;
-					} else {
-						alert("系统错误" + textStatus);
-					}
-				});
-			}
+
 			$(function(){
 				getMomentData_dongtai();
 //				getAllyema();
