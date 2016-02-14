@@ -78,26 +78,28 @@ class JsonController extends Controller {
 	 * 获取动态
 	 */
 	public function actionGetmomentdata() {
-		//		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
-		//		$rightNowUserName = Yii::$app->user->identity->Name;
-		//		$moments          = new Moments();
-		//		$content          = $moments->getPageMomentWithOrder(1, 5);
-		//		$allPage          = $moments->getAllPage(5);
+				$rightNowUserId   = Yii::$app->user->identity->XH_ID;
+				$rightNowUserName = Yii::$app->user->identity->Name;
+				$moments          = new Moments();
+				$content          = $moments->getPageMomentWithOrder(1, 6);
+				$allPage          = $moments->getAllPage(6);
 		//		$content = Moments::find()->asArray()->join('LEFT JOIN','user_tb','moments.XH_ID=user_tb.XH_ID')->orderBy('Mdate DESC,Time DESC')->all();
-		$content = Moments::find()->asArray()->orderBy('Mdate DESC,Time DESC')->all();
+//		$content = Moments::find()->asArray()->orderBy('Mdate DESC,Time DESC')->all();
 		$istop   = MomentTop::find()->all();
-		foreach ($content as $key => $value) {
-			foreach ($istop as $key1 => $value1) {
-				if ($value1['moment_id'] == $value['id']) {
-					$content[$key]['status'] = $value1['status'];
+		if(!empty($content)){
+			foreach ($content as $key => $value) {
+				foreach ($istop as $key1 => $value1) {
+					if ($value1['moment_id'] == $value['id']) {
+						$content[$key]['status'] = $value1['status'];
+					}
 				}
+				$name                      = UserTb::findOne($value['XH_ID']);
+				$content[$key]['username'] = $name['Name'];
 			}
-			$name                      = UserTb::findOne($value['XH_ID']);
-			$content[$key]['username'] = $name['Name'];
 		}
 
-		$content = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).'}';
-		//		$content          = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).',"allPage":"'.$allPage.'","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
+//		$content = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).'}';
+				$content          = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).',"allPage":"'.$allPage.'","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
 		echo $content;
 	}
 
