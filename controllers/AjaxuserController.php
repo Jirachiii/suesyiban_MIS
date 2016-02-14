@@ -34,12 +34,17 @@ class AjaxuserController extends Controller {
 			return;
 		}
 		$usertb         = new UserTb();
-		$usertb->XH_ID  = $_POST["classmark"];
+		$usertb->XH_ID  =trim($_POST["classmark"]);
 		$usertb->XH_PW  = md5('123456');
-		$usertb->Name   = $_POST["name"];
-		$usertb->phone  = $_POST["phone"];
+		$usertb->Name   = trim($_POST["name"]);
+		$usertb->phone  = trim($_POST["phone"]);
 		$usertb->status = 2;
-		$usertb->save();
+		if($usertb->save()){
+			echo '{"success":true,"msg":"用户：'.$_POST["name"].' 信息保存成功！"}';
+		}else{
+			echo '{"success":false,"msg":"字符超出限制"}';
+
+		}
 		//TODO: 获取POST表单数据并保存到数据库
 		//		$user['XH_ID']  = $_POST["classmark"];
 		//		$user['XH_PW']  = md5('123456');
@@ -49,7 +54,6 @@ class AjaxuserController extends Controller {
 		//		$usertb         = new UserTb();
 		//		$usertb->insertMomentData($user);
 		//提示保存成功
-		echo '{"success":true,"msg":"用户：'.$_POST["name"].' 信息保存成功！"}';
 	}
 	//管理员搜索用户
 	public function actionAdminsearchuser() {

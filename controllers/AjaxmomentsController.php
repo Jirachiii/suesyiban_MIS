@@ -33,15 +33,19 @@ class AjaxmomentsController extends Controller {
 		$moment->deleteOneMoment($id);
 		echo '{"success":true}';
 	}
-
+	/**
+	 * 分页
+	 * @return string搜索的分页
+	 */
 	public function actionPagechange() {
 		$page   = $_POST['page'];
 		$moment = new Moments();
-		$result = $moment->getPageMomentWithOrder($page, 5);
+		$result = $moment->getPageMomentWithOrder($page,6);
+		$allPage = $moment->getAllPage(6);
 		if ($result == false) {
 			return '{"success":false}';
 		} else {
-			$result = '{"success":true,"moments":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
+			$result = '{"success":true,"moments":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"allPage":"'.$allPage.'"}';
 			echo $result;
 		}
 	}
@@ -49,7 +53,18 @@ class AjaxmomentsController extends Controller {
 //	public function actionGetyema(){
 //
 //	}
-
+	/**
+	 * 搜索的分页
+	 * @return string搜索的分页
+	 */
+	public function actionPagechange_s() {
+		$page   = $_POST['page'];
+		$input   = $_POST['input'];
+		$moment = new Moments();
+		$result = $moment->getPageMomentWithOrder_2($input,$page,6);
+		$allPage = $moment->getAllPage_s(6,$input);
+		echo $result;
+	}
 //搜索动态
 	public function actionAdminsearchmoment() {
 		if (!isset($_GET["searchmoment"]) || empty($_GET["searchmoment"])) {
@@ -57,24 +72,8 @@ class AjaxmomentsController extends Controller {
 			return;
 		}
 		$input = $_GET["searchmoment"];
-		$result   = (new Query())
-//			->select(['Mdate','XH_ID', 'Content','like_Num'])
-			->from('moments')
-			->where(['or',['like','XH_ID',$input],['like','Content',$input]])
-			->orderBy('Mdate DESC','Time DESC')
-			->all();
-		$istop = MomentTop::find()->all();
-		foreach($result as $key=>$value){
-			foreach($istop as $key1=>$value1){
-				if($value1['moment_id']==$value['id']){
-					$result[$key]['status']=$value1['status'];
-				}
-			}
-//			$value['username']=UserTb::findOne($value['XH_ID'])->Name;
-			$result[$key]['username']=UserTb::findOne($value['XH_ID'])->Name;
-
-		}
-		$result = '{"success":true,"moments":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
+		$moments=new Moments();
+		$result=$moments->getPageMomentWithOrder_2($input,1, 6);
 		echo $result;
 	}
 	//动态修改

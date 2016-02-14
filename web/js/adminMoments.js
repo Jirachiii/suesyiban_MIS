@@ -1,9 +1,31 @@
+var show = 0;
+var nowPage = 1;
+var allpage = 1;
+var nowPage_s = 1;
+var allpage_s = 1;
+function tiggle() {
+	if (this.show == 0) {
+		document.getElementById("showandhide").style.top = '51px';
+		this.show = 1;
+	} else {
+		document.getElementById("showandhide").style.top = '-100%';
+		this.show = 0;
+	}
+}
 //动态显示
 function getMomentData_dongtai() {
+	nowPage = 1;
+	allpage = 1;
+	nowPage_s = 1;
+	allpage_s = 1;
+	$("#mom_search_prev").hide();
+	$("#mom_search_aft").hide();
+	$("#mom_prev").show();
+	$("#mom_aft").show();
 	document.getElementById("searchMoment").value="";
 	$.getJSON('index.php?r=json/getmomentdata', function(data, textStatus) {
 		if (textStatus == 'success') {
-			this.allpage = data.allPage;
+			allpage = data.allPage;
 			var tableHead = '<thead><tr><td>学号</td><td>内容</td><td>时间</td><td>姓名</td><td>修改/置顶/删除</td></tr></thead>';
 			var tableBody = '<tbody>';
 			for (var i = 0; i < data.moments.length; i++) {
@@ -38,7 +60,10 @@ function deleteMom(monentsId) {
 				if (data.success) {
 					if($("#searchMoment").val()!=""){
 						searchMoment();
+						nowPage_s = 1;
 					}else {
+						nowPage = 1;
+						allpage = 1;
 						getMomentData_dongtai();
 					}
 					alert('删除成功');
@@ -46,6 +71,8 @@ function deleteMom(monentsId) {
 					if($("#searchMoment").val()!=""){
 						searchMoment();
 					}else {
+						nowPage = 1;
+						allpage = 1;
 						getMomentData_dongtai();
 					}
 					alert('删除失败');
@@ -57,95 +84,24 @@ function deleteMom(monentsId) {
 		});
 	}
 }
-var show = 0;
-var nowPage = 1;
-var allpage = 1;
-function tiggle() {
-	if (this.show == 0) {
-		document.getElementById("showandhide").style.top = '51px';
-		this.show = 1;
-	} else {
-		document.getElementById("showandhide").style.top = '-100%';
-		this.show = 0;
-	}
-}
-//上一页
-function beforePage() {
-	if (this.nowPage == 1) {
-		alert('已经是第一页');
-		return;
-	}
-	this.nowPage = this.nowPage-1;
-	$("#userMsgShow").empty();
-	$.ajax({
-	    type: "POST",
-		url: "index.php?r=ajaxmoments/pagechange",
-		data: {
-			page: this.nowPage,
-		},
-		dataType: "json",
-		success: function(data) {
-			if (data.success) {
-				var tableHead = '<thead><tr><td>学号</td><td>内容</td><td>时间</td><td>姓名</td><td>修改/置顶/删除</td></tr></thead>';
-				var tableBody = '<tbody>';
-				for (var i = 0; i < data.moments.length; i++) {
-					tableBody += '<tr><td>'+data.moments[i].XH_ID+'</td><td>'+handleLength(data.moments[i].Content,5)+'</td><td>'+data.moments[i].like_Num+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
-					tableBody += '<tr><td>'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].Mdate+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-pencil" onclick="changeMoment(&quot;'+data.moments[i].id+'&quot;,&quot;'+data.moments[i].XH_ID+'&quot;,&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].Content+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-sort" onclick="changeMomentTop('+data.moments[i].id+')"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
-				};
-				tableBody += '</tbody>';
-				document.getElementById('MomentsData').innerHTML = tableHead+tableBody;
-			} else {
-				alert('错误的页码');
-			}
-		},
-		error: function(jqXHR){
-			alert("error:"+jqXHR.status);
-		},
-	});
-}
-//下一页
-function afterPage() {
-	if (this.nowPage == this.allPage) {
-		console.log('last');
-		alert('已经是最后一页');
-		return;
-	}
-	this.nowPage = this.nowPage+1;
-	$("#userMsgShow").empty();
-	$.ajax({
-	    type: "POST",
-		url: "index.php?r=ajaxmoments/pagechange",
-		data: {
-			page: this.nowPage,
-		},
-		dataType: "json",
-		success: function(data) {
-			if (data.success) {
-				var tableHead = '<thead><tr><td>学号</td><td>内容</td><td>时间</td><td>姓名</td><td>修改/置顶/删除</td></tr></thead>';
-				var tableBody = '<tbody>';
-				for (var i = 0; i < data.moments.length; i++) {
-					tableBody += '<tr><td>'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].Mdate+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-pencil" onclick="changeMoment()"></div> | <div class="Set_dele glyphicon glyphicon-sort" onclick="changeMomentTop()"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
-				};
-				tableBody += '</tbody>';
-				document.getElementById('MomentsData').innerHTML = tableHead+tableBody;
-			} else {
-				alert('错误的页码');
-			}
-		},
-		error: function(jqXHR){
-			alert("error:"+jqXHR.status);
-		},
-	});
-}
+
+
 //动态搜索
 function searchMoment(){
 	$("#MomentsData").empty();
+	$("#mom_search_prev").show();
+	$("#mom_search_aft").show();
+	$("#mom_prev").hide();
+	$("#mom_aft").hide();
+
+
 	$.ajax({
 		type: "GET",
 		url: "index.php?r=ajaxmoments/adminsearchmoment&searchmoment="+$("#searchMoment").val(),
 		dataType: "json",
 		success: function(data){
 			if (data.success) {
+				allpage_s=data.allPage_s
 				if (data.moments == '') {
 					var tableBody = '<h1>没有此动态</h1>';
 				} else {
@@ -243,7 +199,10 @@ function updateMoment(){
 				setTimeout(function daojishi_(){$("#changeResult_mom").html("修改成功！1秒后将自动关闭此页面")},1000);
 				if($("#searchMoment").val()!=""){
 					searchMoment();
+					nowPage_s = 1;
 				}else {
+					nowPage = 1;
+					allpage = 1;
 					getMomentData_dongtai();
 				}
 			} else {
@@ -270,6 +229,8 @@ function updateMoment_1(){
 				setTimeout("hideAll_mom_1()",2000);
 				$("#changeResult_mom_1").html("添加成功！2秒后将自动关闭此页面");
 				setTimeout(function daojishi_1(){$("#changeResult_mom_1").html("添加成功！1秒后将自动关闭此页面")},1000);
+				nowPage = 1;
+				allpage = 1;
 				getMomentData_dongtai();
 			} else {
 				$("#changeResult_mom_1").html("出现错误：" + data.msg);
@@ -286,7 +247,7 @@ function updateMoment_1(){
 function updateMoment_2(){
 	$.ajax({
 		type: "POST",
-		url: "index.php?r=emptyclass/adminupdatemoment_2",
+		url: "index.php?r=ajaxmoments/adminupdatemoment_2",
 		data: {
 			momentid: $("#momentid_2").text(),
 			status: $("#momenttop_2").val(),
@@ -298,7 +259,10 @@ function updateMoment_2(){
 				$("#changeResult_mom_2").html("修改成功！1秒后将自动关闭此页面");
 				if($("#searchMoment").val()!=""){
 					searchMoment();
+					nowPage_s = 1;
 				}else {
+					nowPage = 1;
+					allpage = 1;
 					getMomentData_dongtai();
 				}
 			} else {
@@ -311,4 +275,145 @@ function updateMoment_2(){
 	});
 }
 
+//上一页
+function beforePage() {
+	if (nowPage == 1) {
+		alert('已经是第一页');
+		return;
+	}
+	nowPage = nowPage-1;
+	$("#userMsgShow").empty();
+	$.ajax({
+		type: "POST",
+		url: "index.php?r=ajaxmoments/pagechange",
+		data: {
+			page: nowPage,
+		},
+		dataType: "json",
+		success: function(data) {
+			if (data.success) {
+				var tableBody = '<thead><tr><td>学号</td><td>内容</td><td>时间</td><td>姓名</td><td>修改/置顶/删除</td></tr></thead>';
+				for (var i = 0; i < data.moments.length; i++) {
+					tableBody += '<tr><td ><span style="display: none">'+data.moments[i].status+'</span>&nbsp;'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].Mdate+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-pencil" onclick="changeMoment(&quot;'+data.moments[i].id+'&quot;,&quot;'+data.moments[i].XH_ID+'&quot;,&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].Content+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-sort" onclick="changeMomentTop('+data.moments[i].id+',&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].status+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
+				};
+				tableBody += '</tbody>';
+				document.getElementById('MomentsData').innerHTML = tableBody;
+				$("td span:contains(1)").addClass("glyphicon glyphicon-fire myred").show().empty();
+				$("td span[class='glyphicon glyphicon-fire myred']").parent().parent().insertBefore($("tbody tr:eq(0)"))
+			} else {
+				alert('错误的页码');
+			}
+		},
+		error: function(jqXHR){
+			alert("error:"+jqXHR.status);
+		},
+	});
+}
+//下一页
+function afterPage() {
+	if (nowPage == allpage) {
+		console.log('last');
+		alert('已经是最后一页');
+		return;
+	}
+	nowPage = nowPage+1;
+	$("#userMsgShow").empty();
+	$.ajax({
+		type: "POST",
+		url: "index.php?r=ajaxmoments/pagechange",
+		data: {
+			page: nowPage,
+		},
+		dataType: "json",
+		success: function(data) {
+			if (data.success) {
+				var tableBody = '<thead><tr><td>学号</td><td>内容</td><td>时间</td><td>姓名</td><td>修改/置顶/删除</td></tr></thead>';
+				for (var i = 0; i < data.moments.length; i++) {
+					tableBody += '<tr><td ><span style="display: none">'+data.moments[i].status+'</span>&nbsp;'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].Mdate+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-pencil" onclick="changeMoment(&quot;'+data.moments[i].id+'&quot;,&quot;'+data.moments[i].XH_ID+'&quot;,&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].Content+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-sort" onclick="changeMomentTop('+data.moments[i].id+',&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].status+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
+				};
+				tableBody += '</tbody>';
+				document.getElementById('MomentsData').innerHTML = tableBody;
+				$("td span:contains(1)").addClass("glyphicon glyphicon-fire myred").show().empty();
+				$("td span[class='glyphicon glyphicon-fire myred']").parent().parent().insertBefore($("tbody tr:eq(0)"))
+			} else {
+				alert('错误的页码');
+			}
+		},
+		error: function(jqXHR){
+			alert("error:"+jqXHR.status);
+		},
+	});
+}
+//上一页（搜索）
+function beforePage_s(){
+	if (nowPage_s == 1) {
+		alert('已经是第一页');
+		return;
+	}
+	nowPage_s = nowPage_s-1;
+	$("#userMsgShow").empty();
+	$.ajax({
+		type: "POST",
+		url: "index.php?r=ajaxmoments/pagechange_s",
+		data: {
+			page: nowPage_s,
+			input: $("#searchMoment").val()
 
+		},
+		dataType: "json",
+		success: function(data) {
+			if (data.success) {
+				var tableBody = '<thead><tr><td>学号</td><td>内容</td><td>时间</td><td>姓名</td><td>修改/置顶/删除</td></tr></thead>';
+				for (var i = 0; i < data.moments.length; i++) {
+					tableBody += '<tr><td ><span style="display: none">'+data.moments[i].status+'</span>&nbsp;'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].Mdate+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-pencil" onclick="changeMoment(&quot;'+data.moments[i].id+'&quot;,&quot;'+data.moments[i].XH_ID+'&quot;,&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].Content+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-sort" onclick="changeMomentTop('+data.moments[i].id+',&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].status+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
+				};
+				tableBody += '</tbody>';
+				document.getElementById('MomentsData').innerHTML = tableBody;
+				$("td span:contains(1)").addClass("glyphicon glyphicon-fire myred").show().empty();
+				$("td span[class='glyphicon glyphicon-fire myred']").parent().parent().insertBefore($("tbody tr:eq(0)"))
+			} else {
+				alert('错误的页码');
+			}
+		},
+		error: function(jqXHR){
+			alert("error:"+jqXHR.status);
+		},
+	});
+}
+
+//下一页（搜索）
+function afterPage_s(){
+	if (nowPage_s == allpage_s) {
+		console.log('last');
+		alert('已经是最后一页');
+		return;
+	}
+	nowPage_s= nowPage_s+1;
+	$("#userMsgShow").empty();
+	$.ajax({
+		type: "POST",
+		url: "index.php?r=ajaxmoments/pagechange_s",
+		data: {
+			page: nowPage_s,
+			input: $("#searchMoment").val()
+		},
+		dataType: "json",
+		success: function(data) {
+			if (data.success) {
+				var tableBody = '<thead><tr><td>学号</td><td>内容</td><td>时间</td><td>姓名</td><td>修改/置顶/删除</td></tr></thead>';
+				for (var i = 0; i < data.moments.length; i++) {
+					tableBody += '<tr><td ><span style="display: none">'+data.moments[i].status+'</span>&nbsp;'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].Mdate+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-pencil" onclick="changeMoment(&quot;'+data.moments[i].id+'&quot;,&quot;'+data.moments[i].XH_ID+'&quot;,&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].Content+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-sort" onclick="changeMomentTop('+data.moments[i].id+',&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].status+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
+				};
+				tableBody += '</tbody>';
+				document.getElementById('MomentsData').innerHTML = tableBody;
+				$("td span:contains(1)").addClass("glyphicon glyphicon-fire myred").show().empty();
+				$("td span[class='glyphicon glyphicon-fire myred']").parent().parent().insertBefore($("tbody tr:eq(0)"))
+			} else {
+				alert('错误的页码');
+			}
+		},
+		error: function(jqXHR){
+			alert("error:"+jqXHR.status);
+		},
+	});
+}
