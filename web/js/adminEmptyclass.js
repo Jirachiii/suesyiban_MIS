@@ -194,6 +194,8 @@ function searchEmptyclass(){
     if($("#whichweek").val()==null||$("#zhibantime").val()==null||$("#weekday").val()==null){
         alert("请完成筛选条件")
     }else{
+        nowPage_anpai = 1;
+        allpage_anpai = 1;
         $.ajax({
             type:"GET",
             url:"index.php?r=emptyclass/searchemptyclass",
@@ -347,7 +349,7 @@ function afterPage_anpai(){
 function beforePage_anpai(){
     if (nowPage_anpai==1) {
         console.log('last');
-        alert('已经是最后一页');
+        alert('已经是第一页');
         return;
     }
     nowPage_anpai= nowPage_anpai-1;
