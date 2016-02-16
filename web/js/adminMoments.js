@@ -93,8 +93,6 @@ function searchMoment(){
 	$("#mom_search_aft").show();
 	$("#mom_prev").hide();
 	$("#mom_aft").hide();
-
-
 	$.ajax({
 		type: "GET",
 		url: "index.php?r=ajaxmoments/adminsearchmoment&searchmoment="+$("#searchMoment").val(),
