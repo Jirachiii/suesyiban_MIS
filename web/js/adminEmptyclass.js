@@ -1,4 +1,6 @@
 var show = 0;
+var nowPage_anpai = 1;
+var allpage_anpai = 1;
 function tiggle() {
     if (this.show == 0) {
         document.getElementById("showandhide").style.top = '51px';
@@ -106,7 +108,7 @@ function insertAnpai(){
 
 }
 /**
- * 获取已有安排
+ * 获取一周安排
  */
 
 function loadanpai(){
@@ -171,8 +173,13 @@ function updateMemberkb(){
         if(update2==true){
             $.getJSON('index.php?r=emptyclass/updatememberkb', function(data, textStatus) {
                 if (textStatus == 'success') {
-                    alert("更新成功")
-                    window.location.reload()
+                    if(data.ifsuccess==true){
+                        alert(data.msg)
+                        window.location.reload()
+                    }else{
+                        alert(data.msg)
+                        window.location.reload()
+                    }
                 } else {
                     alert("更新失败" + textStatus);
                 }
@@ -181,7 +188,7 @@ function updateMemberkb(){
     }
 }
 /**
- * 搜索没课的人
+ * 搜索这班没课的人
  */
 function searchEmptyclass(){
     if($("#whichweek").val()==null||$("#zhibantime").val()==null||$("#weekday").val()==null){
@@ -191,6 +198,7 @@ function searchEmptyclass(){
             type:"GET",
             url:"index.php?r=emptyclass/searchemptyclass",
             data:{
+                page: nowPage_anpai,
                 whichweek:$("#whichweek").val(),
                 zhibantime:$("#zhibantime").val(),
                 weekday:$("#weekday").val(),
@@ -211,6 +219,9 @@ function searchEmptyclass(){
                     document.getElementById('emptyclassdata').innerHTML = tableBody;
                     $("td span:contains(1)").addClass("Set_dele glyphicon glyphicon-remove myblue").show().empty();
                     $("td span[class='Set_dele glyphicon glyphicon-remove myblue']").parent().parent().insertBefore($("tbody tr:eq(0)"))
+                    $("#anpai_prev").show();
+                    $("#anpai_aft").show();
+                    allpage_anpai=data.allPage
                 } else {
                     document.getElementById('emptyclassdata').innerHTML = "出现错误：" + data.msg;
                 }
@@ -285,4 +296,96 @@ function delanpai(anpai_id){
 
         })
     }
+}
+//下一页
+function afterPage_anpai(){
+    if (nowPage_anpai == allpage_anpai) {
+        console.log('last');
+        alert('已经是最后一页');
+        return;
+    }
+    nowPage_anpai= nowPage_anpai+1;
+    $("#emptyclassdata").empty();
+    $.ajax({
+        type:"GET",
+        url:"index.php?r=emptyclass/searchemptyclass",
+        data:{
+            page: nowPage_anpai,
+            whichweek:$("#whichweek").val(),
+            zhibantime:$("#zhibantime").val(),
+            weekday:$("#weekday").val(),
+        },
+        dataType:"json",
+        success:function(data){
+            if (data.success) {
+                if (data.kongkebiao == '') {
+                    var tableBody = '<h1>没有空闲</h1>';
+                } else {
+                    var tableBody = '<thead><tr><td>姓名</td><td>学号</td><td>排班</td><td>取消</td></tr></thead><tbody>';
+                    for (var i = 0; i < data.kongkebiao.length; i++) {
+                        tableBody += '<tr><td>'+data.kongkebiao[i].Name+'</td><td>'+data.kongkebiao[i].XH_ID+'</td><td><div class="Set_dele glyphicon glyphicon-hand-up" onclick="managest(\''+data.kongkebiao[i].XH_ID+'\',\''+data.kongkebiao[i].Name+'\')"></div></td><td><span style="display: none" onclick="delanpai('+data.kongkebiao[i].anpai_id+')">'+data.kongkebiao[i].status+'</span></td></tr>';
+                    };
+                    tableBody += '</tbody>';
+                };
+                $("#msg918").empty()
+                document.getElementById('emptyclassdata').innerHTML = tableBody;
+                $("td span:contains(1)").addClass("Set_dele glyphicon glyphicon-remove myblue").show().empty();
+                $("td span[class='Set_dele glyphicon glyphicon-remove myblue']").parent().parent().insertBefore($("tbody tr:eq(0)"))
+                $("#anpai_prev").show();
+                $("#anpai_aft").show();
+                allpage_anpai=data.allPage
+            } else {
+                document.getElementById('emptyclassdata').innerHTML = "出现错误：" + data.msg;
+            }
+        },
+        error:function(data){
+            alert("获取失败!")
+        }
+    })
+}
+//上一页
+function beforePage_anpai(){
+    if (nowPage_anpai==1) {
+        console.log('last');
+        alert('已经是最后一页');
+        return;
+    }
+    nowPage_anpai= nowPage_anpai-1;
+    $("#emptyclassdata").empty();
+    $.ajax({
+        type:"GET",
+        url:"index.php?r=emptyclass/searchemptyclass",
+        data:{
+            page: nowPage_anpai,
+            whichweek:$("#whichweek").val(),
+            zhibantime:$("#zhibantime").val(),
+            weekday:$("#weekday").val(),
+        },
+        dataType:"json",
+        success:function(data){
+            if (data.success) {
+                if (data.kongkebiao == '') {
+                    var tableBody = '<h1>没有空闲</h1>';
+                } else {
+                    var tableBody = '<thead><tr><td>姓名</td><td>学号</td><td>排班</td><td>取消</td></tr></thead><tbody>';
+                    for (var i = 0; i < data.kongkebiao.length; i++) {
+                        tableBody += '<tr><td>'+data.kongkebiao[i].Name+'</td><td>'+data.kongkebiao[i].XH_ID+'</td><td><div class="Set_dele glyphicon glyphicon-hand-up" onclick="managest(\''+data.kongkebiao[i].XH_ID+'\',\''+data.kongkebiao[i].Name+'\')"></div></td><td><span style="display: none" onclick="delanpai('+data.kongkebiao[i].anpai_id+')">'+data.kongkebiao[i].status+'</span></td></tr>';
+                    };
+                    tableBody += '</tbody>';
+                };
+                $("#msg918").empty()
+                document.getElementById('emptyclassdata').innerHTML = tableBody;
+                $("td span:contains(1)").addClass("Set_dele glyphicon glyphicon-remove myblue").show().empty();
+                $("td span[class='Set_dele glyphicon glyphicon-remove myblue']").parent().parent().insertBefore($("tbody tr:eq(0)"))
+                $("#anpai_prev").show();
+                $("#anpai_aft").show();
+                allpage_anpai=data.allPage
+            } else {
+                document.getElementById('emptyclassdata').innerHTML = "出现错误：" + data.msg;
+            }
+        },
+        error:function(data){
+            alert("获取失败!")
+        }
+    })
 }

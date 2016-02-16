@@ -35,7 +35,7 @@ class AjaxmomentsController extends Controller {
 	}
 	/**
 	 * 分页
-	 * @return string搜索的分页
+	 * @return string
 	 */
 	public function actionPagechange() {
 		$page   = $_POST['page'];
