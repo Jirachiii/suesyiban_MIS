@@ -22,6 +22,7 @@ function getMomentData_dongtai() {
 	$("#mom_search_aft").hide();
 	$("#mom_prev").show();
 	$("#mom_aft").show();
+	$("#yema_mom_s").empty();
 	document.getElementById("searchMoment").value="";
 	$.getJSON('index.php?r=json/getmomentdata', function(data, textStatus) {
 		if (textStatus == 'success') {
@@ -35,6 +36,14 @@ function getMomentData_dongtai() {
 			document.getElementById('MomentsData').innerHTML = tableHead+tableBody;
 				$("td span:contains(1)").addClass("glyphicon glyphicon-fire myred").show().empty();
 				$("td span[class='glyphicon glyphicon-fire myred']").parent().parent().insertBefore($("tbody tr:eq(0)"))
+			//分页的
+			$("#yema_mom").empty();
+			var yema="<span id='yema_mom' class='yema_mom'></span>"
+			$("#mom_prev").after(yema);
+			for(i=1;i<=allpage;i++){
+				$("#yema_mom").append("<a id='"+i+"' onclick='yema_mom("+i+")'>"+i+"</a>")
+			}
+			danqianye_mom()
 		} else {
 			alert("系统错误" + textStatus);
 		}
@@ -93,6 +102,10 @@ function searchMoment(){
 	$("#mom_search_aft").show();
 	$("#mom_prev").hide();
 	$("#mom_aft").hide();
+	$("#yema_mom").empty();
+	$("#yema_mom_s").empty();
+	nowPage_s = 1;
+	allpage_s = 1;
 	$.ajax({
 		type: "GET",
 		url: "index.php?r=ajaxmoments/adminsearchmoment&searchmoment="+$("#searchMoment").val(),
@@ -111,6 +124,13 @@ function searchMoment(){
 					document.getElementById('MomentsData').innerHTML = tableBody;
 					$("td span:contains(1)").addClass("glyphicon glyphicon-fire myred").show().empty();
 					$("td span[class='glyphicon glyphicon-fire myred']").parent().parent().insertBefore($("tbody tr:eq(0)"))
+					//分页的
+					var yema="<span id='yema_mom_s' class='yema_mom'></span>"
+					$("#mom_search_prev").after(yema);
+					for(i=1;i<=allpage_s;i++){
+						$("#yema_mom_s").append("<a id='"+i+"' onclick='yema_mom_s("+i+")'>"+i+"</a>")
+					}
+					danqianye_mom_s()
 				};
 			} else {
 				document.getElementById('MomentsData').innerHTML = "出现错误：" + data.msg;
@@ -298,6 +318,7 @@ function beforePage() {
 				document.getElementById('MomentsData').innerHTML = tableBody;
 				$("td span:contains(1)").addClass("glyphicon glyphicon-fire myred").show().empty();
 				$("td span[class='glyphicon glyphicon-fire myred']").parent().parent().insertBefore($("tbody tr:eq(0)"))
+				danqianye_mom()
 			} else {
 				alert('错误的页码');
 			}
@@ -333,6 +354,7 @@ function afterPage() {
 				document.getElementById('MomentsData').innerHTML = tableBody;
 				$("td span:contains(1)").addClass("glyphicon glyphicon-fire myred").show().empty();
 				$("td span[class='glyphicon glyphicon-fire myred']").parent().parent().insertBefore($("tbody tr:eq(0)"))
+				danqianye_mom()
 			} else {
 				alert('错误的页码');
 			}
@@ -369,6 +391,7 @@ function beforePage_s(){
 				document.getElementById('MomentsData').innerHTML = tableBody;
 				$("td span:contains(1)").addClass("glyphicon glyphicon-fire myred").show().empty();
 				$("td span[class='glyphicon glyphicon-fire myred']").parent().parent().insertBefore($("tbody tr:eq(0)"))
+				danqianye_mom_s()
 			} else {
 				alert('错误的页码');
 			}
@@ -406,6 +429,7 @@ function afterPage_s(){
 				document.getElementById('MomentsData').innerHTML = tableBody;
 				$("td span:contains(1)").addClass("glyphicon glyphicon-fire myred").show().empty();
 				$("td span[class='glyphicon glyphicon-fire myred']").parent().parent().insertBefore($("tbody tr:eq(0)"))
+				danqianye_mom_s()
 			} else {
 				alert('错误的页码');
 			}
@@ -414,4 +438,95 @@ function afterPage_s(){
 			alert("error:"+jqXHR.status);
 		},
 	});
+}
+/**
+ * 页码跳转
+ */
+function yema_mom(page){
+	nowPage = page;
+	$("#userMsgShow").empty();
+	$.ajax({
+		type: "POST",
+		url: "index.php?r=ajaxmoments/pagechange",
+		data: {
+			page: nowPage,
+		},
+		dataType: "json",
+		success: function(data) {
+			if (data.success) {
+				var tableBody = '<thead><tr><td>学号</td><td>内容</td><td>时间</td><td>姓名</td><td>修改/置顶/删除</td></tr></thead>';
+				for (var i = 0; i < data.moments.length; i++) {
+					tableBody += '<tr><td ><span style="display: none">'+data.moments[i].status+'</span>&nbsp;'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].Mdate+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-pencil" onclick="changeMoment(&quot;'+data.moments[i].id+'&quot;,&quot;'+data.moments[i].XH_ID+'&quot;,&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].Content+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-sort" onclick="changeMomentTop('+data.moments[i].id+',&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].status+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
+				};
+				tableBody += '</tbody>';
+				document.getElementById('MomentsData').innerHTML = tableBody;
+				$("td span:contains(1)").addClass("glyphicon glyphicon-fire myred").show().empty();
+				$("td span[class='glyphicon glyphicon-fire myred']").parent().parent().insertBefore($("tbody tr:eq(0)"))
+				danqianye_mom()
+			} else {
+				alert('错误的页码');
+			}
+		},
+		error: function(jqXHR){
+			alert("error:"+jqXHR.status);
+		},
+	});
+}
+function yema_mom_s(page){
+	nowPage_s= page;
+	$("#userMsgShow").empty();
+	$.ajax({
+		type: "POST",
+		url: "index.php?r=ajaxmoments/pagechange_s",
+		data: {
+			page: nowPage_s,
+			input: $("#searchMoment").val()
+		},
+		dataType: "json",
+		success: function(data) {
+			if (data.success) {
+				var tableBody = '<thead><tr><td>学号</td><td>内容</td><td>时间</td><td>姓名</td><td>修改/置顶/删除</td></tr></thead>';
+				for (var i = 0; i < data.moments.length; i++) {
+					tableBody += '<tr><td ><span style="display: none">'+data.moments[i].status+'</span>&nbsp;'+data.moments[i].XH_ID+'</td><td>'+data.moments[i].Content+'</td><td>'+data.moments[i].Mdate+'</td><td>'+data.moments[i].username+'</td><td><div class="Set_dele glyphicon glyphicon-pencil" onclick="changeMoment(&quot;'+data.moments[i].id+'&quot;,&quot;'+data.moments[i].XH_ID+'&quot;,&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].Content+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-sort" onclick="changeMomentTop('+data.moments[i].id+',&quot;'+data.moments[i].username+'&quot;,&quot;'+data.moments[i].Mdate+'&quot;,&quot;'+data.moments[i].status+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteMom('+data.moments[i].id+')"></div></td></tr>';
+				};
+				tableBody += '</tbody>';
+				document.getElementById('MomentsData').innerHTML = tableBody;
+				$("td span:contains(1)").addClass("glyphicon glyphicon-fire myred").show().empty();
+				$("td span[class='glyphicon glyphicon-fire myred']").parent().parent().insertBefore($("tbody tr:eq(0)"))
+				danqianye_mom_s()
+			} else {
+				alert('错误的页码');
+			}
+		},
+		error: function(jqXHR){
+			alert("error:"+jqXHR.status);
+		},
+	});
+}
+/**
+ * 当前页高亮
+ */
+function danqianye_mom(){
+	$("#yema_mom a").filter(function(inx){
+		if(inx+1==nowPage){
+			return true
+		}
+	}).addClass("yema_choosed")
+	$("#yema_mom a").filter(function(inx){
+		if(inx+1!=nowPage){
+			return true
+		}
+	}).removeClass("yema_choosed")
+}
+function danqianye_mom_s(){
+	$("#yema_mom_s a").filter(function(inx){
+		if(inx+1==nowPage_s){
+			return true
+		}
+	}).addClass("yema_choosed")
+	$("#yema_mom_s a").filter(function(inx){
+		if(inx+1!=nowPage_s){
+			return true
+		}
+	}).removeClass("yema_choosed")
 }

@@ -26,3 +26,13 @@
 	margin-top: 14px;
 	margin-bottom: -14px;
 }
+.yema_anpai a{
+	margin:10px;
+	padding: 5px;
+	font-size: 1.3em;
+	cursor:pointer;
+}
+.yema_choosed{
+	color: #99CC66;
+	border: 1px solid #99CC66;
+}

@@ -30,3 +30,13 @@
 .myred{
     color: #dc0010;
 }
+.yema_mom a{
+    margin:10px;
+    padding: 5px;
+    font-size: 1.3em;
+    cursor:pointer;
+}
+.yema_choosed{
+    color: #99CC66;
+    border: 1px solid #99CC66;
+}
