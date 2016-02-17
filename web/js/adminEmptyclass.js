@@ -191,6 +191,7 @@ function updateMemberkb(){
  * 搜索这班没课的人
  */
 function searchEmptyclass(){
+    $("#yema_anpai").empty();
     if($("#whichweek").val()==null||$("#zhibantime").val()==null||$("#weekday").val()==null){
         alert("请完成筛选条件")
     }else{
@@ -221,9 +222,16 @@ function searchEmptyclass(){
                     document.getElementById('emptyclassdata').innerHTML = tableBody;
                     $("td span:contains(1)").addClass("Set_dele glyphicon glyphicon-remove myblue").show().empty();
                     $("td span[class='Set_dele glyphicon glyphicon-remove myblue']").parent().parent().insertBefore($("tbody tr:eq(0)"))
+                    allpage_anpai=data.allPage
+                    //分页的
                     $("#anpai_prev").show();
                     $("#anpai_aft").show();
-                    allpage_anpai=data.allPage
+                    var yema="<span id='yema_anpai' class='yema_anpai'></span>"
+                    $("#anpai_prev").after(yema);
+                    for(i=1;i<=allpage_anpai;i++){
+                        $("#yema_anpai").append("<a id='"+i+"' onclick='yema_anpai("+i+")'>"+i+"</a>")
+                    }
+                    danqianye_anpai()
                 } else {
                     document.getElementById('emptyclassdata').innerHTML = "出现错误：" + data.msg;
                 }
@@ -238,6 +246,7 @@ function searchEmptyclass(){
  * 排班按钮
  */
 function managest(xh,name){
+    $("#yema_anpai").empty();
     $.ajax({
         type: "POST",
         url: "index.php?r=emptyclass/managest",
@@ -257,6 +266,8 @@ function managest(xh,name){
                 }
                 searchEmptyclass();
             } else {
+                $("#anpai_prev").hide();
+                $("#anpai_aft").hide();
                 $("#emptyclassdata").html("出现错误：" + data.msg);
             }
         },
@@ -336,6 +347,7 @@ function afterPage_anpai(){
                 $("#anpai_prev").show();
                 $("#anpai_aft").show();
                 allpage_anpai=data.allPage
+                danqianye_anpai()
             } else {
                 document.getElementById('emptyclassdata').innerHTML = "出现错误：" + data.msg;
             }
@@ -382,6 +394,7 @@ function beforePage_anpai(){
                 $("#anpai_prev").show();
                 $("#anpai_aft").show();
                 allpage_anpai=data.allPage
+                danqianye_anpai()
             } else {
                 document.getElementById('emptyclassdata').innerHTML = "出现错误：" + data.msg;
             }
@@ -390,4 +403,61 @@ function beforePage_anpai(){
             alert("获取失败!")
         }
     })
+}
+/**
+ * 页码跳转
+ */
+function yema_anpai(page){
+    nowPage_anpai= page
+    $("#emptyclassdata").empty();
+    $.ajax({
+        type:"GET",
+        url:"index.php?r=emptyclass/searchemptyclass",
+        data:{
+            page: nowPage_anpai,
+            whichweek:$("#whichweek").val(),
+            zhibantime:$("#zhibantime").val(),
+            weekday:$("#weekday").val(),
+        },
+        dataType:"json",
+        success:function(data){
+            if (data.success) {
+                if (data.kongkebiao == '') {
+                    var tableBody = '<h1>没有空闲</h1>';
+                } else {
+                    var tableBody = '<thead><tr><td>姓名</td><td>学号</td><td>排班</td><td>取消</td></tr></thead><tbody>';
+                    for (var i = 0; i < data.kongkebiao.length; i++) {
+                        tableBody += '<tr><td>'+data.kongkebiao[i].Name+'</td><td>'+data.kongkebiao[i].XH_ID+'</td><td><div class="Set_dele glyphicon glyphicon-hand-up" onclick="managest(\''+data.kongkebiao[i].XH_ID+'\',\''+data.kongkebiao[i].Name+'\')"></div></td><td><span style="display: none" onclick="delanpai('+data.kongkebiao[i].anpai_id+')">'+data.kongkebiao[i].status+'</span></td></tr>';
+                    };
+                    tableBody += '</tbody>';
+                };
+                $("#msg918").empty()
+                document.getElementById('emptyclassdata').innerHTML = tableBody;
+                $("td span:contains(1)").addClass("Set_dele glyphicon glyphicon-remove myblue").show().empty();
+                $("td span[class='Set_dele glyphicon glyphicon-remove myblue']").parent().parent().insertBefore($("tbody tr:eq(0)"))
+                $("#anpai_prev").show();
+                $("#anpai_aft").show();
+                allpage_anpai=data.allPage
+                danqianye_anpai()
+
+            } else {
+                document.getElementById('emptyclassdata').innerHTML = "出现错误：" + data.msg;
+            }
+        },
+        error:function(data){
+            alert("获取失败!")
+        }
+    })
+}
+function danqianye_anpai(){
+    $("#yema_anpai a").filter(function(inx){
+        if(inx+1==nowPage_anpai){
+            return true
+        }
+    }).addClass("yema_choosed")
+    $("#yema_anpai a").filter(function(inx){
+        if(inx+1!=nowPage_anpai){
+            return true
+        }
+    }).removeClass("yema_choosed")
 }
