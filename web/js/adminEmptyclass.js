@@ -318,7 +318,7 @@ function afterPage_anpai(){
         return;
     }
     nowPage_anpai= nowPage_anpai+1;
-    $("#emptyclassdata").empty();
+    //$("#emptyclassdata").empty();
     $.ajax({
         type:"GET",
         url:"index.php?r=emptyclass/searchemptyclass",
