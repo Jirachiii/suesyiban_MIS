@@ -372,11 +372,24 @@ class AjaxuserController extends Controller {
 			echo '{"success":false}';
 		}
 	}
-	/**
-	 * 	          库存管理
-	 */
 
-	//搜索库存
+
+
+
+	//库存管理
+	/**
+	 * 库存分页
+	 */
+	public function  actionArticlepagchange(){
+		$request=\Yii::$app->request;
+		$page=$request->get("page");
+		$article=new Articles();
+		$result=$article->showarticledata($page,6);
+		return $result;
+	}
+	/**
+	 * 搜索库存
+	 */
 
 	public function actionAdminsearcharticle() {
 		if (!isset($_GET["searcharticle"]) || empty($_GET["searcharticle"])) {
@@ -384,30 +397,52 @@ class AjaxuserController extends Controller {
 			return;
 		}
 		$Art_Name = $_GET["searcharticle"];
-		$result   = (new Query())
-		//			->select(['Art_Name', 'status'])
-			->from('articles')
-			->where(['like', 'Art_Name', $Art_Name])
-			->all();
-		$result = '{"success":true,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
+		$page=$_GET['page'];
+		$artice=new Articles();
+		$result=$artice->searcharticle($Art_Name,1,6);
 		echo $result;
 	}
-	//状态筛选
+
+	/**
+	 * 搜索的分页
+	 */
+	public function actionAdminsearcharticlefenye(){
+		$Art_Name = $_GET["article"];
+		$page=$_GET['page'];
+		$artice=new Articles();
+		$result=$artice->searcharticle($Art_Name,$page,6);
+		echo $result;
+
+	}
+	/**
+	 * 状态筛选
+	 */
 	public function actionAdminselectarticle() {
 		if (!isset($_GET["searcharticle"]) || empty($_GET["searcharticle"])) {
 			echo '{"success":false,"msg":"请选择查询状态"}';
 			return;
 		}
-		if ($_GET["searcharticle"] == 4) {
-			$result = Articles::find()->asArray()->orderBy('status ASC,Art_Num DESC')->all();
-			$result = '{"success":true,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
-		} else {
-			$status = $_GET["searcharticle"];
-			$result = Articles::find()->where(['status' => $status])->asArray()->orderBy('status ASC,Art_Num DESC')->all();
-			$result = '{"success":true,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';}
+		$status=$_GET["searcharticle"];
+		$page=$_GET['page'];
+		$article=new Articles();
+		$result=$article->searcharticlebystatus($status,1,6);
 		echo $result;
 	}
-	//插入库存
+	/**
+	 * 状态筛选分页
+	 */
+	public function actionArticlepagchangesel(){
+		$request=\Yii::$app->request;
+		$page=$request->get("page");
+		$status=$request->get("status");
+		$article=new Articles();
+		$result=$article->searcharticlebystatus($status,$page,6);
+		echo $result;
+	}
+
+	/**
+	 * 插入库存
+	 */
 	public function actionAdmininsertarticle() {
 		//判断信息是否填写完全
 		if (!isset($_POST["itemname"]) || empty($_POST["itemname"])
@@ -425,16 +460,13 @@ class AjaxuserController extends Controller {
 		$article->Art_Num  = $_POST["number"];
 		$article->Art_Time = date("y-m-d", time());
 		$article->status   = 1;
-
-		//		$article->email = 'james@example.com';
 		$article->save();
-		// 等同于 $customer->insert();
-		//TODO: 获取POST表单数据并保存到数据库
-
-		//提示保存成功
 		echo '{"success":true,"msg":"用户：'.$_POST["itemname"].' 信息保存成功！"}';
 	}
-	//删除库存
+
+	/**
+	 * 删除库存
+	 */
 	public function actionDeletearticle() {
 		$art_id  = $_POST['art_id'];
 		$article = Articles::findOne($art_id);
@@ -442,7 +474,9 @@ class AjaxuserController extends Controller {
 		echo '{"success":true}';
 	}
 
-	//添加库存
+	/**
+	 * 添加库存数量
+	 */
 	public function actionAdminupdatearticle() {
 		//判断信息是否填写完全
 		if ((empty($_POST["changeart_sel"]) && empty($_POST["changeart_inp"])) ||
@@ -463,7 +497,10 @@ class AjaxuserController extends Controller {
 		$aimarticle->save(false);
 		echo '{"success":true,"msg":"添加成功！"}';
 	}
-	//减少库存
+
+	/**
+	 * 减少库存数量
+	 */
 	public function actionAdminupdatearticle2() {
 		//判断信息是否填写完全
 		if ((empty($_POST["changeart_sel"]) && empty($_POST["changeart_inp"])) ||
@@ -488,7 +525,10 @@ class AjaxuserController extends Controller {
 		$aimarticle->save(false);
 		echo '{"success":true,"msg":"扣除成功！"}';
 	}
-	//更改库存上架状态
+
+	/**
+	 * 更改库存上架状态
+	 */
 	public function actionAdminupdatearticle3() {
 		//判断信息是否填写完全
 		if ((empty($_POST["changeart_sel"]) || !isset($_POST["changeart_sel"]))) {
@@ -497,11 +537,6 @@ class AjaxuserController extends Controller {
 		}
 		$aimarticle = Articles::findOne($_POST['id']);
 		if ($_POST['changeart_sel'] == "1") {
-			//			if($aimarticle->Art_Num>0){
-			//				$aimarticle->status=1;
-			//			}else{
-			//				$aimarticle->status=2;
-			//			}
 			($aimarticle->Art_Num > 0)?$aimarticle->status = 1:$aimarticle->status = 2;
 		} else if ($_POST['changeart_sel'] == "2") {
 			$aimarticle->status = 3;

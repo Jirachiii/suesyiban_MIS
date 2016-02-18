@@ -97,8 +97,6 @@ class JsonController extends Controller {
 				$content[$key]['username'] = $name['Name'];
 			}
 		}
-
-//		$content = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).'}';
 				$content          = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).',"allPage":"'.$allPage.'","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
 		echo $content;
 	}
@@ -119,8 +117,8 @@ class JsonController extends Controller {
 	 * 获取article物品
 	 */
 	public function actionGetarticledata() {
-		$result = Articles::find()->asArray()->orderBy('status ASC,Art_Num DESC')->all();
-		$result = '{"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
+		$article=new Articles();
+		$result=$article->showarticledata(1,6);
 		echo $result;
 	}
 
@@ -212,18 +210,18 @@ class JsonController extends Controller {
 		}
 	}
 	//这下面都不属于这边，以后更换位置
-	public function actionAddmoment() {
-		$content            = '测试';
-		$moment             = new Moments();
-		$RightNow           = $moment->getDateAndTime();
-		$momentMsg['XH_ID'] = Yii::$app->user->identity->XH_ID;
-		$momentMsg['Mdate'] = $RightNow['date'];
-		$momentMsg['Time']  = $RightNow['time'];
-		//以后解决，request过来的值
-		$momentMsg['Content']  = $_POST['Content'];
-		$momentMsg['like_Num'] = 0;
-		echo $moment->insertMomentData($momentMsg);
-	}
+//	public function actionAddmoment() {
+//		$content            = '测试';
+//		$moment             = new Moments();
+//		$RightNow           = $moment->getDateAndTime();
+//		$momentMsg['XH_ID'] = Yii::$app->user->identity->XH_ID;
+//		$momentMsg['Mdate'] = $RightNow['date'];
+//		$momentMsg['Time']  = $RightNow['time'];
+//		//以后解决，request过来的值
+//		$momentMsg['Content']  = $_POST['Content'];
+//		$momentMsg['like_Num'] = 0;
+//		echo $moment->insertMomentData($momentMsg);
+//	}
 
 	public function actionTest() {
 		$Dbfactory = DbFactory::getinstance();
