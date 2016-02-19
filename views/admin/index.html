@@ -12,9 +12,10 @@
 		<title>管理员</title>
 		<style>html,body {width: 100%; height: 100%;}</style>
 	</head>
-	<body onload="getRawData()">
+	<body>
 		<header class="Ad_head" id="head">
 			<button class="btn btn-primary hd_downbtn" onclick="tiggle()">下拉</button>
+			<a class="nav_btn"></a>
 		</header>
 		<section class="col-xs-2 Ad_Lef" id="showandhide">
 			<br>
@@ -65,6 +66,10 @@
 					<table id="userMsgShow" class="table table-condensed table-hover">
 					</table>
 				</div>
+				<div>
+					<button id="user_prev" onclick="beforePage_user()">上一页</button>
+					<button id="user_aft" onclick="afterPage_user()">下一页</button>
+				</div>
 			</div>
 		</section>
 		<!-- 以下为用户添加，默认隐藏 -->
@@ -84,51 +89,35 @@
 				<button class="Set_btn col-xs-6" onclick="hideAll()">取消</button>
 			</div>
 		</section>
+		<!-- 以下为更用户权限，默认隐藏 -->
+		<section class="cover_user_2" id="coverDiv_user_2" onclick="hideAll_user_2()"></section>
+		<section class="showSetting_user_2" id="SetDiv_user_2">
+
+			<p class="Set_tit_user_2">更改物品状态</p>
+
+			<span>目前为：</span><span id="showuserstatus_2" class=""></span>
+			<!--id（学号）用于等会ajax传输数据-->
+			<span id="thisuserid_2" style="display: none"></span>
+			<section class="Set_xm">
+				<select class="form-control" name="changestatus_2" id="changestatus_user_2">
+					<option value="" selected="true" disabled="true">—选择权限—</option>
+					<option value="1">管理员</option>
+					<option value="2">用户</option>
+				</select>
+			</section>
+			<p id="changeResult_user_2" class="Set_btn_P"></p><br>
+			<div class="Set_btn_M">
+				<button class="Set_btn col-xs-6 handlegreen" onclick="updateuser_2()">确定</button>
+				<button class="Set_btn col-xs-6" onclick="hideAll_user_2()">取消</button>
+			</div>
+		</section>
         <script src="js/adminHref.js"></script>
         <script src="js/adminUser.js"></script>
         <script src="js/jquery.min.js"></script>
 		<script>
-			function getRawData() {
-				$("#userMsgShow").empty();
-				$.getJSON('index.php?r=json/getuserdata', function(data, textStatus) {
-					if (textStatus == 'success') {
-						var tableHead = '<thead><tr><td>编号</td><td>学号</td><td>姓名</td><td>权限</td><td>电话</td><td>重置密码/删除</td></tr></thead>';
-						var tableBody = '<tbody>';
-						for (var i = 0; i < data.users.length; i++) {
-							tableBody += '<tr><td>'+(i+1)+'</td><td>'+data.users[i].XH_ID+'</td><td>'+data.users[i].Name+'</td><td>'+userOrAdmin(data.users[i].status)+'</td><td>'+data.users[i].phone+'</td><td><div class="Set_dele glyphicon glyphicon-wrench" onclick="resetPass(&quot;'+data.users[i].XH_ID+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteUser(&quot;'+data.users[i].XH_ID+'&quot;)"></div></td></tr>';
-						};
-						tableBody += '</tbody>';
-						document.getElementById('userMsgShow').innerHTML = tableHead+tableBody;
-						document.getElementById('head').innerHTML += '<a class="nav_btn" id="'+data.userIdNow+'" >'+data.userName+'</a>';
-					} else {
-						alert("系统错误" + textStatus);
-					}
-				});
-			}
-			function userOrAdmin(status) {
-				if (status == 1) {
-					return '管理员'
-				} else {
-					return '用户'
-				}
-			}
-			//隐藏状态栏
-			function hideAll() {
-				document.getElementById("coverDiv").style.top = '-999px';
-				document.getElementById("SetDiv").style.top = '-600px';
-				document.getElementById("SetDiv").style.opacity = 0;
-			}
-			//下拉手风琴
-			var show = 0;
-			function tiggle() {
-				if (this.show == 0) {
-					document.getElementById("showandhide").style.top = '51px';
-					this.show = 1;
-				} else {
-					document.getElementById("showandhide").style.top = '-100%';
-					this.show = 0;
-				}
-			}
+			$(function(){
+				getRawData();
+			})
 		</script>
 	</body>
 </html>

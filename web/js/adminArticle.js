@@ -51,17 +51,7 @@ function getRawArticleData(a){
                 var tableHead = '<thead><tr><td>物品</td><td>数量</td><td>第一次添加时间</td><td>状态</td><td>添加/减少/更改状态/删除</td></tr></thead>';
                 var tableBody = '<tbody>';
                 for (var i = 0; i < data.articles.length; i++) {
-                    switch(data.articles[i].status){
-                        case "1":
-                            data.articles[i].status='有库存';
-                            break;
-                        case "2":
-                            data.articles[i].status='无库存';
-                            break;
-                        case "3":
-                            data.articles[i].status='已下架';
-                            break;
-                    }
+                    data.articles[i].status=switchstatus(data.articles[i].status)
                     tableBody += '<tr><td>'+data.articles[i].Art_Name+'</td><td>'+data.articles[i].Art_Num+'</td><td>'+data.articles[i].Art_Time+'</td><td>'+data.articles[i].status+'</td><td><div class="Set_dele glyphicon glyphicon-plus" onclick="changeArticle(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-minus" onclick="changeArticle_2(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-wrench" onclick="changeArticle_3(&quot;'+data.articles[i].status+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteArticle(&quot;'+data.articles[i].Art_Id+'&quot;,&quot;'+data.articles[i].Art_Name+'&quot;)"></div> </td></tr>';
 
                 };
@@ -135,17 +125,7 @@ function searchArticlehandle() {
                 } else {
                     var tableBody = '<thead><tr><td>物品</td><td>数量</td><td>第一次添加时间</td><td>状态</td><td>添加/减少/更改状态/删除</td></tr></thead>';
                     for (var i = 0; i < data.articles.length; i++) {
-                        switch(data.articles[i].status){
-                            case "1":
-                                data.articles[i].status='有库存';
-                                break;
-                            case "2":
-                                data.articles[i].status='无库存';
-                                break;
-                            case "3":
-                                data.articles[i].status='已下架';
-                                break;
-                        }
+                        data.articles[i].status=switchstatus(data.articles[i].status)
                         tableBody += '<tr><td>'+data.articles[i].Art_Name+'</td><td>'+data.articles[i].Art_Num+'</td><td>'+data.articles[i].Art_Time+'</td><td>'+data.articles[i].status+'</td><td><div class="Set_dele glyphicon glyphicon-plus" onclick="changeArticle(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-minus" onclick="changeArticle_2(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-wrench" onclick="changeArticle_3(&quot;'+data.articles[i].status+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteArticle(&quot;'+data.articles[i].Art_Id+'&quot;,&quot;'+data.articles[i].Art_Name+'&quot;)"></div> </td></tr>';
 
                     };
@@ -195,17 +175,7 @@ function selectArticle() {
                 } else {
                     var tableBody = '<thead><tr><td>物品</td><td>数量</td><td>第一次添加时间</td><td>状态</td><td>添加/减少/更改状态/删除</td></tr></thead>';
                     for (var i = 0; i < data.articles.length; i++) {
-                        switch(data.articles[i].status){
-                            case "1":
-                                data.articles[i].status='有库存';
-                                break;
-                            case "2":
-                                data.articles[i].status='无库存';
-                                break;
-                            case "3":
-                                data.articles[i].status='已下架';
-                                break;
-                        }
+                        data.articles[i].status=switchstatus(data.articles[i].status)
                         tableBody += '<tr><td>'+data.articles[i].Art_Name+'</td><td>'+data.articles[i].Art_Num+'</td><td>'+data.articles[i].Art_Time+'</td><td>'+data.articles[i].status+'</td><td><div class="Set_dele glyphicon glyphicon-plus" onclick="changeArticle(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-minus" onclick="changeArticle_2(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-wrench" onclick="changeArticle_3(&quot;'+data.articles[i].status+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteArticle(&quot;'+data.articles[i].Art_Id+'&quot;,&quot;'+data.articles[i].Art_Name+'&quot;)"></div> </td></tr>';
 
                     };
@@ -432,13 +402,16 @@ function changeArticle_2(obj,obj2,obj3) {
     $("#changeResult_2").html("");
     $("#changeart_inp_2").val("");
 }
+//更改库存状态
 function changeArticle_3(obj,obj3) {
     //obj:status,obj2:;obj3:id
     document.getElementById("coverDiv_ch_3").style.top = '0px';
     document.getElementById("SetDiv_ch_3").style.top = '10%';
     document.getElementById("SetDiv_ch_3").style.opacity = 1;
-    if(obj='有库存'){
-        document.getElementById("showarticlestatus_3").innerHTML="上架";
+    if(obj!="已下架"){
+        document.getElementById("showarticlestatus_3").innerHTML="已上架";
+    }else{
+        document.getElementById("showarticlestatus_3").innerHTML="已下架";
     }
 
     //document.getElementById("showarticlenumber_3").innerHTML=obj2;
@@ -515,17 +488,7 @@ function afterPage_article(){
                 } else {
                     var tableBody = '<thead><tr><td>物品</td><td>数量</td><td>第一次添加时间</td><td>状态</td><td>添加/减少/更改状态/删除</td></tr></thead>';
                     for (var i = 0; i < data.articles.length; i++) {
-                        switch(data.articles[i].status){
-                            case "1":
-                                data.articles[i].status='有库存';
-                                break;
-                            case "2":
-                                data.articles[i].status='无库存';
-                                break;
-                            case "3":
-                                data.articles[i].status='已下架';
-                                break;
-                        }
+                        data.articles[i].status=switchstatus(data.articles[i].status)
                         tableBody += '<tr><td>'+data.articles[i].Art_Name+'</td><td>'+data.articles[i].Art_Num+'</td><td>'+data.articles[i].Art_Time+'</td><td>'+data.articles[i].status+'</td><td><div class="Set_dele glyphicon glyphicon-plus" onclick="changeArticle(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-minus" onclick="changeArticle_2(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-wrench" onclick="changeArticle_3(&quot;'+data.articles[i].status+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteArticle(&quot;'+data.articles[i].Art_Id+'&quot;,&quot;'+data.articles[i].Art_Name+'&quot;)"></div> </td></tr>';
 
                     };
@@ -568,17 +531,7 @@ function beforePage_article(){
                 } else {
                     var tableBody = '<thead><tr><td>物品</td><td>数量</td><td>第一次添加时间</td><td>状态</td><td>添加/减少/更改状态/删除</td></tr></thead>';
                     for (var i = 0; i < data.articles.length; i++) {
-                        switch(data.articles[i].status){
-                            case "1":
-                                data.articles[i].status='有库存';
-                                break;
-                            case "2":
-                                data.articles[i].status='无库存';
-                                break;
-                            case "3":
-                                data.articles[i].status='已下架';
-                                break;
-                        }
+                        data.articles[i].status=switchstatus(data.articles[i].status)
                         tableBody += '<tr><td>'+data.articles[i].Art_Name+'</td><td>'+data.articles[i].Art_Num+'</td><td>'+data.articles[i].Art_Time+'</td><td>'+data.articles[i].status+'</td><td><div class="Set_dele glyphicon glyphicon-plus" onclick="changeArticle(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-minus" onclick="changeArticle_2(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-wrench" onclick="changeArticle_3(&quot;'+data.articles[i].status+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteArticle(&quot;'+data.articles[i].Art_Id+'&quot;,&quot;'+data.articles[i].Art_Name+'&quot;)"></div> </td></tr>';
 
                     };
@@ -622,17 +575,7 @@ function afterPage_article_sel(){
                 } else {
                     var tableBody = '<thead><tr><td>物品</td><td>数量</td><td>第一次添加时间</td><td>状态</td><td>添加/减少/更改状态/删除</td></tr></thead>';
                     for (var i = 0; i < data.articles.length; i++) {
-                        switch(data.articles[i].status){
-                            case "1":
-                                data.articles[i].status='有库存';
-                                break;
-                            case "2":
-                                data.articles[i].status='无库存';
-                                break;
-                            case "3":
-                                data.articles[i].status='已下架';
-                                break;
-                        }
+                        data.articles[i].status=switchstatus(data.articles[i].status)
                         tableBody += '<tr><td>'+data.articles[i].Art_Name+'</td><td>'+data.articles[i].Art_Num+'</td><td>'+data.articles[i].Art_Time+'</td><td>'+data.articles[i].status+'</td><td><div class="Set_dele glyphicon glyphicon-plus" onclick="changeArticle(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-minus" onclick="changeArticle_2(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-wrench" onclick="changeArticle_3(&quot;'+data.articles[i].status+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteArticle(&quot;'+data.articles[i].Art_Id+'&quot;,&quot;'+data.articles[i].Art_Name+'&quot;)"></div> </td></tr>';
 
                     };
@@ -677,17 +620,7 @@ function beforePage_article_sel(){
                 } else {
                     var tableBody = '<thead><tr><td>物品</td><td>数量</td><td>第一次添加时间</td><td>状态</td><td>添加/减少/更改状态/删除</td></tr></thead>';
                     for (var i = 0; i < data.articles.length; i++) {
-                        switch(data.articles[i].status){
-                            case "1":
-                                data.articles[i].status='有库存';
-                                break;
-                            case "2":
-                                data.articles[i].status='无库存';
-                                break;
-                            case "3":
-                                data.articles[i].status='已下架';
-                                break;
-                        }
+                        data.articles[i].status=switchstatus(data.articles[i].status)
                         tableBody += '<tr><td>'+data.articles[i].Art_Name+'</td><td>'+data.articles[i].Art_Num+'</td><td>'+data.articles[i].Art_Time+'</td><td>'+data.articles[i].status+'</td><td><div class="Set_dele glyphicon glyphicon-plus" onclick="changeArticle(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-minus" onclick="changeArticle_2(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-wrench" onclick="changeArticle_3(&quot;'+data.articles[i].status+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteArticle(&quot;'+data.articles[i].Art_Id+'&quot;,&quot;'+data.articles[i].Art_Name+'&quot;)"></div> </td></tr>';
 
                     };
@@ -731,17 +664,7 @@ function afterPage_article_s(){
                 } else {
                     var tableBody = '<thead><tr><td>物品</td><td>数量</td><td>第一次添加时间</td><td>状态</td><td>添加/减少/更改状态/删除</td></tr></thead>';
                     for (var i = 0; i < data.articles.length; i++) {
-                        switch(data.articles[i].status){
-                            case "1":
-                                data.articles[i].status='有库存';
-                                break;
-                            case "2":
-                                data.articles[i].status='无库存';
-                                break;
-                            case "3":
-                                data.articles[i].status='已下架';
-                                break;
-                        }
+                        data.articles[i].status=switchstatus(data.articles[i].status)
                         tableBody += '<tr><td>'+data.articles[i].Art_Name+'</td><td>'+data.articles[i].Art_Num+'</td><td>'+data.articles[i].Art_Time+'</td><td>'+data.articles[i].status+'</td><td><div class="Set_dele glyphicon glyphicon-plus" onclick="changeArticle(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-minus" onclick="changeArticle_2(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-wrench" onclick="changeArticle_3(&quot;'+data.articles[i].status+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteArticle(&quot;'+data.articles[i].Art_Id+'&quot;,&quot;'+data.articles[i].Art_Name+'&quot;)"></div> </td></tr>';
 
                     };
@@ -786,17 +709,7 @@ function beforePage_article_s(){
                 } else {
                     var tableBody = '<thead><tr><td>物品</td><td>数量</td><td>第一次添加时间</td><td>状态</td><td>添加/减少/更改状态/删除</td></tr></thead>';
                     for (var i = 0; i < data.articles.length; i++) {
-                        switch(data.articles[i].status){
-                            case "1":
-                                data.articles[i].status='有库存';
-                                break;
-                            case "2":
-                                data.articles[i].status='无库存';
-                                break;
-                            case "3":
-                                data.articles[i].status='已下架';
-                                break;
-                        }
+                        data.articles[i].status=switchstatus(data.articles[i].status)
                         tableBody += '<tr><td>'+data.articles[i].Art_Name+'</td><td>'+data.articles[i].Art_Num+'</td><td>'+data.articles[i].Art_Time+'</td><td>'+data.articles[i].status+'</td><td><div class="Set_dele glyphicon glyphicon-plus" onclick="changeArticle(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-minus" onclick="changeArticle_2(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-wrench" onclick="changeArticle_3(&quot;'+data.articles[i].status+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteArticle(&quot;'+data.articles[i].Art_Id+'&quot;,&quot;'+data.articles[i].Art_Name+'&quot;)"></div> </td></tr>';
 
                     };
@@ -833,17 +746,7 @@ function yema_art(page){
                 } else {
                     var tableBody = '<thead><tr><td>物品</td><td>数量</td><td>第一次添加时间</td><td>状态</td><td>添加/减少/更改状态/删除</td></tr></thead>';
                     for (var i = 0; i < data.articles.length; i++) {
-                        switch(data.articles[i].status){
-                            case "1":
-                                data.articles[i].status='有库存';
-                                break;
-                            case "2":
-                                data.articles[i].status='无库存';
-                                break;
-                            case "3":
-                                data.articles[i].status='已下架';
-                                break;
-                        }
+                        data.articles[i].status=switchstatus(data.articles[i].status)
                         tableBody += '<tr><td>'+data.articles[i].Art_Name+'</td><td>'+data.articles[i].Art_Num+'</td><td>'+data.articles[i].Art_Time+'</td><td>'+data.articles[i].status+'</td><td><div class="Set_dele glyphicon glyphicon-plus" onclick="changeArticle(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-minus" onclick="changeArticle_2(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-wrench" onclick="changeArticle_3(&quot;'+data.articles[i].status+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteArticle(&quot;'+data.articles[i].Art_Id+'&quot;,&quot;'+data.articles[i].Art_Name+'&quot;)"></div> </td></tr>';
 
                     };
@@ -878,17 +781,7 @@ function yema_art_s(page){
                 } else {
                     var tableBody = '<thead><tr><td>物品</td><td>数量</td><td>第一次添加时间</td><td>状态</td><td>添加/减少/更改状态/删除</td></tr></thead>';
                     for (var i = 0; i < data.articles.length; i++) {
-                        switch(data.articles[i].status){
-                            case "1":
-                                data.articles[i].status='有库存';
-                                break;
-                            case "2":
-                                data.articles[i].status='无库存';
-                                break;
-                            case "3":
-                                data.articles[i].status='已下架';
-                                break;
-                        }
+                        data.articles[i].status=switchstatus(data.articles[i].status)
                         tableBody += '<tr><td>'+data.articles[i].Art_Name+'</td><td>'+data.articles[i].Art_Num+'</td><td>'+data.articles[i].Art_Time+'</td><td>'+data.articles[i].status+'</td><td><div class="Set_dele glyphicon glyphicon-plus" onclick="changeArticle(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-minus" onclick="changeArticle_2(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-wrench" onclick="changeArticle_3(&quot;'+data.articles[i].status+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteArticle(&quot;'+data.articles[i].Art_Id+'&quot;,&quot;'+data.articles[i].Art_Name+'&quot;)"></div> </td></tr>';
 
                     };
@@ -923,17 +816,7 @@ function yema_art_sel(page){
                 } else {
                     var tableBody = '<thead><tr><td>物品</td><td>数量</td><td>第一次添加时间</td><td>状态</td><td>添加/减少/更改状态/删除</td></tr></thead>';
                     for (var i = 0; i < data.articles.length; i++) {
-                        switch(data.articles[i].status){
-                            case "1":
-                                data.articles[i].status='有库存';
-                                break;
-                            case "2":
-                                data.articles[i].status='无库存';
-                                break;
-                            case "3":
-                                data.articles[i].status='已下架';
-                                break;
-                        }
+                        data.articles[i].status=switchstatus(data.articles[i].status)
                         tableBody += '<tr><td>'+data.articles[i].Art_Name+'</td><td>'+data.articles[i].Art_Num+'</td><td>'+data.articles[i].Art_Time+'</td><td>'+data.articles[i].status+'</td><td><div class="Set_dele glyphicon glyphicon-plus" onclick="changeArticle(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-minus" onclick="changeArticle_2(&quot;'+data.articles[i].Art_Name+'&quot;,&quot;'+data.articles[i].Art_Num+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-wrench" onclick="changeArticle_3(&quot;'+data.articles[i].status+'&quot;,&quot;'+data.articles[i].Art_Id+'&quot;)"></div> | <div class="Set_dele glyphicon glyphicon-remove" onclick="deleteArticle(&quot;'+data.articles[i].Art_Id+'&quot;,&quot;'+data.articles[i].Art_Name+'&quot;)"></div> </td></tr>';
 
                     };
@@ -990,4 +873,18 @@ function danqianye_art_sel(){
             return true
         }
     }).removeClass("yema_choosed")
+}
+function switchstatus(status){
+    switch(status){
+        case "1":
+            status='有库存';
+            break;
+        case "2":
+            status='无库存';
+            break;
+        case "3":
+            status='已下架';
+            break;
+    }
+    return status
 }
