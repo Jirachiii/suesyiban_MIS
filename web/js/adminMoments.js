@@ -18,10 +18,8 @@ function getMomentData_dongtai() {
 	allpage = 1;
 	nowPage_s = 1;
 	allpage_s = 1;
-	$("#mom_search_prev").hide();
-	$("#mom_search_aft").hide();
-	$("#mom_prev").show();
-	$("#mom_aft").show();
+	$("#mom_prev").attr("onclick","beforePage()");
+	$("#mom_aft").attr("onclick","afterPage()");
 	$("#yema_mom_s").empty();
 	document.getElementById("searchMoment").value="";
 	$.getJSON('index.php?r=json/getmomentdata', function(data, textStatus) {
@@ -98,10 +96,8 @@ function deleteMom(monentsId) {
 //动态搜索
 function searchMoment(){
 	$("#MomentsData").empty();
-	$("#mom_search_prev").show();
-	$("#mom_search_aft").show();
-	$("#mom_prev").hide();
-	$("#mom_aft").hide();
+	$("#mom_prev").attr("onclick","beforePage_s()");
+	$("#mom_aft").attr("onclick","afterPage_s()");
 	$("#yema_mom").empty();
 	$("#yema_mom_s").empty();
 	nowPage_s = 1;
@@ -126,7 +122,7 @@ function searchMoment(){
 					$("td span[class='glyphicon glyphicon-fire myred']").parent().parent().insertBefore($("tbody tr:eq(0)"))
 					//分页的
 					var yema="<span id='yema_mom_s' class='yema_mom'></span>"
-					$("#mom_search_prev").after(yema);
+					$("#mom_prev").after(yema);
 					for(i=1;i<=allpage_s;i++){
 						$("#yema_mom_s").append("<a id='"+i+"' onclick='yema_mom_s("+i+")'>"+i+"</a>")
 					}

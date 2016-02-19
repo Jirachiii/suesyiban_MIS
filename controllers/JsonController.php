@@ -108,8 +108,14 @@ class JsonController extends Controller {
 		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
 		$rightNowUserName = Yii::$app->user->identity->Name;
 		$usertb           = new UserTb();
-		$result           = $usertb->getPageMomentWithOrder(1, 5);
-		$result           = '{"users":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
+		$result           = $usertb->getPageUserWithOrder(1, 6);
+		$allpage=$usertb->userallpage(6);
+		if(empty($result)){
+			$result           = '{"success":false,"msg":"获取失败","users":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
+		}else{
+			$result           = '{"success":true,"allPage":"'.$allpage.'","users":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
+
+		}
 		echo $result;
 	}
 

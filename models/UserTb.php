@@ -3,6 +3,7 @@ namespace app\models;
 use app\controllers\DbFactory;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 header("Content-Type: application/json;charset=utf-8");
 
 /**
@@ -137,13 +138,52 @@ class UserTb extends \yii\db\ActiveRecord {
 			}
 		}
 	}
-	//显示用户代码，以后添加用户职务
-	public function getPageMomentWithOrder($page, $number) {
+
+	/**
+	 * 获取用户
+	 * @param $page
+	 * @param $number
+	 * @return array
+	 */
+	public function getPageUserWithOrder($page, $number) {
 		$front     = ($page-1)*$number;
-		$sql       = 'SELECT * FROM user_tb LIMIT '.$front.','.$number;
+		$sql       = 'SELECT * FROM (SELECT * FROM user_tb ORDER BY status)AS tbl LIMIT '.$front.','.$number;
 		$Dbfactory = DbFactory::getinstance();
 		$users     = $Dbfactory->findBySql($sql);
 		return $users;
+	}
+
+	/**
+	 * 统计总的页数
+	 */
+	public function userallpage($numbers){
+		$result=UserTb::find()->count();
+		return (ceil($result/$numbers));
+	}
+
+	/**
+	 * 搜索用户的分页
+	 * @param $content
+	 * @param $page
+	 * @param $numbers
+	 * @return array
+	 */
+	public function getSearchUserWithPage($content,$page,$numbers){
+		$index=($page-1)*$numbers;
+		$result = (new Query())
+			->from('user_tb')
+			->where(['or', ['like', 'XH_ID', $content], ['like', 'Name', $content]])
+			->limit($numbers)
+			->offset($index)
+			->all();
+		return $result;
+}
+	/**
+	 * 统计总的页数(搜索)
+	 */
+	public function userallpage_s($numbers,$content){
+		$result=UserTb::find()->where("XH_ID like '%$content%' or Name like '%$content%'")->count();
+		return (ceil($result/$numbers));
 	}
 
 }

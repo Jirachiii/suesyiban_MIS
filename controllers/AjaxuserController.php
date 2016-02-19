@@ -55,21 +55,56 @@ class AjaxuserController extends Controller {
 		//		$usertb->insertMomentData($user);
 		//提示保存成功
 	}
+
+	/**
+	 * 	用户管理分页
+	 */
+	public function actionUserpagechange(){
+		$page=$_GET['page'];
+		$usertb=new UserTb();
+		$allpage=$usertb->userallpage(6);
+		if($allpage<$page||$page<1){
+			$result= '{"success":false,"allPage":1,"msg":"页码出错"}';
+		}else{
+			$result=$usertb->getPageUserWithOrder($page,6);
+			$result= '{"success":true,"users":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"allPage":"'.$allpage.'"}';
+		}
+
+		return $result;
+	}
 	//管理员搜索用户
 	public function actionAdminsearchuser() {
 		if (!isset($_GET["searchuser"]) || empty($_GET["searchuser"])) {
-			echo '{"success":false,"msg":"你输入了空值"}';
+			echo '{"success":false,"msg":"请输入查询内容"}';
 			return;
 		}
-		$XH_ID  = $_GET["searchuser"];
-		$result = (new Query())
-			->from('user_tb')
-			->where(['or', ['like', 'XH_ID', $XH_ID], ['like', 'Name', $XH_ID]])
-			->all();
-		//TODO: 获取GET表单数据并搜索数据库
+		$page=$_GET['page'];
+		$content  = $_GET["searchuser"];
 
-		$result = '{"success":true,"users":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
+		$usertb=new UserTb();
+		$allpage=$usertb->userallpage_s(6,$content);
+		if($allpage<$page||$page<1){
+			$result= '{"success":false,"allPage":1,"msg":"页码出错"}';
+		}else{
+			$result=$usertb->getSearchUserWithPage($content,$page,6);
+			$result = '{"success":true,"allPage":"'.$allpage.'","users":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
+		}
 		echo $result;
+	}
+	/**
+	 * 更改用户权限
+	 */
+	public function actionChangeuserstatus() {
+		//判断信息是否填写完全
+		if ((empty($_POST["status"]) || !isset($_POST["status"]))) {
+			echo '{"success":false,"msg":"请选择"}';
+			return;
+		}
+		$aimuser = UserTb::findOne($_POST['id']);
+		$aimuser->status = $_POST["status"];
+		$aimuser->save(false);
+		//		$a=$aimarticle->status;
+		echo '{"success":true,"msg":"更改成功！"}';
 	}
 	//获取所有状态
 	public function actionAdminstatusgetitems() {
