@@ -165,9 +165,9 @@ class Moments extends \yii\db\ActiveRecord
     public function getPageMomentWithOrder_2($input,$page, $number){
         $front = ($page - 1) * $number;
         if($page==1){
-            $sql="SELECT tabbledesc.id,tabbledesc.XH_ID,Content,Mdate FROM (SELECT * FROM moments ORDER BY Mdate DESC)AS tabbledesc LEFT JOIN moment_top ON tabbledesc.id=moment_top.moment_id  WHERE tabbledesc.Content like '%$input%' OR tabbledesc.XH_ID like '%$input%' LIMIT $number";
+            $sql="SELECT tabbledesc.id,tabbledesc.XH_ID,Content,Mdate FROM (SELECT * FROM moments ORDER BY Mdate DESC,Time desc)AS tabbledesc LEFT JOIN moment_top ON tabbledesc.id=moment_top.moment_id  WHERE tabbledesc.Content like '%$input%' OR tabbledesc.XH_ID like '%$input%' LIMIT $number";
         }else{
-            $sql1="SELECT tabbledesc.id,tabbledesc.XH_ID,Content,Mdate FROM (SELECT * FROM moments ORDER BY Mdate DESC)AS tabbledesc LEFT JOIN moment_top ON tabbledesc.id=moment_top.moment_id  WHERE tabbledesc.Content like '%$input%' OR tabbledesc.XH_ID like '%$input%'  LIMIT $front";
+            $sql1="SELECT tabbledesc.id,tabbledesc.XH_ID,Content,Mdate FROM (SELECT * FROM moments ORDER BY Mdate DESC,Time desc)AS tabbledesc LEFT JOIN moment_top ON tabbledesc.id=moment_top.moment_id  WHERE tabbledesc.Content like '%$input%' OR tabbledesc.XH_ID like '%$input%'  LIMIT $front";
             $count=Yii::$app->db->createCommand($sql1)->queryAll();
             $idcount="";
             foreach($count as $key=>$value){
