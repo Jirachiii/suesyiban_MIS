@@ -117,10 +117,10 @@ class Moments extends \yii\db\ActiveRecord
         if ($this->decideGetMomentContinue($page, $number)) {
             $front = ($page - 1) * $number;
             if ($page == 1) {
-               $sql=" SELECT tabbledesc.id,tabbledesc.XH_ID,Content,Mdate FROM (SELECT * FROM moments ORDER BY Mdate DESC)AS tabbledesc LEFT JOIN moment_top ON tabbledesc.id=moment_top.moment_id LIMIT $number";
+               $sql=" SELECT tabbledesc.id,tabbledesc.XH_ID,Content,Mdate FROM (SELECT * FROM moments ORDER BY Mdate DESC,Time desc)AS tabbledesc LEFT JOIN moment_top ON tabbledesc.id=moment_top.moment_id LIMIT $number";
             }else{
 //              $sql = 'SELECT id,XH_ID,Content,Mdate FROM Moments ORDER BY Mdate DESC,Time DESC LIMIT ' . $front . ',' . $number;
-                $sql1=" SELECT tabbledesc.id FROM (SELECT * FROM moments ORDER BY Mdate DESC)AS tabbledesc LEFT JOIN moment_top ON tabbledesc.id=moment_top.moment_id  LIMIT $front";
+                $sql1=" SELECT tabbledesc.id FROM (SELECT * FROM moments ORDER BY Mdate DESC,Time desc)AS tabbledesc LEFT JOIN moment_top ON tabbledesc.id=moment_top.moment_id  LIMIT $front";
                 $count=Yii::$app->db->createCommand($sql1)->queryAll();
                 $idcount="";
                 foreach($count as $key=>$value){
