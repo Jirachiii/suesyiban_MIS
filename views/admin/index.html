@@ -66,9 +66,9 @@
 					<table id="userMsgShow" class="table table-condensed table-hover">
 					</table>
 				</div>
-				<div>
-					<button id="user_prev" onclick="beforePage_user()">上一页</button>
-					<button id="user_aft" onclick="afterPage_user()">下一页</button>
+				<div class="pageStyle_user">
+					<button id="user_prev" class="btn-sm btn_prev" onclick="beforePage_user()">上一页</button>
+					<button id="user_aft" class="btn-sm btn_after" onclick="afterPage_user()">下一页</button>
 				</div>
 			</div>
 		</section>
@@ -93,8 +93,8 @@
 		<section class="cover_user_2" id="coverDiv_user_2" onclick="hideAll_user_2()"></section>
 		<section class="showSetting_user_2" id="SetDiv_user_2">
 
-			<p class="Set_tit_user_2">更改物品状态</p>
-
+			<p class="Set_tit_user_2">更改权限</p>
+			<br>
 			<span>目前为：</span><span id="showuserstatus_2" class=""></span>
 			<!--id（学号）用于等会ajax传输数据-->
 			<span id="thisuserid_2" style="display: none"></span>
@@ -106,7 +106,7 @@
 				</select>
 			</section>
 			<p id="changeResult_user_2" class="Set_btn_P"></p><br>
-			<div class="Set_btn_M">
+			<div class="Set_btn_M mysetforbtn_user">
 				<button class="Set_btn col-xs-6 handlegreen" onclick="updateuser_2()">确定</button>
 				<button class="Set_btn col-xs-6" onclick="hideAll_user_2()">取消</button>
 			</div>

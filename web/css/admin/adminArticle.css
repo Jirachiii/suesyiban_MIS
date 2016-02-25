@@ -32,8 +32,8 @@
     z-index: 101;
     opacity: 0;
     width: 200px;
-    height: 300px;
-    background-color: #909090;
+    height: 200px;
+    background-color: #ADADAD;
     opacity: 0.4;
     border-radius: 5%;
     left: 50%;
@@ -44,11 +44,15 @@
 .Set_tit_3{
     position: relative;
     color: #EEE;
-    font-size: 1.2em;
+    font-size: 1.4em;
     text-align: center;
     text-shadow: 5px 5px 5px #000;
     top: 13px;
     -webkit-transform: translateY(-50%);
+}
+.showSetting_3 span{
+    margin-left: 20px;
+    font-size: 1.2em;
 }
 
 .myword{
@@ -64,14 +68,7 @@
     padding: 5px;
     border-radius: 30px;
 }
-.yema_art a{
-    margin:10px;
-    padding: 5px;
-    font-size: 1.3em;
-    cursor:pointer;
-}
-
-.yema_choosed{
-    color: #99CC66;
-    border: 1px solid #99CC66;
+.mysetforbtn_art{
+    position: absolute;
+    bottom: 0px;
 }
