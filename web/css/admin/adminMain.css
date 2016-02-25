@@ -242,3 +242,60 @@ td {
 		left: 92%;
 	}
 }
+.btn_prev{
+	border: 1px solid #A9A9A9;
+	background-color: #EDEBEB
+}
+.btn_after{
+	border: 1px solid #A9A9A9;
+	background-color: #EDEBEB
+}
+.pageStyle_user{
+	text-align: center;
+	position: relative;
+	top: -14px;	
+}
+.pageStyle_mom{
+	text-align: center;
+	position: relative;
+	top: -14px;	
+}
+.pageStyle_article{
+	text-align: center;
+	position: relative;
+	top: 4px;	
+}
+.pageStyle_anpai{
+	position: absolute;
+	bottom: 1px;	
+	right: 400px;
+}
+.yema_user a{
+	margin:10px;
+	padding: 5px;
+	font-size: 1.3em;
+	cursor:pointer;
+}
+
+.yema_choosed{
+	color: #99CC66;
+	border: 1px solid #99CC66;
+}
+.yema_mom a{
+    margin:10px;
+    padding: 5px;
+    font-size: 1.3em;
+    cursor:pointer;
+}
+.yema_art a{
+    margin:10px;
+    padding: 5px;
+    font-size: 1.3em;
+    cursor:pointer;
+}
+.yema_anpai a{
+	margin:10px;
+	padding: 5px;
+	font-size: 1.3em;
+	cursor:pointer;
+}

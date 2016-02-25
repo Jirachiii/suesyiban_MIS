@@ -72,9 +72,9 @@
 					</table>
 				</div>
 			</div>
-			<div>
-				<button id="article_prev" onclick="beforePage_article()">上一页</button>
-				<button id="article_aft" onclick="afterPage_article()">下一页</button>
+			<div class="pageStyle_article">
+				<button id="article_prev" class="btn-sm btn_prev" onclick="beforePage_article()">上一页</button>
+				<button id="article_aft" class="btn-sm btn_after" onclick="afterPage_article()">下一页</button>
 			</div>
 		</div>
 		<!-- 以下为库存种类添加，默认隐藏 -->
@@ -88,7 +88,7 @@
 				<div class="Set_sp">数量：</div><input class="form-control" type="number" placeholder="请输入物品数量" id="insertNumber">
 			</section>
 			<p id="createResult" class="Set_btn_P"></p><br>
-			<div class="Set_btn_M">
+			<div class="Set_btn_M mysetforbtn_art">
 				<button class="Set_btn col-xs-6 handlegreen" onclick="insertArticle()">插入</button>
 				<button class="Set_btn col-xs-6" onclick="hideAll()">取消</button>
 			</div>
@@ -117,7 +117,7 @@
 				</div><input class="form-control" type="number" placeholder="手动输入数量" id="changeart_inp" onclick="clearvalue(this)">
 			</section>
 			<p id="changeResult" class="Set_btn_P"></p><br>
-			<div class="Set_btn_M">
+			<div class="Set_btn_M mysetforbtn_art">
 				<button class="Set_btn col-xs-6 handlegreen" onclick="updateArticle()">添加</button>
 				<button class="Set_btn col-xs-6" onclick="hideAll_ch()">取消</button>
 			</div>
@@ -147,7 +147,7 @@
 				</div><input class="form-control" type="number" placeholder="手动输入数量" id="changeart_inp_2" onclick="clearvalue_2(this)">
 			</section>
 			<p id="changeResult_2" class="Set_btn_P"></p><br>
-			<div class="Set_btn_M">
+			<div class="Set_btn_M mysetforbtn_art">
 				<button class="Set_btn col-xs-6 handlegreen" onclick="updateArticle_2()">减少</button>
 				<button class="Set_btn col-xs-6" onclick="hideAll_ch_2()">取消</button>
 			</div>
@@ -158,7 +158,7 @@
 		<section class="showSetting_3" id="SetDiv_ch_3">
 
 			<p class="Set_tit_3">更改物品状态</p>
-
+			<br>
 			<span>目前为：</span><span id="showarticlestatus_3" class=""></span><span id="showarticlenumber_3"></span>
 			<!--用于等会ajax传输数据-->
 			<span id="articleid_3" style="display: none"></span>
@@ -170,7 +170,7 @@
 				</select>
 			</section>
 			<p id="changeResult_3" class="Set_btn_P"></p><br>
-			<div class="Set_btn_M">
+			<div class="Set_btn_M mysetforbtn_art">
 				<button class="Set_btn col-xs-6 handlegreen" onclick="updateArticle_3()">确定</button>
 				<button class="Set_btn col-xs-6" onclick="hideAll_ch_3()">取消</button>
 			</div>

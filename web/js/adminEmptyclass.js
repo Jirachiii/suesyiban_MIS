@@ -29,6 +29,10 @@ function addAnapi() {
     whichweek_manual()
     getname_manual()
 }
+function loading() {
+    document.getElementById("coverDiv_loading").style.top = '0px';
+}
+
 /**
  * 隐藏人工排班的页面
  */
@@ -167,9 +171,10 @@ function loadanpai(){
  * 更新课表，把部员的课表存到一个新表中
  */
 function updateMemberkb(){
-    var update = confirm('当课表发生变化时使用此功能。更新需要十秒左右,更新完毕会提示并刷新(以后做个画面：点击确定出来一个页面“更新中请稍后”，等待更新好刷新掉)');
+    var update = confirm('当课表发生变化时使用此功能。更新需要十秒左右');
     if(update == true){
-        var update2=confirm('确认更新')
+        var update2=confirm('确认更新?')
+        loading()
         if(update2==true){
             $.getJSON('index.php?r=emptyclass/updatememberkb', function(data, textStatus) {
                 if (textStatus == 'success') {
