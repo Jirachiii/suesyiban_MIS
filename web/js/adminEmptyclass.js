@@ -100,6 +100,12 @@ function insertAnpai(){
                 if (data.success) {
                     $("#anpai_result").html("安排值班成功！2秒后自动关闭此页面");
                     setTimeout("daojishi_anpai()",1000)
+                    if($("#whichweek").val()!=null&&$("#zhibantime").val()!=null&&$("#weekday").val()!=null){
+                        searchEmptyclass();
+                    }
+                    if($("#whichweek_2").val()!=null&&$("#weekday_2").val()!=null){
+                        loadanpai()
+                    }
                 } else {
                     $("#anpai_result").html("出现错误：" + data.msg);
                 }
