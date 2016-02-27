@@ -137,6 +137,7 @@ class AjaxuserController extends Controller {
 	//用户获取项目
 	public function actionGetitembystatus() {
 		$status = $_GET['status'];
+		$msg="";
 		switch ($status) {
 			case 2:
 				//以后改进
@@ -191,10 +192,11 @@ class AjaxuserController extends Controller {
 		$content['XH_ID']      = \Yii::$app->user->identity->XH_ID;
 		$content['CreateDate'] = date('Y-m-d');
 		$content['Num']        = intval($owntodos->findTodayMissionCount())+1;
-		$content['content']    = $_POST['content'];
+//		$content['content']    = $_POST['content'];
+		$content['content']    = '111111';
 		$content['urgentLev']  = 1;
 		if ($owntodos->insertTodoData($content)) {
-			$result = '{"success":true,"msg":"<div data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$content['Num'].'\" class=\"mission_type\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$content['content'].'</span><span class=\"mission_SpDate\">'.$content['CreateDate'].'</span>';
+			$result = '{"success":true,"msg":"<div data-createDate=\"'.$content['CreateDate'].'\" data-Num=\"'.$content['Num'].'\" class=\"mission_type\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$content['content'].'</span><span class=\"mission_SpDate\">'.$content['CreateDate'].'</span>';
 			$result .= '<div onclick=\"Urgenthandle(this,1)\" class=\"mission_SpUrgent normal\" data-Num=\"'.$content['Num'].'\"></div><div onclick=\"Urgenthandle(this,2)\" class=\"mission_SpUrgent urgenter\" data-Num=\"'.$content['Num'].'\"></div><div onclick=\"Urgenthandle(this,3)\" class=\"mission_SpUrgent urgentest\" data-Num=\"'.$content['Num'].'\"></div></div>"}';
 			echo $result;
 		} else {
@@ -250,6 +252,9 @@ class AjaxuserController extends Controller {
 		return $data;
 	}
 	//插入项目
+	/**
+	 *
+	 */
 	public function actionInsertitem() {
 		$arr['XH_ID']      = \Yii::$app->user->identity->XH_ID;
 		$arr['Item_Name']  = $_POST["ItemName"];
@@ -257,7 +262,13 @@ class AjaxuserController extends Controller {
 		$arr['Status']     = 1;
 		$arr['Date']       = date('y-m-d');
 		$item              = new Items();
-		if ($item->insertItem($arr)) {
+		$item->XH_ID=$arr['XH_ID'];
+		$item->Item_Name=$arr['Item_Name'];
+		$item->Item_Intro=$arr['Item_Intro'];
+		$item->Status=$arr['Status'];
+		$item->Date=123;
+		$result=$item->save(false);
+		if ($result) {
 			echo '{"success": true}';
 		} else {
 			echo '{"success": false}';
@@ -375,7 +386,13 @@ class AjaxuserController extends Controller {
 		$arr['Date']     = date('y-m-d');
 		$arr['Time']     = date('H:i:s');
 		$itemdetail      = new Itemdetails();
-		$result          = $itemdetail->insertDetail($arr);
+//		$result          = $itemdetail->insertDetail($arr);
+		$itemdetail->item_id=$arr['item_id'];
+		$itemdetail->discribe=$arr['discribe'];
+		$itemdetail->status=$arr['status'];
+		$itemdetail->Date=$arr['Date'];
+		$itemdetail->Time=$arr['Time'];
+		$result=$itemdetail->save();
 		if ($result) {
 			echo '{"success":true}';
 		} else {

@@ -13,7 +13,7 @@ use Yii;
  * @property string $Item_Intro
  * @property integer $Status
  * @property integer $ShowPublic
- *
+ *@property string $Date
  * @property UserTb $xH
  */
 
@@ -61,9 +61,11 @@ class Items extends \yii\db\ActiveRecord {
 	public function searchAllItems($status) {
 		$XH_ID     = \Yii::$app->user->identity->XH_ID;
 		$sql       = 'SELECT Item_Id,Item_Name FROM items WHERE XH_ID = \''.$XH_ID.'\' and Status = '.$status;
-		$Dbfactory = DbFactory::getinstance();
-		$query     = $Dbfactory->doQuery($sql);
-		return $Dbfactory->findAll($query);
+//		$Dbfactory = DbFactory::getinstance();
+//		$query     = $Dbfactory->doQuery($sql);
+//		return $Dbfactory->findAll($query);
+		$result=Yii::$app->db->createCommand($sql)->queryAll();
+		return $result;
 	}
 	//
 	public function searchItemsDetail($Item_Id) {

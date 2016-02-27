@@ -71,7 +71,7 @@ class OwnTodos extends \yii\db\ActiveRecord {
 	//插入数据，并在插入之前检验数据是否会对数据库有害
 	public function insertTodoData($arr) {
 		$Dbfactory = DbFactory::getinstance();
-		$this->processthemessage($arr['Content']);
+		$this->processthemessage($arr['content']);
 		return $Dbfactory->insertIntoDb('OwnTodos', $arr);
 	}
 	//数据过滤
