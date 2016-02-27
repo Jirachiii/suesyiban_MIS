@@ -193,9 +193,15 @@ class AjaxuserController extends Controller {
 		$content['CreateDate'] = date('Y-m-d');
 		$content['Num']        = intval($owntodos->findTodayMissionCount())+1;
 //		$content['content']    = $_POST['content'];
-		$content['content']    = '111111';
+		$content['content']    = $_POST['content'];
 		$content['urgentLev']  = 1;
-		if ($owntodos->insertTodoData($content)) {
+		$owntodos->XH_ID=$content['XH_ID'];
+		$owntodos->CreateDate=$content['CreateDate'];
+		$owntodos->Num=$content['Num'];
+		$owntodos->content=$content['content'];
+		$owntodos->urgentLev=$content['urgentLev'];
+//		if ($owntodos->insertTodoData($content)) {
+		if ($owntodos->save(false)) {
 			$result = '{"success":true,"msg":"<div data-createDate=\"'.$content['CreateDate'].'\" data-Num=\"'.$content['Num'].'\" class=\"mission_type\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$content['content'].'</span><span class=\"mission_SpDate\">'.$content['CreateDate'].'</span>';
 			$result .= '<div onclick=\"Urgenthandle(this,1)\" class=\"mission_SpUrgent normal\" data-Num=\"'.$content['Num'].'\"></div><div onclick=\"Urgenthandle(this,2)\" class=\"mission_SpUrgent urgenter\" data-Num=\"'.$content['Num'].'\"></div><div onclick=\"Urgenthandle(this,3)\" class=\"mission_SpUrgent urgentest\" data-Num=\"'.$content['Num'].'\"></div></div>"}';
 			echo $result;
@@ -266,8 +272,8 @@ class AjaxuserController extends Controller {
 		$item->Item_Name=$arr['Item_Name'];
 		$item->Item_Intro=$arr['Item_Intro'];
 		$item->Status=$arr['Status'];
-		$item->Date=123;
-		$result=$item->save(false);
+		$item->Date=$arr['Date'];
+		$result=$item->save();
 		if ($result) {
 			echo '{"success": true}';
 		} else {

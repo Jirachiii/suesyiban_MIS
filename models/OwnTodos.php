@@ -11,6 +11,7 @@ date_default_timezone_set("PRC");
  * @property string $XH_ID
  * @property string $CreateDate
  * @property integer $number
+ * @property integer $Num
  * @property string $content
  * @property integer $urgentLev
  */
@@ -28,8 +29,8 @@ class OwnTodos extends \yii\db\ActiveRecord {
 	 */
 	public function rules() {
 		return [
-			[['XH_ID', 'CreateDate', 'number', 'content', 'urgentLev'], 'required'],
-			[['number', 'urgentLev'], 'integer'],
+			[['XH_ID', 'CreateDate', 'Num', 'content', 'urgentLev'], 'required'],
+			[['Num', 'urgentLev'], 'integer'],
 			[['XH_ID'], 'string', 'max'      => 10],
 			[['CreateDate'], 'string', 'max' => 8],
 			[['content'], 'string', 'max'    => 16]
@@ -43,7 +44,7 @@ class OwnTodos extends \yii\db\ActiveRecord {
 		return [
 			'XH_ID'      => 'Xh  ID',
 			'CreateDate' => 'Create Date',
-			'number'     => 'Number',
+			'Num'     => 'Num',
 			'content'    => 'Content',
 			'urgentLev'  => 'Urgent Lev',
 		];
@@ -53,10 +54,12 @@ class OwnTodos extends \yii\db\ActiveRecord {
 	public function findTodayMission() {
 		$rightNowUserId = Yii::$app->user->identity->XH_ID;
 		$today          = date('Y-m-d');
-		$Dbfactory      = DbFactory::getinstance();
 		$sql            = 'SELECT CreateDate,Num,content,urgentLev FROM ownTodos WHERE XH_ID = \''.$rightNowUserId.'\' and CreateDate = \''.$today.'\'';
-		$query          = $Dbfactory->doQuery($sql);
-		return $Dbfactory->findAll($query);
+//		$Dbfactory      = DbFactory::getinstance();
+//		$query          = $Dbfactory->doQuery($sql);
+//		return $Dbfactory->findAll($query);
+		$result=Yii::$app->db->createCommand($sql)->queryAll();
+		return $result;
 	}
 	//数据个数
 	public function findTodayMissionCount() {
@@ -93,24 +96,30 @@ class OwnTodos extends \yii\db\ActiveRecord {
 		$rightNowUserId = Yii::$app->user->identity->XH_ID;
 		$CreateDate     = date('Y-m-d');
 		$sql            = 'SELECT CreateDate,Num,content,urgentLev FROM OwnTodos WHERE XH_ID = \''.$rightNowUserId.'\' and CreateDate = \''.$CreateDate.'\' and urgentLev = 4';
-		$Dbfactory      = DbFactory::getinstance();
-		$query          = $Dbfactory->doQuery($sql);
-		return $Dbfactory->findAll($query);
+//		$Dbfactory      = DbFactory::getinstance();
+//		$query          = $Dbfactory->doQuery($sql);
+//		return $Dbfactory->findAll($query);
+		$result=Yii::$app->db->createCommand($sql)->queryAll();
+		return $result;
 	}
 	//取出7天内的数据
 	public function dateSearch($oneWeek, $today) {
 		$XH_ID     = \Yii::$app->user->identity->XH_ID;
 		$sql       = 'SELECT * FROM OwnTodos WHERE XH_ID = \''.$XH_ID.'\' AND CreateDate BETWEEN \''.$oneWeek.'\' AND \''.$today.'\' ORDER BY CreateDate DESC';
-		$Dbfactory = DbFactory::getinstance();
-		$query     = $Dbfactory->doQuery($sql);
-		return $Dbfactory->findAll($query);
+//		$Dbfactory = DbFactory::getinstance();
+//		$query     = $Dbfactory->doQuery($sql);
+//		return $Dbfactory->findAll($query);
+		$result=Yii::$app->db->createCommand($sql)->queryAll();
+		return $result;
 	}
 	//所有未完成
 	public function willHandle() {
 		$XH_ID     = \Yii::$app->user->identity->XH_ID;
 		$sql       = 'SELECT * FROM OwnTodos WHERE XH_ID = \''.$XH_ID.'\' AND urgentLev BETWEEN \'1\' AND \'3\' ORDER BY CreateDate DESC';
-		$Dbfactory = DbFactory::getinstance();
-		$query     = $Dbfactory->doQuery($sql);
-		return $Dbfactory->findAll($query);
+//		$Dbfactory = DbFactory::getinstance();
+//		$query     = $Dbfactory->doQuery($sql);
+//		return $Dbfactory->findAll($query);
+		$result=Yii::$app->db->createCommand($sql)->queryAll();
+		return $result;
 	}
 }
