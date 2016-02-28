@@ -1,15 +1,11 @@
 <?php
-
 namespace app\models;
-
 use app\controllers\DbFactory;
 use app\models\UserTb;
 use yii\db\Query;
 use Yii;
-
 date_default_timezone_set("PRC");
 header("Content-Type: application/json;charset=utf-8");
-
 /**
  * This is the model class for table "moments".
  *
@@ -31,7 +27,6 @@ class Moments extends \yii\db\ActiveRecord
     {
         return 'moments';
     }
-
     /**
      * @inheritdoc
      */
@@ -46,7 +41,6 @@ class Moments extends \yii\db\ActiveRecord
             [['Content'], 'string', 'max' => 32]
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -61,7 +55,6 @@ class Moments extends \yii\db\ActiveRecord
             'like_Num' => 'Like  Num',
         ];
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -69,7 +62,6 @@ class Moments extends \yii\db\ActiveRecord
     {
         return $this->hasOne(UserTb::className(), ['XH_ID' => 'XH_ID']);
     }
-
     public function adminGetMoment()
     {
         $dbFactory = DbFactory::getinstance();
@@ -81,13 +73,10 @@ class Moments extends \yii\db\ActiveRecord
         $content[0]['name'] = $username;
         return $content;
     }
-
     public function userGetMoment()
     {
         $dbFactory = DbFactory::getinstance();
-
     }
-
     //获取当前时间
     public function getDateAndTime()
     {
@@ -95,7 +84,6 @@ class Moments extends \yii\db\ActiveRecord
         $RightNow['time'] = date('H:i:s');
         return $RightNow;
     }
-
     private function processthemessage($message)
     {
         $Dbfactory = DbFactory::getinstance();
@@ -103,7 +91,6 @@ class Moments extends \yii\db\ActiveRecord
         $message = \yii\helpers\HtmlPurifier::process($message);
         return $message;
     }
-
     //插入数据，并在插入之前检验数据是否会对数据库有害
     public function insertMomentData($arr)
     {
@@ -111,30 +98,32 @@ class Moments extends \yii\db\ActiveRecord
         $this->processthemessage($arr['Content']);
         $Dbfactory->insertIntoDb('moments', $arr);
     }
-
     public function getPageMomentWithOrder($page, $number)
     {
         if ($this->decideGetMomentContinue($page, $number)) {
             $front = ($page - 1) * $number;
-            if ($page == 1) {
-               $sql=" SELECT tabbledesc.id,tabbledesc.XH_ID,Content,Mdate FROM (SELECT * FROM moments ORDER BY Mdate DESC,Time desc)AS tabbledesc LEFT JOIN moment_top ON tabbledesc.id=moment_top.moment_id LIMIT $number";
-            }else{
-//              $sql = 'SELECT id,XH_ID,Content,Mdate FROM Moments ORDER BY Mdate DESC,Time DESC LIMIT ' . $front . ',' . $number;
-                $sql1=" SELECT tabbledesc.id FROM (SELECT * FROM moments ORDER BY Mdate DESC,Time desc)AS tabbledesc LEFT JOIN moment_top ON tabbledesc.id=moment_top.moment_id  LIMIT $front";
-                $count=Yii::$app->db->createCommand($sql1)->queryAll();
-                $idcount="";
-                foreach($count as $key=>$value){
-                    $idcount.=$value['id'].',';
-                }
-                $idcount=rtrim($idcount, ",");
-//                print_r($idcount);
-//                exit();
-                $sql="SELECT id,XH_ID,Content,Mdate FROM Moments WHERE id NOT IN($idcount) ORDER BY Mdate DESC,Time DESC LIMIT $number;";
-            }
-//            $sql = 'SELECT id,XH_ID,Content,Mdate FROM Moments ORDER BY Mdate DESC,Time DESC LIMIT ' . $front . ',' . $number;
-
+            $sql=" SELECT moments.id,moments.XH_ID,moments.Content,moments.Mdate FROM moments RIGHT JOIN moment_top ON moments.id=moment_top.moment_id";
             $Dbfactory = DbFactory::getinstance();
-            $Moments = $Dbfactory->findBySql($sql);
+            $Moments1 = $Dbfactory->findBySql($sql);
+            $counttop=MomentTop::find()->count();
+            $num=$number-$counttop;
+            $idcount="";
+            foreach($Moments1 as $key=>$value){
+                $idcount.=$value['id'].',';
+            }
+            if ($page == 1) {
+                $idcount=rtrim($idcount, ",");
+                $sql2="SELECT id,XH_ID,Content,Mdate FROM moments WHERE id NOT IN ($idcount) ORDER BY Mdate DESC ,TIME DESC LIMIT $num";
+                $Moments2=Yii::$app->db->createCommand($sql2)->queryAll();
+                $Moments=array_merge($Moments1,$Moments2);
+            }else{
+                $num=$front-$counttop;
+                $idcount=rtrim($idcount, ",");
+                $sql2="SELECT id,XH_ID,Content,Mdate FROM moments WHERE id NOT IN ($idcount) ORDER BY Mdate DESC ,TIME DESC LIMIT $num,$number";
+                $Moments=Yii::$app->db->createCommand($sql2)->queryAll();
+//                $Moments=array_merge($Moments1,$Moments2);
+
+            }
             $user = new UserTb();
             foreach ($Moments as $key => $value) {
                 $XH = $value['XH_ID'];
@@ -149,12 +138,12 @@ class Moments extends \yii\db\ActiveRecord
                     }
                 }
             }
+
             return $Moments;
         } else {
             return false;
         }
     }
-
     /**
      * 分页（搜索）
      * @param $input
@@ -165,18 +154,20 @@ class Moments extends \yii\db\ActiveRecord
     public function getPageMomentWithOrder_2($input,$page, $number){
         $front = ($page - 1) * $number;
         if($page==1){
-            $sql="SELECT tabbledesc.id,tabbledesc.XH_ID,Content,Mdate FROM (SELECT * FROM moments ORDER BY Mdate DESC,Time desc)AS tabbledesc LEFT JOIN moment_top ON tabbledesc.id=moment_top.moment_id  WHERE tabbledesc.Content like '%$input%' OR tabbledesc.XH_ID like '%$input%' LIMIT $number";
+//            $sql="SELECT tabbledesc.id,tabbledesc.XH_ID,Content,Mdate FROM (SELECT * FROM moments ORDER BY Mdate DESC,Time desc)AS tabbledesc LEFT JOIN moment_top ON tabbledesc.id=moment_top.moment_id  WHERE tabbledesc.Content like '%$input%' OR tabbledesc.XH_ID like '%$input%' LIMIT $number";
+            $sql="SELECT id,XH_ID,Content,Mdate from moments WHERE Content like '%$input%' OR XH_ID like '%$input%' ORDER BY Mdate DESC ,TIME DESC LIMIT $number";
         }else{
-            $sql1="SELECT tabbledesc.id,tabbledesc.XH_ID,Content,Mdate FROM (SELECT * FROM moments ORDER BY Mdate DESC,Time desc)AS tabbledesc LEFT JOIN moment_top ON tabbledesc.id=moment_top.moment_id  WHERE tabbledesc.Content like '%$input%' OR tabbledesc.XH_ID like '%$input%'  LIMIT $front";
-            $count=Yii::$app->db->createCommand($sql1)->queryAll();
-            $idcount="";
-            foreach($count as $key=>$value){
-                $idcount.=$value['id'].',';
-            }
-            $idcount=rtrim($idcount, ",");
-//                print_r($idcount);
-//                exit();
-            $sql="SELECT id,XH_ID,Content,Mdate FROM Moments WHERE id NOT IN($idcount) AND  (Content like '%$input%' OR XH_ID LIKE '%$input%') ORDER BY Mdate DESC,Time DESC LIMIT $number;";
+            $sql="SELECT id,XH_ID,Content,Mdate from moments WHERE Content like '%$input%' OR XH_ID like '%$input%' ORDER BY Mdate DESC ,TIME DESC LIMIT $front,$number";
+
+//            $count=Yii::$app->db->createCommand($sql1)->queryAll();
+//            $idcount="";
+//            foreach($count as $key=>$value){
+//                $idcount.=$value['id'].',';
+//            }
+//            $idcount=rtrim($idcount, ",");
+////                print_r($idcount);
+////                exit();
+//            $sql="SELECT id,XH_ID,Content,Mdate FROM Moments WHERE id NOT IN($idcount) AND  (Content like '%$input%' OR XH_ID LIKE '%$input%') ORDER BY Mdate DESC,Time DESC LIMIT $number;";
         }
         $result=yii::$app->db->createCommand($sql)->queryAll();
         if(!empty($result)){
@@ -203,7 +194,6 @@ class Moments extends \yii\db\ActiveRecord
         $Dbfactory = DbFactory::getinstance();
         $Dbfactory->deleteOneRecord('moments', 'id', $id);
     }
-
     private function decideGetMomentContinue($page, $number)
     {
         $frontCount = ($page - 1) * $number;
@@ -214,13 +204,11 @@ class Moments extends \yii\db\ActiveRecord
             return true;
         }
     }
-
     public function getMomentCount()
     {
         $Dbfactory = DbFactory::getinstance();
         return $Dbfactory->tableCount('Moments');
     }
-
     public function getAllPage($countEveryPage)
     {
         $count = $this->getMomentCount();
