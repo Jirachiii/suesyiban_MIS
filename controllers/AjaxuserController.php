@@ -273,7 +273,7 @@ class AjaxuserController extends Controller {
 		$item->Item_Intro=$arr['Item_Intro'];
 		$item->Status=$arr['Status'];
 		$item->Date=$arr['Date'];
-		$result=$item->save();
+		$result=$item->save(false);
 		if ($result) {
 			echo '{"success": true}';
 		} else {
