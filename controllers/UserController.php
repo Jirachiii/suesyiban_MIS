@@ -33,6 +33,9 @@ class UserController extends Controller {
 	public function actionHomepage() {
 		return $this->renderPartial('homepage.html');
 	}
+	public function actionOrder() {
+		return $this->renderPartial('stOrderclass.html');
+	}
 
 	public function behaviors() {
 		return [

@@ -284,6 +284,18 @@ class Zhibantable extends \yii\db\ActiveRecord
         return $content;
     }
 
+    /**
+     * 用户界面的值班表
+     * @param $whichweek
+     * @param $weekday
+     * @param $year_xq
+     * @return array
+     */
+    public function findanpaidata_2($whichweek,$weekday,$year_xq,$nowuser){
+        $sql="select id,stname,stid,date_turn,conflict_class from zhibantable WHERE stid='$nowuser' AND date_zhoushu='$whichweek' AND date_weekday='$weekday' AND year_xq='$year_xq'";
+        $content=Yii::$app->db->createCommand($sql)->queryAll();
+        return $content;
+    }
     public function genamemanual(){
         if($content=(new Query())->select(['Name','XH_ID'])->from('user_tb')->all()){
             $content = '{"success":true,"name":'.json_encode($content, JSON_UNESCAPED_UNICODE).'}';

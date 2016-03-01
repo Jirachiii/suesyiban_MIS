@@ -1,0 +1,16 @@
+
+.ordertable{
+    margin: 70px auto 20px auto;
+    width: 90%;
+    background-color: #dbdbdb;
+    height: 80%;
+    border-radius: 20px;
+    padding-top: 30px;
+}
+.zhibanshow{
+    text-align: center;
+}
+
+.myhr{
+    border-color: #A7A7A7;
+}
