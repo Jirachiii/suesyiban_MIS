@@ -51,9 +51,11 @@ class Itemdetails extends \yii\db\ActiveRecord {
 	//所有项目细节
 	public function detailAll($id) {
 		$sql       = 'SELECT ItemDetail_Id, item_id, discribe, Date, status FROM Itemdetails WHERE item_id = \''.$id.'\' ORDER BY Date DESC, Time DESC';
-		$Dbfactory = DbFactory::getinstance();
-		$query     = $Dbfactory->doQuery($sql);
-		return $Dbfactory->findAll($query);
+//		$Dbfactory = DbFactory::getinstance();
+//		$query     = $Dbfactory->doQuery($sql);
+//		return $Dbfactory->findAll($query);
+		$result=Yii::$app->db->createCommand($sql)->queryAll();
+		return $result;
 	}
 	//查询项目单个细节
 	public function detailDet($id) {

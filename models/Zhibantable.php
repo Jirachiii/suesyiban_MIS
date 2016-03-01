@@ -62,12 +62,16 @@ class Zhibantable extends \yii\db\ActiveRecord
     public function updatememberkb(){
         //判断学期 学年
         $year=date(date('Y'));
-        if(date('m')>=3&&date('m')<9){
+        // if(date('m')>=3&&date('m')<9){
+        // 为了测试将第一学期的结束月份设为6月份，正式使用时使用上面的
+        if(date('m')>=6&&date('m')<9){
             $xueqi=2;
             $xuenian=($year-1).'-'.$year;
         }elseif(date('m')>=9){
             $xueqi=1;
             $xuenian=$year.'-'.($year+1);
+        // }elseif(date('m')<=2){
+        // 为了测试将第一学期的结束月份设为6月份，正式使用时使用上面的
         }elseif(date('m')<=2){
             $xueqi=1;
             $xuenian=($year-1).'-'.$year;

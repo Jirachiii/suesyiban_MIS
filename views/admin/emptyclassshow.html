@@ -44,7 +44,7 @@
 		</div>
 		<div class="col-xs-10 Ad_Rig">
 			<h2>值班安排</h2><br>
-			<div class="Ad_RShow_r">
+			<div class="Ad_RShow_r mypadding_anpai">
 				<select name="whichweek" id="whichweek_2" class="myselect">
 				</select>
 				<select name="thisweek" id="weekday_2" class="myselect">
@@ -59,22 +59,23 @@
 				<input type="button" class="btn btn-small btn-primary" onclick="loadanpai()" value="搜索">
 				<input type="button" value="手动排班" class="btn btn-small btn-success" onclick="addAnapi()">
 				<hr>
-				<div id="zhibanshow">
-				<span>12:00-14:00</span><br>
-					<p id="first_arr">
-					</p>
-					<hr>
-				<span>14:00-16:00</span><br>
-					<p id="second_arr">
-					</p>
-					<hr>
-				<span>18:00-20:00</span><br>
-					<p id="third_arr">
-					</p>
+				<div id="zhibanshow" class="zhibanshow">
+					<span>12:00-14:00</span><br><br>
+						<p id="first_arr">
+						</p>
+						<hr>
+					<span>14:00-16:00</span><br><br>
+						<p id="second_arr">
+						</p>
+						<hr>
+					<span>18:00-20:00</span><br><br>
+						<p id="third_arr">
+						</p>
+						<hr>
 				</div>
-				<hr>
+				
 			</div>
-			<div class="Ad_RShow_l"><br>
+			<div class="Ad_RShow_l mypadding_anpai_2"><br>
 				<span class="Ad_btns">
 						<select name="whichweek" id="whichweek" class="myselect">
 						</select>
@@ -97,18 +98,33 @@
 							<!--<option value="1">全部</option>-->
 						<!--</select>-->
 						<input type="button" class="btn btn-small btn-primary" onclick="searchEmptyclass()" value="搜索">
-						<a class="btn btn-danger btn-sm" onclick="updateMemberkb()">更新部员课表</a>
+						<a class="btn btn-danger btn-sm" onclick="updateMemberkb()">更新部员课表(测试方便，第一学期六月份结束)</a>
 				</span><hr class="hranpai"><br>
 				<div class="Ad_User_Main">
 					<table id="emptyclassdata" class="table table-condensed table-hover">
 						<span id="msg918"><h1>第9、18周为我校考试周。因无考试安排数据，请手动排班。</h1></span>
 					</table>
 				</div>
-				<button id="anpai_prev" onclick="beforePage_anpai()" style="display: none">上一页</button>
-				<button id="anpai_aft" onclick="afterPage_anpai()" style="display: none">下一页</button>
+			</div>
+			<div class="pageStyle_anpai">
+					<button id="anpai_prev" class="btn-sm btn_prev" onclick="beforePage_anpai()" style="display: none">上一页</button>
+					<button id="anpai_aft" class="btn-sm btn_after" onclick="afterPage_anpai()" style="display: none">下一页</button>
 			</div>
 			</div>
 		</div>
+		<!-- 加载动画 -->
+		<section class="cover"id="coverDiv_loading">
+			<div class="spinner" >
+			  <div class="rect1"></div>
+			  <div class="rect2"></div>
+			  <div class="rect3"></div>
+			  <div class="rect4"></div>
+			  <div class="rect5"></div>
+			</div>
+			<section class="loadfont">
+					<h1>马上就好，请耐心等待</h1>
+			</section>
+		</section>
 		<!-- 以下安排手动添加，默认隐藏 -->
 		<section class="cover" id="coverDiv_anpai" onclick="hideAll_anpai()"></section>
 		<section class="showSetting" id="SetDiv_anpai">

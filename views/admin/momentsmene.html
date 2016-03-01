@@ -56,9 +56,9 @@
 					<table id="MomentsData" class="table table-condensed table-hover">
 					</table>
 				</div>
-				<div class="pageStyle" id="pagenav">
-					<button id="mom_prev" onclick="beforePage()">上一页</button>
-					<button id="mom_aft" onclick="afterPage()">下一页</button>
+				<div class="pageStyle_mom" id="pagenav">
+					<button id="mom_prev" class="btn-sm btn_prev" onclick="beforePage()">上一页</button>
+					<button id="mom_aft" class="btn-sm btn_after" onclick="afterPage()">下一页</button>
 				</div>
 				</div>
 			</div>
@@ -76,7 +76,7 @@
 				<textarea name="" id="moment_content" cols="53" rows="3"></textarea>
 			</section>
 			<p id="changeResult_mom" class="Set_btn_P"></p><br>
-			<div class="Set_btn_M">
+			<div class="Set_btn_M mysetforbtn_mom">
 				<button class="Set_btn col-xs-6 handlegreen" onclick="updateMoment()">提交</button>
 				<button class="Set_btn col-xs-6" onclick="hideAll_mom()">取消</button>
 			</div>
@@ -92,7 +92,7 @@
 				<textarea name="" id="moment_content_1" cols="53" rows="3"></textarea>
 			</section>
 			<p id="changeResult_mom_1" class="Set_btn_P"></p><br>
-			<div class="Set_btn_M">
+			<div class="Set_btn_M mysetforbtn_mom">
 				<button class="Set_btn col-xs-6 handlegreen" onclick="updateMoment_1()">提交</button>
 				<button class="Set_btn col-xs-6" onclick="hideAll_mom_1()">取消</button>
 			</div>
@@ -103,7 +103,7 @@
 
 			<p class="Set_tit_2">置顶文章</p>
 
-			<span id="username_mom_2">测试名字</span><span>发表于 </span><span id="date_mom_2">测试时间</span>
+			<span id="username_mom_2" >测试名字</span><br><span>发表于</span><span id="date_mom_2">测试时间</span>
 			<!--用于等会ajax传输数据-->
 			<span id="momentid_2" style="display: none"></span>
 			<section class="Set_xm">
@@ -116,7 +116,7 @@
 			</section>
 			<p id="changeResult_mom_2" class="Set_btn_P"></p><br>
 			<br>
-			<div class="Set_btn_M">
+			<div class="Set_btn_M mysetforbtn_mom">
 				<button class="Set_btn col-xs-6 handlegreen" id="momenttop_2" onclick="updateMoment_2()" value="1">置顶</button>
 				<button class="Set_btn col-xs-6" onclick="hideAll_mom_2()">取消</button>
 			</div>

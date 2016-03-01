@@ -147,7 +147,7 @@ class UserTb extends \yii\db\ActiveRecord {
 	 */
 	public function getPageUserWithOrder($page, $number) {
 		$front     = ($page-1)*$number;
-		$sql       = 'SELECT * FROM (SELECT * FROM user_tb ORDER BY status)AS tbl LIMIT '.$front.','.$number;
+		$sql       = 'SELECT * FROM user_tb ORDER BY status,Name LIMIT '.$front.','.$number;
 		$Dbfactory = DbFactory::getinstance();
 		$users     = $Dbfactory->findBySql($sql);
 		return $users;
