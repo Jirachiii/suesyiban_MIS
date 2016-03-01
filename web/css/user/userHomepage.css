@@ -210,3 +210,32 @@
 	background-color: #CCC;
 	margin-right: 49px;
 }
+.moment_Sty {
+	width: 100%;
+	height: 77px;
+}
+.moment_Owner {
+	float: left;
+	position: relative;
+	width: 15%;
+	height: 100%;
+	text-align: center;
+	font-size: 1.4em;
+}
+.centerMomentName {
+	position: relative;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+}
+.moment_Content {
+	float: left;
+	position: relative;
+	width: 70%;
+	height: 100%;
+}
+.moment_Date {
+	float: left;
+	position: relative;
+	height: 100%;
+	width: 15%;
+}

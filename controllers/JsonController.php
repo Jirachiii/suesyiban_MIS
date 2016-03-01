@@ -1,6 +1,7 @@
 <?php
 namespace app\controllers;
 use app\models\Articles;
+use app\models\Itempersons;
 use app\models\Items;
 use app\models\Moments;
 use app\models\MomentTop;
@@ -8,9 +9,7 @@ use app\models\OwnTodos;
 use app\models\TestTb;
 use app\models\UserTb;
 use yii;
-use yii\db\Query;
-use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
+
 use yii\web\Controller;
 date_default_timezone_set("PRC");
 header('Content-type: application/json');
@@ -28,39 +27,39 @@ class JsonController extends Controller {
 	/**权限控制，等项目完成后再填
 	 * @return array
 	 */
-//	public function behaviors() {
-//		return [
-//			'access' => [
-//				'class' => AccessControl::className(),
-//				'only'  => ['logout', 'login', 'getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
-//				'rules' => [
-//					[
-//						'allow'   => true,
-//						'actions' => ['login'],
-//						'roles'   => ['?'],
-//					],
-//					//只有1级管理员有权限
-//					[
-//						'actions'       => ['logout', 'getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
-//						'allow'         => true,
-//						'roles'         => ['@'],
-//						'matchCallback' => function ($rule, $action) {
-//							return Yii::$app->user->identity->status == 1;
-//						}
-//					],
-//
-//				],
-//			],
-//			//            emptyclassshow/itemshow/itemcreate/articles/signinmene/momentsmene
-//
-//			'verbs'    => [
-//				'class'   => VerbFilter::className(),
-//				'actions' => [
-//					'logout' => ['post'],
-//				],
-//			],
-//		];
-//	}
+	//	public function behaviors() {
+	//		return [
+	//			'access' => [
+	//				'class' => AccessControl::className(),
+	//				'only'  => ['logout', 'login', 'getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
+	//				'rules' => [
+	//					[
+	//						'allow'   => true,
+	//						'actions' => ['login'],
+	//						'roles'   => ['?'],
+	//					],
+	//					//只有1级管理员有权限
+	//					[
+	//						'actions'       => ['logout', 'getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
+	//						'allow'         => true,
+	//						'roles'         => ['@'],
+	//						'matchCallback' => function ($rule, $action) {
+	//							return Yii::$app->user->identity->status == 1;
+	//						}
+	//					],
+	//
+	//				],
+	//			],
+	//			//            emptyclassshow/itemshow/itemcreate/articles/signinmene/momentsmene
+	//
+	//			'verbs'    => [
+	//				'class'   => VerbFilter::className(),
+	//				'actions' => [
+	//					'logout' => ['post'],
+	//				],
+	//			],
+	//		];
+	//	}
 
 	public function actions() {
 		return [
@@ -78,15 +77,15 @@ class JsonController extends Controller {
 	 * 获取动态
 	 */
 	public function actionGetmomentdata() {
-				$rightNowUserId   = Yii::$app->user->identity->XH_ID;
-				$rightNowUserName = Yii::$app->user->identity->Name;
-				$moments          = new Moments();
-				$content          = $moments->getPageMomentWithOrder(1, 6);
-				$allPage          = $moments->getAllPage(6);
+		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
+		$rightNowUserName = Yii::$app->user->identity->Name;
+		$moments          = new Moments();
+		$content          = $moments->getPageMomentWithOrder(1, 6);
+		$allPage          = $moments->getAllPage(6);
 		//		$content = Moments::find()->asArray()->join('LEFT JOIN','user_tb','moments.XH_ID=user_tb.XH_ID')->orderBy('Mdate DESC,Time DESC')->all();
-//		$content = Moments::find()->asArray()->orderBy('Mdate DESC,Time DESC')->all();
-		$istop   = MomentTop::find()->all();
-		if(!empty($content)){
+		//		$content = Moments::find()->asArray()->orderBy('Mdate DESC,Time DESC')->all();
+		$istop = MomentTop::find()->all();
+		if (!empty($content)) {
 			foreach ($content as $key => $value) {
 				foreach ($istop as $key1 => $value1) {
 					if ($value1['moment_id'] == $value['id']) {
@@ -97,7 +96,7 @@ class JsonController extends Controller {
 				$content[$key]['username'] = $name['Name'];
 			}
 		}
-				$content          = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).',"allPage":"'.$allPage.'","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
+		$content = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).',"allPage":"'.$allPage.'","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
 		echo $content;
 	}
 
@@ -109,11 +108,11 @@ class JsonController extends Controller {
 		$rightNowUserName = Yii::$app->user->identity->Name;
 		$usertb           = new UserTb();
 		$result           = $usertb->getPageUserWithOrder(1, 6);
-		$allpage=$usertb->userallpage(6);
-		if(empty($result)){
-			$result           = '{"success":false,"msg":"获取失败","users":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
-		}else{
-			$result           = '{"success":true,"allPage":"'.$allpage.'","users":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
+		$allpage          = $usertb->userallpage(6);
+		if (empty($result)) {
+			$result = '{"success":false,"msg":"获取失败","users":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
+		} else {
+			$result = '{"success":true,"allPage":"'.$allpage.'","users":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
 
 		}
 		echo $result;
@@ -123,8 +122,8 @@ class JsonController extends Controller {
 	 * 获取article物品
 	 */
 	public function actionGetarticledata() {
-		$article=new Articles();
-		$result=$article->showarticledata(1,6);
+		$article = new Articles();
+		$result  = $article->showarticledata(1, 6);
 		echo $result;
 	}
 
@@ -171,9 +170,11 @@ class JsonController extends Controller {
 	}
 
 	public function actionGetitems() {
-		$msg    = '';
-		$item   = new Items();
-		$result = $item->searchAllItems(2);
+		$msg            = '';
+		$item           = new Items();
+		$itemPerson     = new Itempersons();
+		$rightNowUserId = Yii::$app->user->identity->XH_ID;
+		$result         = $item->searchAllItems(2);
 		if ($result) {
 			foreach ($result as $value) {
 				$msg .= '<div onclick=\"detailShow('.$value['Item_Id'].')\" id=\"'.$value['Item_Id'].'\" class=\"item_show\" style=\"background-image: url(images/itemImg.jpeg);\"><h3 class=\"item_showtit\">'.$value['Item_Name'].'</h3></div>';
@@ -215,19 +216,33 @@ class JsonController extends Controller {
 				break;
 		}
 	}
+	//
+	public function actionMomentsshow() {
+		$moments = new Moments();
+		$result  = $moments->getPageMomentWithOrder(1, 20);
+		$msg     = '';
+		foreach ($result as $value) {
+			$msg .= '<div class=\"moment_Sty\"><div class=\"moment_Owner\"><p class=\"centerMomentName\">'.$value['username'].'</p></div><div class=\"moment_Content\"><p class=\"centerMomentName\">'.$value['Content'].'</p></div><div class=\"moment_Date\"><p class=\"centerMomentName\">'.$value['Mdate'].'</p></div></div>';
+		}
+		if ($msg) {
+			echo '{"success" :true , "msg":"'.$msg.'"}';
+		} else {
+			echo '{"success" :false , "msg":"没有动态"}';
+		}
+	}
 	//这下面都不属于这边，以后更换位置
-//	public function actionAddmoment() {
-//		$content            = '测试';
-//		$moment             = new Moments();
-//		$RightNow           = $moment->getDateAndTime();
-//		$momentMsg['XH_ID'] = Yii::$app->user->identity->XH_ID;
-//		$momentMsg['Mdate'] = $RightNow['date'];
-//		$momentMsg['Time']  = $RightNow['time'];
-//		//以后解决，request过来的值
-//		$momentMsg['Content']  = $_POST['Content'];
-//		$momentMsg['like_Num'] = 0;
-//		echo $moment->insertMomentData($momentMsg);
-//	}
+	//	public function actionAddmoment() {
+	//		$content            = '测试';
+	//		$moment             = new Moments();
+	//		$RightNow           = $moment->getDateAndTime();
+	//		$momentMsg['XH_ID'] = Yii::$app->user->identity->XH_ID;
+	//		$momentMsg['Mdate'] = $RightNow['date'];
+	//		$momentMsg['Time']  = $RightNow['time'];
+	//		//以后解决，request过来的值
+	//		$momentMsg['Content']  = $_POST['Content'];
+	//		$momentMsg['like_Num'] = 0;
+	//		echo $moment->insertMomentData($momentMsg);
+	//	}
 
 	public function actionTest() {
 		$Dbfactory = DbFactory::getinstance();
@@ -235,19 +250,19 @@ class JsonController extends Controller {
 		echo $count;
 	}
 
-//	/**
-//	 * 获取空课表
-//	 */
-//	public function actionGetemptyclass(){
-////		$content = UserTb::find()->asArray()->all();
-//		$content   = (new Query())
-//			->select(['XH_ID', 'Name','status'])
-//			->from('user_tb')
-//			->orderBy('status DESC')
-//			->all();
-//
-//		$content = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).'}';
-//		echo $content;
-//	}
+	//	/**
+	//	 * 获取空课表
+	//	 */
+	//	public function actionGetemptyclass(){
+	////		$content = UserTb::find()->asArray()->all();
+	//		$content   = (new Query())
+	//			->select(['XH_ID', 'Name','status'])
+	//			->from('user_tb')
+	//			->orderBy('status DESC')
+	//			->all();
+	//
+	//		$content = '{"moments":'.json_encode($content, JSON_UNESCAPED_UNICODE).'}';
+	//		echo $content;
+	//	}
 
 }

@@ -19,7 +19,7 @@
 				<a class="nav_btn" href="index.php?r=user/item">项目</a>
 				<a class="nav_btn" href="index.php?r=user/homepage">我的</a>
 				<a class="nav_btn" href="index.php?r=user/order">排班</a>
-				<a class="nav_btn" href="index.php?r=user/getmess">收件箱</a>
+				<a class="nav_btn" href="index.php?r=user/getmess">动态</a>
 			</section>
 			<section class="nav_right">
 				<a class="nav_btn glyphicon glyphicon-th-list" onclick="showThing()"><span aria-hidden="true"></span></a>
@@ -71,6 +71,17 @@
 			<div class="Detail_sty" id="Detail_Done" ondrop="drop(event)" ondragover="allowDrop(event)">
 			</div>
 		</section>
+		<section class="det_block">
+			<h3 class="det_h3">项目设置</h3><br>
+			<div class="Detail_sty" id="Detail_Done">
+				<div class="detail_add" onclick="getDoneItem()"><p class="Thedetail_p detailadd_p">归档此项目</p></div> <br>
+				<div class="detail_add" onclick="deleteItem()"><p class="Thedetail_p detailadd_p">删除项目</p></div> <br>
+				<div>
+					<input type="text" class="" placeholder="用户"><br>
+					<div class="detail_add"><p class="Thedetail_p detailadd_p">插入</p></div>
+				</div>
+			</div>
+		</section>
 	</section>
 	<section class="detail_model" id="detail_model">
 <!-- 		<span onclick="closeModel()" class="glyphicon glyphicon-remove delete_span"></span>
@@ -80,10 +91,25 @@
 			<button class="detailmodel_btn" id="">修改</button>
 		</div> -->
 	</section>
+<!-- 	<section class="dropdown-menu">
+		<div class="model_SetBlock haveBorder ShowName">
+			<p class="centerMomentName" style="text-align: center;">周倩叶</p>
+		</div>
+		<div class="model_SetBlock haveBorder ChangePassword">
+			<input class="centerMomentName sameSizeModel form-control" type="text" placeholder="新密码">
+		</div>
+		<div class="model_SetBlock haveBorder newPassword">
+			<input class="centerMomentName sameSizeModel form-control" type="text" placeholder="再输入一次">
+		</div>
+		<div class="model_SetBlock ">
+			<button class="centerMomentName sameSizeModel">确认</button>
+		</div>
+	</section> -->
 	<script src="js/userHref.js"></script>
 	<script src="js/userItem.js"></script>
 	<script src="js/jquery.min.js"></script>
 	<script>
+		var itemIdOnAllShow = 0;
 		//关闭这个项目显示的细节
 		function closeDet() {
 			document.getElementById('detailShow').style.top = '-100%';

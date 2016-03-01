@@ -7,7 +7,6 @@ use app\models\Items;
 use app\models\OwnTodos;
 
 use app\models\UserTb;
-use yii\db\Query;
 
 use yii\web\Controller;
 date_default_timezone_set("PRC");
@@ -34,14 +33,14 @@ class AjaxuserController extends Controller {
 			return;
 		}
 		$usertb         = new UserTb();
-		$usertb->XH_ID  =trim($_POST["classmark"]);
+		$usertb->XH_ID  = trim($_POST["classmark"]);
 		$usertb->XH_PW  = md5('123456');
 		$usertb->Name   = trim($_POST["name"]);
 		$usertb->phone  = trim($_POST["phone"]);
 		$usertb->status = 2;
-		if($usertb->save()){
+		if ($usertb->save()) {
 			echo '{"success":true,"msg":"用户：'.$_POST["name"].' 信息保存成功！"}';
-		}else{
+		} else {
 			echo '{"success":false,"msg":"字符超出限制"}';
 
 		}
@@ -59,15 +58,15 @@ class AjaxuserController extends Controller {
 	/**
 	 * 	用户管理分页
 	 */
-	public function actionUserpagechange(){
-		$page=$_GET['page'];
-		$usertb=new UserTb();
-		$allpage=$usertb->userallpage(6);
-		if($allpage<$page||$page<1){
-			$result= '{"success":false,"allPage":1,"msg":"页码出错"}';
-		}else{
-			$result=$usertb->getPageUserWithOrder($page,6);
-			$result= '{"success":true,"users":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"allPage":"'.$allpage.'"}';
+	public function actionUserpagechange() {
+		$page    = $_GET['page'];
+		$usertb  = new UserTb();
+		$allpage = $usertb->userallpage(6);
+		if ($allpage < $page || $page < 1) {
+			$result = '{"success":false,"allPage":1,"msg":"页码出错"}';
+		} else {
+			$result = $usertb->getPageUserWithOrder($page, 6);
+			$result = '{"success":true,"users":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"allPage":"'.$allpage.'"}';
 		}
 
 		return $result;
@@ -78,15 +77,15 @@ class AjaxuserController extends Controller {
 			echo '{"success":false,"msg":"请输入查询内容"}';
 			return;
 		}
-		$page=$_GET['page'];
-		$content  = $_GET["searchuser"];
+		$page    = $_GET['page'];
+		$content = $_GET["searchuser"];
 
-		$usertb=new UserTb();
-		$allpage=$usertb->userallpage_s(6,$content);
-		if($allpage<$page||$page<1){
-			$result= '{"success":false,"allPage":1,"msg":"页码出错"}';
-		}else{
-			$result=$usertb->getSearchUserWithPage($content,$page,6);
+		$usertb  = new UserTb();
+		$allpage = $usertb->userallpage_s(6, $content);
+		if ($allpage < $page || $page < 1) {
+			$result = '{"success":false,"allPage":1,"msg":"页码出错"}';
+		} else {
+			$result = $usertb->getSearchUserWithPage($content, $page, 6);
 			$result = '{"success":true,"allPage":"'.$allpage.'","users":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
 		}
 		echo $result;
@@ -100,7 +99,7 @@ class AjaxuserController extends Controller {
 			echo '{"success":false,"msg":"请选择"}';
 			return;
 		}
-		$aimuser = UserTb::findOne($_POST['id']);
+		$aimuser         = UserTb::findOne($_POST['id']);
 		$aimuser->status = $_POST["status"];
 		$aimuser->save(false);
 		//		$a=$aimarticle->status;
@@ -137,6 +136,7 @@ class AjaxuserController extends Controller {
 	//用户获取项目
 	public function actionGetitembystatus() {
 		$status = $_GET['status'];
+		$msg    = '';
 		switch ($status) {
 			case 2:
 				//以后改进
@@ -194,7 +194,7 @@ class AjaxuserController extends Controller {
 		$content['content']    = $_POST['content'];
 		$content['urgentLev']  = 1;
 		if ($owntodos->insertTodoData($content)) {
-			$result = '{"success":true,"msg":"<div data-createDate=\"'.$value['CreateDate'].'\" data-Num=\"'.$content['Num'].'\" class=\"mission_type\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$content['content'].'</span><span class=\"mission_SpDate\">'.$content['CreateDate'].'</span>';
+			$result = '{"success":true,"msg":"<div data-createDate=\"'.$content['CreateDate'].'\" data-Num=\"'.$content['Num'].'\" class=\"mission_type\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$content['content'].'</span><span class=\"mission_SpDate\">'.$content['CreateDate'].'</span>';
 			$result .= '<div onclick=\"Urgenthandle(this,1)\" class=\"mission_SpUrgent normal\" data-Num=\"'.$content['Num'].'\"></div><div onclick=\"Urgenthandle(this,2)\" class=\"mission_SpUrgent urgenter\" data-Num=\"'.$content['Num'].'\"></div><div onclick=\"Urgenthandle(this,3)\" class=\"mission_SpUrgent urgentest\" data-Num=\"'.$content['Num'].'\"></div></div>"}';
 			echo $result;
 		} else {
@@ -367,6 +367,16 @@ class AjaxuserController extends Controller {
 			echo '{"success":true,"msg":"请输查询入内容"}';
 		}
 	}
+	public function actionDeleteItem() {
+		$Item_Id = $_POST['Item_Id'];
+		$item    = new Item();
+		$result  = $item->deleteItem($Item_Id);
+		if ($result) {
+			echo '{"success":true}';
+		} else {
+			echo '{"success": false}';
+		}
+	}
 	//插入
 	public function actionInsertdetail() {
 		$arr['item_id']  = $_POST['item_id'];
@@ -408,18 +418,15 @@ class AjaxuserController extends Controller {
 		}
 	}
 
-
-
-
 	//库存管理
 	/**
 	 * 库存分页
 	 */
-	public function  actionArticlepagchange(){
-		$request=\Yii::$app->request;
-		$page=$request->get("page");
-		$article=new Articles();
-		$result=$article->showarticledata($page,6);
+	public function actionArticlepagchange() {
+		$request = \Yii::$app->request;
+		$page    = $request->get("page");
+		$article = new Articles();
+		$result  = $article->showarticledata($page, 6);
 		return $result;
 	}
 	/**
@@ -432,20 +439,20 @@ class AjaxuserController extends Controller {
 			return;
 		}
 		$Art_Name = $_GET["searcharticle"];
-		$page=$_GET['page'];
-		$artice=new Articles();
-		$result=$artice->searcharticle($Art_Name,1,6);
+		$page     = $_GET['page'];
+		$artice   = new Articles();
+		$result   = $artice->searcharticle($Art_Name, 1, 6);
 		echo $result;
 	}
 
 	/**
 	 * 搜索的分页
 	 */
-	public function actionAdminsearcharticlefenye(){
+	public function actionAdminsearcharticlefenye() {
 		$Art_Name = $_GET["article"];
-		$page=$_GET['page'];
-		$artice=new Articles();
-		$result=$artice->searcharticle($Art_Name,$page,6);
+		$page     = $_GET['page'];
+		$artice   = new Articles();
+		$result   = $artice->searcharticle($Art_Name, $page, 6);
 		echo $result;
 
 	}
@@ -457,21 +464,21 @@ class AjaxuserController extends Controller {
 			echo '{"success":false,"msg":"请选择查询状态"}';
 			return;
 		}
-		$status=$_GET["searcharticle"];
-		$page=$_GET['page'];
-		$article=new Articles();
-		$result=$article->searcharticlebystatus($status,1,6);
+		$status  = $_GET["searcharticle"];
+		$page    = $_GET['page'];
+		$article = new Articles();
+		$result  = $article->searcharticlebystatus($status, 1, 6);
 		echo $result;
 	}
 	/**
 	 * 状态筛选分页
 	 */
-	public function actionArticlepagchangesel(){
-		$request=\Yii::$app->request;
-		$page=$request->get("page");
-		$status=$request->get("status");
-		$article=new Articles();
-		$result=$article->searcharticlebystatus($status,$page,6);
+	public function actionArticlepagchangesel() {
+		$request = \Yii::$app->request;
+		$page    = $request->get("page");
+		$status  = $request->get("status");
+		$article = new Articles();
+		$result  = $article->searcharticlebystatus($status, $page, 6);
 		echo $result;
 	}
 

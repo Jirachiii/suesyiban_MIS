@@ -290,3 +290,29 @@ nav ,.sec_nav{
 .detailmodel_btn:hover {
 	background-color: #AAA;
 }
+
+.Setting77 {
+	position: absolute;
+	top: 40px;	
+	right: 25px;
+	width: 200px;
+	height: 200px;
+	border-radius: 5px;
+	background-color: #AAA;
+	overflow: hidden;
+}
+.model_SetBlock {
+	height: 50px;
+	width: 100%;
+}
+.haveBorder {
+	border-bottom:1px solid #111;
+}
+.centerMomentName {
+	position: relative;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+}
+.sameSizeModel {
+	width: 100%;
+}
