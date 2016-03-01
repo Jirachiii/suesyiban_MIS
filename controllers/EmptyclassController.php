@@ -131,4 +131,18 @@ class EmptyclassController extends Controller {
         $result=$insertmanual->insertanpaimanual($stname,$xh,$whichweek,$weekday,$zhibantime);
         echo $result;
     }
+
+    public function actionSearchorder(){
+        $nowuser    = \Yii::$app->user->identity->XH_ID;
+        $request=Yii::$app->request;
+        $session=Yii::$app->session;
+        $whichweek=$request->get('whichweek_user');
+        $weekday=$request->get('weekday_user');
+        $session['whichweek_2']=$whichweek;
+        $session['weekday_2']=$weekday;
+        $anpaitable=new Zhibantable();
+        $year_xq=$anpaitable->xuenianxueqi();
+        $content=$anpaitable->findanpaidata_2($session['whichweek_2'],$session['weekday_2'],$year_xq,$nowuser);
+        echo '{"success":true,"anpai":'.json_encode($content,JSON_UNESCAPED_UNICODE).'}';
+    }
 }

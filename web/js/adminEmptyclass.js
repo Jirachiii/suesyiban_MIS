@@ -148,16 +148,20 @@ function loadanpai(){
                                 case "1":
                                     $("#first_arr").append(data.anpai[i].stname+" "+data.anpai[i].stid+'  '+'<span class="Set_dele glyphicon glyphicon-remove myblue " onclick="delanpai(\''+data.anpai[i].id+'\')"></span>');
                                     if(data.anpai[i].conflict_class!=null){
-                                        $("#first_arr").append('<span>(有课程冲突)</span>'+'<br>')
-                                    }else{
-                                        $("#first_arr").append('<br>')
+                                        $("#first_arr").prepend('<span>(有课程冲突)</span>'+'<br>')
                                     }
                                     break;
                                 case "2":
                                     $("#second_arr").append(data.anpai[i].stname+" "+data.anpai[i].stid+'  '+'<span class="Set_dele glyphicon glyphicon-remove myblue " onclick="delanpai(\''+data.anpai[i].id+'\')"></span>'+'<br>');
+                                    if(data.anpai[i].conflict_class!=null){
+                                        $("#second_arr").prepend('<span>(有课程冲突)</span>')
+                                    }
                                     break;
                                 case "3":
                                     $("#third_arr").append(data.anpai[i].stname+" "+data.anpai[i].stid+'  '+'<span class="Set_dele glyphicon glyphicon-remove myblue " onclick="delanpai(\''+data.anpai[i].id+'\')"></span>'+'<br>');
+                                    if(data.anpai[i].conflict_class!=null){
+                                        $("#third_arr").prepend('<span>(有课程冲突)</span>'+'<br>')
+                                    }
                                     break;
                             }
                         };
