@@ -1,15 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="css/main/bootstrap.css">
-		<link rel="stylesheet" href="css/main/normalize.css">
-		<link rel="stylesheet" href="css/teambition.css">
-		<title>收件箱</title>
-	</head>
-	<body>
-		
-	</body>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/main/bootstrap.css">
+	<link rel="stylesheet" href="css/main/normalize.css">
+	<link rel="stylesheet" href="css/Main.css">
+	<link rel="stylesheet" href="css/teambition.css">
+	<link rel="stylesheet" href="css/user/userHomepage.css">
+	<title>工程大易班</title>
+	<style>html,body{height:100%;}</style>
+</head>
+<body onload="getRawData()" style="overflow:hidden">
+	<header>
+		<nav>
+			<div onclick="indexShow()" class="nav_pic" style="background-image: url(images/SuesYiBanteam.png);"></div>
+			<section class="nav_sec1">
+				<a class="nav_btn" href="index.php?r=user/item">项目</a>
+				<a class="nav_btn" href="index.php?r=user/homepage">我的</a>
+				<a class="nav_btn" href="index.php?r=user/order">排班</a>
+				<a class="nav_btn" href="index.php?r=user/getmess">动态</a>
+			</section>
+			<section class="nav_right">
+				<a class="nav_btn glyphicon glyphicon-th-list" onclick="showThing()"><span aria-hidden="true"></span></a>
+			</section>
+		</nav>
+	</header>
+	<section class="col-xs-12 home_first">
+		<div class="centerIst_btn">
+			<a class="nav_btn" onclick="getRawData()">所有动态查看</a>
+			<a class="nav_btn" onclick="getMomentTop()">置顶动态</a>
+		</div>
+	</section>
+	<section class="col-xs-12 home_Main" id="home_Main">
+		<section class="col-xs-1 blockThing"></section>
+		<section class="col-xs-10 todayShow" id="today_Show">
+<!-- 			<br><p class="TS_head">动态</p><hr><div class="today_Show_miss" id="today_Show_miss">
+				<div class="moment_Sty">
+					<div class="moment_Owner"><p class="centerMomentName"></p></div>
+					<div class="moment_Content"><p class="centerMomentName"></p></div>
+					<div class="moment_Date"><p class="centerMomentName"></p></div>
+				</div>			
+			</div> -->
+		</section>
+		<section class="col-xs-1 blockThing" id="deleteTodo"></section>
+	</section>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/userItem.js"></script>
+	<script>
+		function getRawData() {
+			$("#today_Show").empty();
+			document.getElementById('today_Show').innerHTML = '<br><p class="TS_head">动态</p><hr><div class="today_Show_miss" id="today_Show_miss"></div>';
+			var height = document.body.clientHeight -110;
+			document.getElementById('home_Main').style.height =  height+'px';
+			$.getJSON('index.php?r=json/momentsshow', function(data, textStatus) {
+				if (textStatus == 'success') {
+					document.getElementById('today_Show_miss').innerHTML = data.msg;
+				} else {
+					alert("系统错误" + textStatus);
+				}
+			});
+		}
+	</script>
+</body>
 </html>

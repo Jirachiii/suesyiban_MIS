@@ -52,6 +52,11 @@ class Items extends \yii\db\ActiveRecord {
 			'Date'       => 'Date',
 		];
 	}
+	//删除
+	public function deleteItem($id) {
+		$Dbfactory = DbFactory::getinstance();
+		return $Dbfactory->deleteOneRecord('items', 'Item_Id', $id);
+	}
 
 	public function insertItem($arr) {
 		$Dbfactory = DbFactory::getinstance();

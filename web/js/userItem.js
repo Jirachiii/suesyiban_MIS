@@ -32,6 +32,7 @@ function InsertItem() {
 }
 //ajax显示
 function detailShow(id){
+	itemIdOnAllShow = id;
 	document.getElementById('detailShow').style.top = '50px';
 	$.ajax({
 		    type: "GET",
@@ -149,8 +150,7 @@ function pastOneMonth() {
 				document.getElementById('today_Show').innerHTML = '<br><p class="TS_head">近一周</p><hr><div class="today_Show_miss" id="today_Show_miss">';
 				document.getElementById('today_Show_miss').innerHTML = data.msg;
 			} else {
-				alert('错误的数据');
-				window.location.reload();
+				alert('没有数据');
 			}  
 		},
 		error: function(jqXHR){
@@ -351,4 +351,63 @@ function ItemCompleted() {
 			window.location.reload();
 		},
 	});
+}
+//使归档
+function getDoneItem() {
+	var handleOrNot = confirm('确定归档？');
+	if(deleteOrNot == true) {
+		$.ajax({
+			type: "POST",
+			url: "index.php?r=ajaxuser/changeitemstatus",
+			dataType: "json",
+			data: {
+				Item_Id: itemIdOnAllShow,
+				status: 3,
+			},
+			success: function(data){
+				if (data.success) {
+					$("#item_showbox").empty();
+					$("#item_showbox").append(data.msg);
+				} else {
+					alert('获取失败');
+					window.location.reload();
+				}  
+			},
+			error: function(jqXHR){
+				alert("发生错误：" + jqXHR.status);
+				window.location.reload();
+			},
+		});
+	}
+}
+//删除项目
+function deleteItem() {
+	var handleOrNot = confirm('确定删除？');
+	if(deleteOrNot == true) {
+		$.ajax({
+			type: "POST",
+			url: "index.php?r=ajaxuser/deleteItem",
+			dataType: "json",
+			data: {
+				Item_Id: itemIdOnAllShow,
+			},
+			success: function(data){
+				if (data.success) {
+					alert('删除成功');
+					window.location.reload();
+				} else {
+					alert('删除失败');
+					window.location.reload();
+				}
+			},
+			error: function(jqXHR){
+				alert("发生错误：" + jqXHR.status);
+				window.location.reload();
+			},
+		});
+	}
+}
+//添加用户
+function addUser() {
+	
 }
