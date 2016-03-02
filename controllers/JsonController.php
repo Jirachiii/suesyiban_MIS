@@ -9,7 +9,8 @@ use app\models\OwnTodos;
 use app\models\TestTb;
 use app\models\UserTb;
 use yii;
-
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 date_default_timezone_set("PRC");
 header('Content-type: application/json');
@@ -24,42 +25,38 @@ header("Content-Type: application/json;charset=utf-8");
  */
 
 class JsonController extends Controller {
-	/**权限控制，等项目完成后再填
-	 * @return array
-	 */
-	//	public function behaviors() {
-	//		return [
-	//			'access' => [
-	//				'class' => AccessControl::className(),
-	//				'only'  => ['logout', 'login', 'getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
-	//				'rules' => [
-	//					[
-	//						'allow'   => true,
-	//						'actions' => ['login'],
-	//						'roles'   => ['?'],
-	//					],
-	//					//只有1级管理员有权限
-	//					[
-	//						'actions'       => ['logout', 'getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
-	//						'allow'         => true,
-	//						'roles'         => ['@'],
-	//						'matchCallback' => function ($rule, $action) {
-	//							return Yii::$app->user->identity->status == 1;
-	//						}
-	//					],
-	//
-	//				],
-	//			],
-	//			//            emptyclassshow/itemshow/itemcreate/articles/signinmene/momentsmene
-	//
-	//			'verbs'    => [
-	//				'class'   => VerbFilter::className(),
-	//				'actions' => [
-	//					'logout' => ['post'],
-	//				],
-	//			],
-	//		];
-	//	}
+		public function behaviors() {
+			return [
+				'access' => [
+					'class' => AccessControl::className(),
+					'only'  => [ 'getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
+					'rules' => [
+						[
+							'allow'   => true,
+							'actions' => ['login'],
+							'roles'   => ['?'],
+						],
+						//只有1级管理员有权限
+						[
+							'allow'         => true,
+							'actions'       => ['logout', 'getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
+							'roles'         => ['@'],
+							'matchCallback' => function ($rule, $action) {
+								return Yii::$app->user->identity->status == 1;
+							}
+						],
+
+					],
+				],
+
+				'verbs'    => [
+					'class'   => VerbFilter::className(),
+					'actions' => [
+						'logout' => ['post'],
+					],
+				],
+			];
+		}
 
 	public function actions() {
 		return [

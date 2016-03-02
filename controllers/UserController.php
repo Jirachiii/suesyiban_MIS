@@ -35,8 +35,7 @@ class UserController extends Controller {
 	}
 	public function actionOrder() {
 		return $this->renderPartial('stOrderclass.html');
-	}
-
+ 	}
 	public function behaviors() {
 		return [
 			'verbs'    => [

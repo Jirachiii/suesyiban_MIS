@@ -19,16 +19,12 @@ class AdminController extends Controller {
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only'  => ['logout', 'index', 'login', 'emptyclassshow,', 'itemshow', 'itemcreate', 'articles', 'signinmene', 'momentsmene'],
+				'only'  => ['logout', 'index', 'login', 'emptyclassshow', 'itemshow',  'articles', 'momentsmene'],
 				'rules' => [
-					[
-						'allow'   => true,
-						'actions' => ['login'],
-						'roles'   => ['?'],
-					],
+
 					//只有1级管理员有权限
 					[
-						'actions'       => ['logout', 'index', 'emptyclassshow,', 'itemshow', 'itemcreate', 'articles', 'signinmene', 'momentsmene'],
+						'actions'       => ['logout', 'index', 'emptyclassshow', 'itemshow', 'articles', 'momentsmene'],
 						'allow'         => true,
 						'roles'         => ['@'],
 						'matchCallback' => function ($rule, $action) {
