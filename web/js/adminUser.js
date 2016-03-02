@@ -26,7 +26,7 @@ function getRawData() {
 				};
 				tableBody += '</tbody>';
 				document.getElementById('userMsgShow').innerHTML = tableHead+tableBody;
-				$("#head a").attr("id",data.userIdNow).html(data.userName)
+				$("#head a").first().attr("id",data.userIdNow).html(data.userName)
 				//分页的
 				$("#yema_user").empty();
 				var yema="<span id='yema_user' class='yema_user'></span>"

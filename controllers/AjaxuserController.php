@@ -5,10 +5,11 @@ use app\models\Files;
 use app\models\Itemdetails;
 use app\models\Items;
 use app\models\OwnTodos;
-
 use app\models\UserTb;
-
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
+use YII;
 date_default_timezone_set("PRC");
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:POST,GET');
@@ -21,7 +22,56 @@ header("Content-Type: application/json;charset=utf-8");
  */
 
 class AjaxuserController extends Controller {
+	public function behaviors() {
+			return [
+				'access' => [
+					'class' => AccessControl::className(),
+					'only'  => ['admininsertuser', 'userpagechange', 'changeuserstatus', 'adminstatusgetitems'
+						,'changeitemstatus','getitembystatus','resetpass','deleteone','inserttodo','changetodostatus'
+						,'getdonemask','handleLength','insertitem','todopastoneweek','todowillhandle','todogetitwithorder'
+						,'detaildetshow','deleteitem','insertdetail','changediscribe','ddminshowitem','articlepagchange'
+						,'adminsearcharticle','adminsearcharticlefenye','adminselectarticle','articlepagchangesel','admininsertarticle'
+						,'deletearticle','adminupdatearticle','adminupdatearticle2','adminupdatearticle3'],
+					'rules' => [
+						[
+							'allow'   => true,
+							'actions' => ['login'],
+							'roles'   => ['?'],
+						],
+						//1级管理员有权限
+						[
+							'actions'       => ['admininsertuser', 'userpagechange', 'changeuserstatus', 'adminstatusgetitems'
+								,'changeitemstatus','getitembystatus','resetpass','deleteone','inserttodo','changetodostatus'
+								,'getdonemask','handleLength','insertitem','todopastoneweek','todowillhandle','todogetitwithorder'
+								,'detaildetshow','deleteitem','insertdetail','changediscribe','ddminshowitem','articlepagchange'
+								,'adminsearcharticle','adminsearcharticlefenye','adminselectarticle','articlepagchangesel','admininsertarticle'
+								,'deletearticle','adminupdatearticle','adminupdatearticle2','adminupdatearticle3'],
+							'allow'         => true,
+							'roles'         => ['@'],
+							'matchCallback' => function ($rule, $action) {
+								return Yii::$app->user->identity->status == 1;
+							}
+						],
+						//2
+						[
+							'actions'       => [],
+							'allow'         => true,
+							'roles'         => ['@'],
+							'matchCallback' => function ($rule, $action) {
+								return Yii::$app->user->identity->status == 2;
+							}
+						],
 
+					],
+				],
+				'verbs'    => [
+					'class'   => VerbFilter::className(),
+					'actions' => [
+						'logout' => ['post'],
+					],
+				],
+			];
+		}
 	public $enableCsrfValidation = false;
 	//管理员插入用户
 	public function actionAdmininsertuser() {
