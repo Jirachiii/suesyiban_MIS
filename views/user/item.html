@@ -58,6 +58,17 @@
 	<section class="detailShow" id="detailShow">
 		<span onclick="closeDet()" class="glyphicon glyphicon-remove delete_span"></span>
 		<section class="det_block">
+			<h3 class="det_h3">项目设置</h3><br>
+			<div class="Detail_sty" id="Detail_setting">
+				<div class="detail_add" onclick="getDoneItem()"><p class="Thedetail_p detailadd_p">归档此项目</p></div> <br>
+				<div class="detail_add" onclick="deleteItem()"><p class="Thedetail_p detailadd_p">删除项目</p></div> <br>
+				<div>
+					<input type="text" class="detail_User" placeholder="用户" id="insertUser"><br><br>
+					<div class="detail_add" onclick="insertUser()"><p class="Thedetail_p detailadd_p">插入</p></div>
+				</div>
+			</div>
+		</section>
+		<section class="det_block">
 			<h3 class="det_h3">进行中</h3><br>
 			<div class="Detail_sty" id="Detail_Doing" ondrop="drop(event)" ondragover="allowDrop(event)">
 <!-- 				<div class="Thedetail" onclick="detailDet()" draggable="true" id="get1" ondragstart="drag(event)">
@@ -71,17 +82,6 @@
 			<div class="Detail_sty" id="Detail_Done" ondrop="drop(event)" ondragover="allowDrop(event)">
 			</div>
 		</section>
-		<section class="det_block">
-			<h3 class="det_h3">项目设置</h3><br>
-			<div class="Detail_sty" id="Detail_Done">
-				<div class="detail_add" onclick="getDoneItem()"><p class="Thedetail_p detailadd_p">归档此项目</p></div> <br>
-				<div class="detail_add" onclick="deleteItem()"><p class="Thedetail_p detailadd_p">删除项目</p></div> <br>
-				<div>
-					<input type="text" class="detail_User" placeholder="用户" id="insertUser"><br><br>
-					<div class="detail_add" onclick="insertUser()"><p class="Thedetail_p detailadd_p">插入</p></div>
-				</div>
-			</div>
-		</section>
 	</section>
 	<section class="detail_model" id="detail_model">
 <!-- 		<span onclick="closeModel()" class="glyphicon glyphicon-remove delete_span"></span>
@@ -91,20 +91,16 @@
 			<button class="detailmodel_btn" id="">修改</button>
 		</div> -->
 	</section>
-<!-- 	<section class="dropdown-menu">
-		<div class="model_SetBlock haveBorder ShowName">
-			<p class="centerMomentName" style="text-align: center;">周倩叶</p>
-		</div>
-		<div class="model_SetBlock haveBorder ChangePassword">
-			<input class="centerMomentName sameSizeModel form-control" type="text" placeholder="新密码">
-		</div>
-		<div class="model_SetBlock haveBorder newPassword">
-			<input class="centerMomentName sameSizeModel form-control" type="text" placeholder="再输入一次">
-		</div>
-		<div class="model_SetBlock ">
-			<button class="centerMomentName sameSizeModel">确认</button>
-		</div>
-	</section> -->
+	<section class="setting">
+		<div class="setting_block"><p class="setting_p">周倩叶</p></div>
+		<div class="setting_underline"></div>
+		<input type="password" class="setting_textfield" placeholder="新密码" id="Up_password">
+		<div class="setting_block" onclick="updatePassword()"><p class="setting_p">更新密码</p></div>
+		<div class="setting_underline"></div>
+		<form action="index.php?r=site/logout" method="post">
+			<input type="submit" class="setting_block setting_logout" value="退出">
+		</form>
+	</section>
 	<script src="js/userHref.js"></script>
 	<script src="js/userItem.js"></script>
 	<script src="js/jquery.min.js"></script>
@@ -134,10 +130,16 @@
 				if (textStatus == 'success') {
 					if (data.success) {
 						$("#item_showbox").empty();
-						var msg = data.msg + '<div class="item_show" onclick="createItem()" style="background-color: #EEE;"><br><br><img src="images/addicon.png" class="item_Addicon"></div>';
+						if (data.msg1 == 1) {
+							var msg = data.msg + '<div class="item_show" onclick="createItem()" style="background-color: #EEE;"><br><br><img src="images/addicon.png" class="item_Addicon"></div>';
+						} else {
+							var msg = data.msg;
+						}
 						$("#item_showbox").append(msg);
 					} else {
-						$("#item_showbox").append('<div class="item_show" onclick="createItem()" style="background-color: #EEE;"><br><br><img src="images/addicon.png" class="item_Addicon"></div>');
+						if (data.msg1 == 1) {
+							$("#item_showbox").append('<div class="item_show" onclick="createItem()" style="background-color: #EEE;"><br><br><img src="images/addicon.png" class="item_Addicon"></div>');
+						}
 					}
 				} else {
 					alert("系统错误" + textStatus);

@@ -1,7 +1,7 @@
 <?php
 
 namespace app\models;
-
+use app\controllers\DbFactory;
 use Yii;
 
 /**
@@ -41,10 +41,15 @@ class Itempersons extends \yii\db\ActiveRecord {
 			'XH_ID'         => 'Xh  ID',
 		];
 	}
-
+	//搜索这个项目的所有用户
 	public function searchItemJoin($XH_ID) {
 		$Dbfactory = DbFactory::getinstance();
 		$sql       = 'SELECT * FROM itempersons WHERE XH_ID = \''.$XH_ID.'\'';
 		$result    = $Dbfactory->findBySql($sql);
+	}
+	//插入用户
+	public function insertperson($arr) {
+		$Dbfactory = DbFactory::getinstance();
+		return $Dbfactory->insertIntoDb('itempersons', $arr);
 	}
 }

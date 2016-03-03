@@ -25,38 +25,38 @@ header("Content-Type: application/json;charset=utf-8");
  */
 
 class JsonController extends Controller {
-		public function behaviors() {
-			return [
-				'access' => [
-					'class' => AccessControl::className(),
-					'only'  => [ 'getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
-					'rules' => [
-						[
-							'allow'   => true,
-							'actions' => ['login'],
-							'roles'   => ['?'],
-						],
-						//只有1级管理员有权限
-						[
-							'allow'         => true,
-							'actions'       => ['logout', 'getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
-							'roles'         => ['@'],
-							'matchCallback' => function ($rule, $action) {
-								return Yii::$app->user->identity->status == 1;
-							}
-						],
-
+	public function behaviors() {
+		return [
+			'access' => [
+				'class' => AccessControl::className(),
+				'only'  => ['getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
+				'rules' => [
+					[
+						'allow'   => true,
+						'actions' => ['login'],
+						'roles'   => ['?'],
 					],
-				],
-
-				'verbs'    => [
-					'class'   => VerbFilter::className(),
-					'actions' => [
-						'logout' => ['post'],
+					//只有1级管理员有权限
+					[
+						'allow'         => true,
+						'actions'       => ['logout', 'getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
+						'roles'         => ['@'],
+						'matchCallback' => function ($rule, $action) {
+							return Yii::$app->user->identity->status == 1;
+						}
 					],
+
 				],
-			];
-		}
+			],
+
+			'verbs'    => [
+				'class'   => VerbFilter::className(),
+				'actions' => [
+					'logout' => ['post'],
+				],
+			],
+		];
+	}
 
 	public function actions() {
 		return [
@@ -171,12 +171,14 @@ class JsonController extends Controller {
 		$item           = new Items();
 		$itemPerson     = new Itempersons();
 		$rightNowUserId = Yii::$app->user->identity->XH_ID;
+		$usertb         = new UserTb();
+		$status         = $usertb->getAuthority($rightNowUserId);
 		$result         = $item->searchAllItems(2);
 		if ($result) {
 			foreach ($result as $value) {
 				$msg .= '<div onclick=\"detailShow('.$value['Item_Id'].')\" id=\"'.$value['Item_Id'].'\" class=\"item_show\" style=\"background-image: url(images/itemImg.jpeg);\"><h3 class=\"item_showtit\">'.$value['Item_Name'].'</h3></div>';
 			}
-			echo '{"success":true,"msg": "'.$msg.'"}';
+			echo '{"success":true,"msg": "'.$msg.'","msg1":"'.$status.'"}';
 		} else {
 			echo '{"success":false}';
 		}

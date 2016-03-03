@@ -7,10 +7,10 @@ use app\models\Itempersons;
 use app\models\Items;
 use app\models\OwnTodos;
 use app\models\UserTb;
+use YII;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
-use YII;
 date_default_timezone_set("PRC");
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:POST,GET');
@@ -24,55 +24,55 @@ header("Content-Type: application/json;charset=utf-8");
 
 class AjaxuserController extends Controller {
 	public function behaviors() {
-			return [
-				'access' => [
-					'class' => AccessControl::className(),
-					'only'  => ['admininsertuser', 'userpagechange', 'changeuserstatus', 'adminstatusgetitems'
-						,'changeitemstatus','getitembystatus','resetpass','deleteone','inserttodo','changetodostatus'
-						,'getdonemask','handleLength','insertitem','todopastoneweek','todowillhandle','todogetitwithorder'
-						,'detaildetshow','deleteitem','insertdetail','changediscribe','ddminshowitem','articlepagchange'
-						,'adminsearcharticle','adminsearcharticlefenye','adminselectarticle','articlepagchangesel','admininsertarticle'
-						,'deletearticle','adminupdatearticle','adminupdatearticle2','adminupdatearticle3'],
-					'rules' => [
-						[
-							'allow'   => true,
-							'actions' => ['login'],
-							'roles'   => ['?'],
-						],
-						//1级管理员有权限
-						[
-							'actions'       => ['admininsertuser', 'userpagechange', 'changeuserstatus', 'adminstatusgetitems'
-								,'changeitemstatus','getitembystatus','resetpass','deleteone','inserttodo','changetodostatus'
-								,'getdonemask','handleLength','insertitem','todopastoneweek','todowillhandle','todogetitwithorder'
-								,'detaildetshow','deleteitem','insertdetail','changediscribe','ddminshowitem','articlepagchange'
-								,'adminsearcharticle','adminsearcharticlefenye','adminselectarticle','articlepagchangesel','admininsertarticle'
-								,'deletearticle','adminupdatearticle','adminupdatearticle2','adminupdatearticle3'],
-							'allow'         => true,
-							'roles'         => ['@'],
-							'matchCallback' => function ($rule, $action) {
-								return Yii::$app->user->identity->status == 1;
-							}
-						],
-						//2
-						[
-							'actions'       => [],
-							'allow'         => true,
-							'roles'         => ['@'],
-							'matchCallback' => function ($rule, $action) {
-								return Yii::$app->user->identity->status == 2;
-							}
-						],
+		return [
+			'access' => [
+				'class' => AccessControl::className(),
+				'only'  => ['admininsertuser', 'userpagechange', 'changeuserstatus', 'adminstatusgetitems'
+					, 'changeitemstatus', 'getitembystatus', 'resetpass', 'deleteone', 'inserttodo', 'changetodostatus'
+					, 'getdonemask', 'handleLength', 'insertitem', 'todopastoneweek', 'todowillhandle', 'todogetitwithorder'
+					, 'detaildetshow', 'deleteitem', 'insertdetail', 'changediscribe', 'ddminshowitem', 'articlepagchange'
+					, 'adminsearcharticle', 'adminsearcharticlefenye', 'adminselectarticle', 'articlepagchangesel', 'admininsertarticle'
+					, 'deletearticle', 'adminupdatearticle', 'adminupdatearticle2', 'adminupdatearticle3'],
+				'rules' => [
+					[
+						'allow'   => true,
+						'actions' => ['login'],
+						'roles'   => ['?'],
+					],
+					//1级管理员有权限
+					[
+						'actions' => ['admininsertuser', 'userpagechange', 'changeuserstatus', 'adminstatusgetitems'
+							, 'changeitemstatus', 'getitembystatus', 'resetpass', 'deleteone', 'inserttodo', 'changetodostatus'
+							, 'getdonemask', 'handleLength', 'insertitem', 'todopastoneweek', 'todowillhandle', 'todogetitwithorder'
+							, 'detaildetshow', 'deleteitem', 'insertdetail', 'changediscribe', 'ddminshowitem', 'articlepagchange'
+							, 'adminsearcharticle', 'adminsearcharticlefenye', 'adminselectarticle', 'articlepagchangesel', 'admininsertarticle'
+							, 'deletearticle', 'adminupdatearticle', 'adminupdatearticle2', 'adminupdatearticle3'],
+						'allow'         => true,
+						'roles'         => ['@'],
+						'matchCallback' => function ($rule, $action) {
+							return Yii::$app->user->identity->status == 1;
+						}
+					],
+					//2
+					[
+						'actions'       => [],
+						'allow'         => true,
+						'roles'         => ['@'],
+						'matchCallback' => function ($rule, $action) {
+							return Yii::$app->user->identity->status == 2;
+						}
+					],
 
-					],
 				],
-				'verbs'    => [
-					'class'   => VerbFilter::className(),
-					'actions' => [
-						'logout' => ['post'],
-					],
+			],
+			'verbs'    => [
+				'class'   => VerbFilter::className(),
+				'actions' => [
+					'logout' => ['post'],
 				],
-			];
-		}
+			],
+		];
+	}
 	public $enableCsrfValidation = false;
 	//管理员插入用户
 	public function actionAdmininsertuser() {
@@ -155,6 +155,18 @@ class AjaxuserController extends Controller {
 		$aimuser->save(false);
 		//		$a=$aimarticle->status;
 		echo '{"success":true,"msg":"更改成功！"}';
+	}
+	//
+	public function actionUpdateuserpassword() {
+		$id       = \Yii::$app->user->identity->XH_ID;
+		$password = $_POST['password'];
+		$usertb   = new UserTb();
+		$result   = $usertb->updatePassword($id, $password);
+		if ($result) {
+			echo '{"success": true}';
+		} else {
+			echo '{"success": false}';
+		}
 	}
 	//获取所有状态
 	public function actionAdminstatusgetitems() {
@@ -266,7 +278,18 @@ class AjaxuserController extends Controller {
 			echo '{"success":false}';
 		}
 	}
-
+	//删除个人todo
+	public function actionDeleteownertodo() {
+		$Num        = $_POST['Num'];
+		$CreateDate = $_POST['CreateDate'];
+		$owntodo    = new OwnTodos();
+		$result     = $owntodo->deleteTodo($Num, $CreateDate);
+		if ($result) {
+			echo '{"success":true}';
+		} else {
+			echo '{"success":false}';
+		}
+	}
 	//测试改变状态
 	public function actionChangestatus() {
 		$itemdetails = new Itemdetails();
@@ -430,8 +453,17 @@ class AjaxuserController extends Controller {
 	}
 
 	public function actionInsertitemperson() {
-		$itemperson = new itempersons();
-
+		// $arr['XH_ID']   = $_POST['person'];
+		// $arr['Item_Id'] = $_POST['Item_Id'];
+		$arr['XH_ID']   = '031513216';
+		$arr['Item_Id'] = '1';
+		$itemperson     = new Itempersons();
+		$result         = $itemperson->insertperson($arr);
+		if ($result) {
+			echo '{"success":true}';
+		} else {
+			echo '{"success":false}';
+		}
 	}
 
 	public function actionDeleteItem() {
