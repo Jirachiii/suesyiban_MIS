@@ -88,7 +88,7 @@ class Items extends \yii\db\ActiveRecord {
 	public function AdminSearchAllItems($status, $page, $number) {
 		if ($this->decideGetMomentContinue($page, $number)) {
 			$front     = ($page-1)*$number;
-			$sql       = 'SELECT XH_ID,Item_Name,Item_Intro,Date FROM items WHERE Status = '.$status.' ORDER BY Date DESC LIMIT '.$front.','.$number;
+			$sql       = 'SELECT XH_ID,Item_Name,Item_Intro,Item_Id, Date FROM items WHERE Status = '.$status.' ORDER BY Date DESC LIMIT '.$front.','.$number;
 			$Dbfactory = DbFactory::getinstance();
 			$items     = $Dbfactory->findBySql($sql);
 			$user      = new UserTb();

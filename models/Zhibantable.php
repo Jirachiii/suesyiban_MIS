@@ -72,7 +72,7 @@ class Zhibantable extends \yii\db\ActiveRecord
             $xuenian=$year.'-'.($year+1);
         // }elseif(date('m')<=2){
         // 为了测试将第一学期的结束月份设为6月份，正式使用时使用上面的
-        }elseif(date('m')<=2){
+        }elseif(date('m')<=6){
             $xueqi=1;
             $xuenian=($year-1).'-'.$year;
         }

@@ -103,13 +103,23 @@ class Moments extends \yii\db\ActiveRecord {
 			}
 			if ($page == 1) {
 				$idcount  = rtrim($idcount, ",");
-				$sql2     = "SELECT id,XH_ID,Content,Mdate FROM moments WHERE id NOT IN ($idcount) ORDER BY Mdate DESC ,TIME DESC LIMIT $num";
+				if(empty($idcount)){
+					$sql2     = "SELECT id,XH_ID,Content,Mdate FROM moments ORDER BY Mdate DESC ,TIME DESC LIMIT $num";
+				}else{
+					$sql2     = "SELECT id,XH_ID,Content,Mdate FROM moments WHERE id NOT IN ($idcount) ORDER BY Mdate DESC ,TIME DESC LIMIT $num";
+				}
 				$Moments2 = Yii::$app->db->createCommand($sql2)->queryAll();
 				$Moments  = array_merge($Moments1, $Moments2);
 			} else {
 				$num     = $front-$counttop;
 				$idcount = rtrim($idcount, ",");
-				$sql2    = "SELECT id,XH_ID,Content,Mdate FROM moments WHERE id NOT IN ($idcount) ORDER BY Mdate DESC ,TIME DESC LIMIT $num,$number";
+				if(empty($idcount)){
+					$sql2    = "SELECT id,XH_ID,Content,Mdate FROM moments ORDER BY Mdate DESC ,TIME DESC LIMIT $num,$number";
+
+				}else{
+					$sql2    = "SELECT id,XH_ID,Content,Mdate FROM moments WHERE id NOT IN ($idcount) ORDER BY Mdate DESC ,TIME DESC LIMIT $num,$number";
+
+				}
 				$Moments = Yii::$app->db->createCommand($sql2)->queryAll();
 				//                $Moments=array_merge($Moments1,$Moments2);
 
