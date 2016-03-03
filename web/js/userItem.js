@@ -408,6 +408,27 @@ function deleteItem() {
 	}
 }
 //添加用户
-function addUser() {
-	
+function insertUser() {
+	var Name = $("#insertUser").val();
+	$.ajax({
+		type: "POST",
+		url: "index.php?r=ajaxuser/insertitemperson",
+		dataType: "json",
+		data: {
+			User: insertUser,
+			Item_Id: itemIdOnAllShow,
+		},
+		success: function(data){
+			if (data.success) {
+				alert('添加成功');
+			} else {
+				alert('添加失败');
+				window.location.reload();
+			}
+		},
+		error: function(jqXHR){
+			alert("发生错误：" + jqXHR.status);
+			window.location.reload();
+		},
+	});
 }

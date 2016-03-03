@@ -290,6 +290,17 @@ nav ,.sec_nav{
 .detailmodel_btn:hover {
 	background-color: #AAA;
 }
+.detail_User {
+	
+	width: 100%;
+	height: 30px;
+	-webkit-transition:all .2s ease-in-out;	
+}
+.detail_User:hover {
+}
+.detail_User:focus {
+
+}
 
 .Setting77 {
 	position: absolute;

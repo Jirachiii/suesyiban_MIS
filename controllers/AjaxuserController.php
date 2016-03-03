@@ -3,6 +3,7 @@ namespace app\controllers;
 use app\models\articles;
 use app\models\Files;
 use app\models\Itemdetails;
+use app\models\Itempersons;
 use app\models\Items;
 use app\models\OwnTodos;
 use app\models\UserTb;
@@ -427,6 +428,12 @@ class AjaxuserController extends Controller {
 			echo '{"success":true,"msg":"请输查询入内容"}';
 		}
 	}
+
+	public function actionInsertitemperson() {
+		$itemperson = new itempersons();
+
+	}
+
 	public function actionDeleteItem() {
 		$Item_Id = $_POST['Item_Id'];
 		$item    = new Item();
