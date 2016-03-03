@@ -45,7 +45,7 @@ function detailShow(id){
 				if (data.success) {
 					$('#Detail_Doing').empty();
 					$('#Detail_Done').empty();
-					var msg = '<div class="detail_add" onclick="AddDetail('+data.msg3+')"><p class="Thedetail_p detailadd_p">添加...</p></div>';
+					var msg = '<div class="detail_add" onclick="AddDetail('+id+')"><p class="Thedetail_p detailadd_p">添加...</p></div>';
 					$('#Detail_Doing').append(msg);
 					$('#Detail_Doing').append(data.msg1);
 					$('#Detail_Done').append(data.msg2);
@@ -105,6 +105,30 @@ function Urgenthandle(ev,urgentLev) {
 				getRawData();
 			} else {
 				alert('不能改变此状态');
+				window.location.reload();
+			}  
+		},
+		error: function(jqXHR){
+			alert("发生错误：" + jqXHR.status);
+			window.location.reload();
+		},
+	});
+}
+//删除任务
+function deletehandle(ev) {
+	$.ajax({
+	    type: "POST",
+		url: "index.php?r=ajaxuser/deleteownertodo",
+		data: {
+			Num: ev.getAttribute("data-Num"),
+			CreateDate: ev.getAttribute("data-createDate"),
+		},
+		dataType: "json",
+		success: function(data){
+			if (data.success) {
+				getRawData();
+			} else {
+				alert('操作失败');
 				window.location.reload();
 			}  
 		},
@@ -408,6 +432,58 @@ function deleteItem() {
 	}
 }
 //添加用户
-function addUser() {
-	
+function insertUser() {
+	var person = $("#insertUser").val();
+	if (person == '') {
+		alert('不能为空')
+		return
+	}
+	$.ajax({
+		type: "POST",
+		url: "index.php?r=ajaxuser/insertitemperson",
+		dataType: "json",
+		data: {
+			person: person,
+			Item_Id: itemIdOnAllShow,
+		},
+		success: function(data){
+			if (data.success) {
+				alert('添加成功');
+			} else {
+				alert('添加失败');
+				window.location.reload();
+			}
+		},
+		error: function(jqXHR){
+			alert("发生错误：" + jqXHR.status);
+			window.location.reload();
+		},
+	});
+}
+//更新自己的密码
+function updatePassword() {
+	var password = $("#Up_password").val();
+	if (password == '') {
+		alert('不能为空');
+		return;
+	}
+	$.ajax({
+		type: "POST",
+		url: "index.php?r=ajaxuser/updateuserpassword",
+		dataType: "json",
+		data: {
+			password: password,
+		},
+		success: function(data){
+			if (data.success) {
+				alert('修改成功');
+			} else {
+				alert('修改失败');
+			}
+		},
+		error: function(jqXHR){
+			alert("发生错误：" + jqXHR.status);
+			window.location.reload();
+		},
+	});
 }

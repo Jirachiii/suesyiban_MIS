@@ -82,6 +82,12 @@ class UserTb extends \yii\db\ActiveRecord {
 		$arrUpdate['XH_PW'] = md5(123456);
 		return $Dbfactory->updateTheDbRecord('user_tb', 'XH_ID', $id, $arrUpdate);
 	}
+	//用户重置密码
+	public function updatePassword($id, $password) {
+		$Dbfactory          = DbFactory::getinstance();
+		$arrUpdate['XH_PW'] = md5($password);
+		return $Dbfactory->updateTheDbRecord('user_tb', 'XH_ID', $id, $arrUpdate);
+	}
 	//登录逻辑
 	public function handleLogin($username, $password) {
 		$this->getLoginMess($username, $password);
@@ -156,8 +162,8 @@ class UserTb extends \yii\db\ActiveRecord {
 	/**
 	 * 统计总的页数
 	 */
-	public function userallpage($numbers){
-		$result=UserTb::find()->count();
+	public function userallpage($numbers) {
+		$result = UserTb::find()->count();
 		return (ceil($result/$numbers));
 	}
 
@@ -168,8 +174,8 @@ class UserTb extends \yii\db\ActiveRecord {
 	 * @param $numbers
 	 * @return array
 	 */
-	public function getSearchUserWithPage($content,$page,$numbers){
-		$index=($page-1)*$numbers;
+	public function getSearchUserWithPage($content, $page, $numbers) {
+		$index  = ($page-1)*$numbers;
 		$result = (new Query())
 			->from('user_tb')
 			->where(['or', ['like', 'XH_ID', $content], ['like', 'Name', $content]])
@@ -177,12 +183,12 @@ class UserTb extends \yii\db\ActiveRecord {
 			->offset($index)
 			->all();
 		return $result;
-}
+	}
 	/**
 	 * 统计总的页数(搜索)
 	 */
-	public function userallpage_s($numbers,$content){
-		$result=UserTb::find()->where("XH_ID like '%$content%' or Name like '%$content%'")->count();
+	public function userallpage_s($numbers, $content) {
+		$result = UserTb::find()->where("XH_ID like '%$content%' or Name like '%$content%'")->count();
 		return (ceil($result/$numbers));
 	}
 

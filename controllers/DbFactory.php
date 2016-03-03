@@ -118,7 +118,7 @@ class DbFactory {
 			$keyAndvalueArr[] = "`".$key."`='".$value."'";
 		}
 		$keyAndValue = implode(',', $keyAndvalueArr);
-		$sql         = 'update '.$table.' set '.$keyAndValue.' where '.$KeyName.' = '.$id;
+		$sql         = 'update '.$table.' set '.$keyAndValue.' where '.$KeyName.' = \''.$id.'\'';
 		$query       = $this->doQuery($sql);
 		return $query;
 	}
