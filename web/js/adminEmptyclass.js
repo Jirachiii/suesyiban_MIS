@@ -146,7 +146,7 @@ function loadanpai(){
                         for (var i = 0; i < data.anpai.length; i++) {
                             switch (data.anpai[i].date_turn){
                                 case "1":
-                                    $("#first_arr").append(data.anpai[i].stname+" "+data.anpai[i].stid+'  '+'<span class="Set_dele glyphicon glyphicon-remove myblue " onclick="delanpai(\''+data.anpai[i].id+'\')"></span>');
+                                    $("#first_arr").append(data.anpai[i].stname+" "+data.anpai[i].stid+'  '+'<span class="Set_dele glyphicon glyphicon-remove myblue " onclick="delanpai(\''+data.anpai[i].id+'\')"></span>'+'<br>');
                                     if(data.anpai[i].conflict_class!=null){
                                         $("#first_arr").prepend('<span>(有课程冲突)</span>'+'<br>')
                                     }
