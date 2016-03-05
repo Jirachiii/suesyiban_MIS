@@ -67,7 +67,8 @@ class SiteController extends Controller {
 	}
 
 	public function actionIndex() {
-		return $this->renderPartial('index');
+		$userstatus   = Yii::$app->user->identity->status;
+		return $this->renderPartial('index',['userstatus'=>$userstatus]);
 	}
 
 	public function actionLogin() {

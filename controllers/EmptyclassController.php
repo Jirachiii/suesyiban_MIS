@@ -38,6 +38,8 @@ class EmptyclassController extends Controller {
     public function actionSearchanpai(){
         $request=Yii::$app->request;
         $session=Yii::$app->session;
+        $rightNowUserId   = Yii::$app->user->identity->XH_ID;
+        $rightNowUserName = Yii::$app->user->identity->Name;
         $whichweek=$request->get('whichweek_2');
         $weekday=$request->get('weekday_2');
         $session['whichweek_2']=$whichweek;
@@ -45,7 +47,7 @@ class EmptyclassController extends Controller {
         $anpaitable=new Zhibantable();
         $year_xq=$anpaitable->xuenianxueqi();
         $content=$anpaitable->findanpaidata($session['whichweek_2'],$session['weekday_2'],$year_xq);
-        echo '{"success":true,"anpai":'.json_encode($content,JSON_UNESCAPED_UNICODE).'}';
+        echo '{"success":true,"anpai":'.json_encode($content,JSON_UNESCAPED_UNICODE).',"userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
     }
     /**
      * 搜索有空值班的学生(右边的视图)

@@ -47,6 +47,7 @@ function getRawArticleData(a){
     $.getJSON('index.php?r=json/getarticledata', function(data, textStatus) {
         if (textStatus == 'success') {
             if(data.success==true){
+                $("#head a").first().attr("id",data.userIdNow).html(data.userName+'<span class="caret"></span>')
                 allPage_art=data.allPage
                 var tableHead = '<thead><tr><td>物品</td><td>数量</td><td>第一次添加时间</td><td>状态</td><td>添加/减少/更改状态/删除</td></tr></thead>';
                 var tableBody = '<tbody>';
@@ -277,9 +278,9 @@ function updateArticle(){
         url: "index.php?r=ajaxuser/adminupdatearticle",
         data: {
             articleid: $("#articleid").text(),
-            changeart_sel: $("#changeart_sel").val(),
+            //changeart_sel: $("#changeart_sel").val(),
             changeart_inp: $("#changeart_inp").val(),
-            total:         Number($("#showarticlenumber").text())+Number($("#changeart_sel").val())+Number($("#changeart_inp").val()),
+            total:         Number($("#showarticlenumber").text())+Number($("#changeart_inp").val()),
             //total: "10000",
         },
         dataType: "json",
@@ -310,9 +311,9 @@ function updateArticle_2(){
         url: "index.php?r=ajaxuser/adminupdatearticle2",
         data: {
             articleid: $("#articleid_2").text(),
-            changeart_sel: $("#changeart_sel_2").val(),
+            //changeart_sel: $("#changeart_sel_2").val(),
             changeart_inp: $("#changeart_inp_2").val(),
-            total:         Number($("#showarticlenumber_2").text())-Number($("#changeart_sel_2").val())-Number($("#changeart_inp_2").val()),
+            total:         Number($("#showarticlenumber_2").text())-Number($("#changeart_inp_2").val()),
             //total: "10000",
         },
         dataType: "json",
@@ -385,7 +386,7 @@ function changeArticle(obj,obj2,obj3) {
     document.getElementById("showarticlename").innerHTML=obj;
     document.getElementById("showarticlenumber").innerHTML=obj2;
     document.getElementById("articleid").innerHTML=obj3;
-    $("#changeart_sel option:first").prop("selected", 'selected');
+    $("#changeart_inp").val("");
     $("#changeResult").html("");
 
 }
@@ -398,7 +399,6 @@ function changeArticle_2(obj,obj2,obj3) {
     document.getElementById("showarticlename_2").innerHTML=obj;
     document.getElementById("showarticlenumber_2").innerHTML=obj2;
     document.getElementById("articleid_2").innerHTML=obj3;
-    $("#changeart_sel_2 option:first").prop("selected", 'selected');
     $("#changeResult_2").html("");
     $("#changeart_inp_2").val("");
 }
@@ -442,7 +442,6 @@ function daojishi2 () {
     if(daojishinum2<0){
         clearTimeout(i);
         daojishinum2=1;
-        $("#changeart_sel option:first").prop("selected", 'selected');
         $("#changeResult").html("");
     }else{
         var i=setTimeout("daojishi2()",1000);

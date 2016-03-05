@@ -15,11 +15,18 @@
 	<body>
 		<header class="Ad_head" id="head">
 			<button class="btn btn-primary hd_downbtn" onclick="tiggle()">下拉</button>
-			<a class="nav_btn"></a>
-			<form action="index.php?r=site/logout" method="post">
-				<input type="submit" value="退出">
-			</form>
-			<!--<a class="nav_btn mylogout" id="adminlogout" href="index.php?r=site/logout">退出登陆</a>-->
+			<ul class="nav navbar-nav myloginfo" >
+				<li class="dropdown">
+					<a href="##" class="dropdown-toggle " data-toggle="dropdown" >
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li class="hrefpointet" onclick="hrefuser()">用户界面</li>
+						<li><hr></li>
+						<li><form action="index.php?r=site/logout" method="post"><input class="mylogoutbtn" type="submit" value="退出"></form></li>
+					</ul>
+				</li>
+			</ul>
 		</header>
 
 		<section class="col-xs-2 Ad_Lef" id="showandhide">
@@ -110,7 +117,8 @@
 		</section>
         <script src="js/adminHref.js"></script>
         <script src="js/adminUser.js"></script>
-        <script src="js/jquery.min.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
 		<script>
 			$(function(){
 				getRawData();

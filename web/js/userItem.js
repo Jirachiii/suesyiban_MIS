@@ -494,3 +494,23 @@ function updatePassword() {
 		},
 	});
 }
+//跳转管理员
+function hrefadmin(){
+	$.ajax({
+		type: "POST",
+		url: "index.php?r=ajaxuser/hrefadmin",
+		dataType: "json",
+
+		success: function(data){
+			if(data!=1){
+				alert("您没有权限")
+			}else{
+				location.href="?r=admin/index"
+			}
+		},
+		error: function(jqXHR){
+			alert("发生错误：" + jqXHR.status);
+			window.location.reload();
+		},
+	});
+}

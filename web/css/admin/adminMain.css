@@ -299,3 +299,23 @@ td {
 	font-size: 1.3em;
 	cursor:pointer;
 }
+.mylogoutbtn{
+	border: 0;
+	background: inherit;
+}
+.myloginfo li ul li{
+	text-align: center;
+	width: 100%;
+}
+.myloginfo li ul li form input{
+	width: 100%;
+}
+
+.myloginfo{
+	position: absolute;
+	top: 0px;
+	left: 5px;
+}
+.hrefpointet{
+	cursor: pointer;
+}

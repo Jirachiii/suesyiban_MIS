@@ -24,6 +24,7 @@ function getMomentData_dongtai() {
 	document.getElementById("searchMoment").value="";
 	$.getJSON('index.php?r=json/getmomentdata', function(data, textStatus) {
 		if (textStatus == 'success') {
+			$("#head a").first().attr("id",data.userIdNow).html(data.userName+'<span class="caret"></span>')
 			allpage = data.allPage;
 			var tableHead = '<thead><tr><td>学号</td><td>内容</td><td>时间</td><td>姓名</td><td>修改/置顶/删除</td></tr></thead>';
 			var tableBody = '<tbody>';

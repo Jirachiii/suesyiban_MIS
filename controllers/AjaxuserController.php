@@ -522,17 +522,20 @@ class AjaxuserController extends Controller {
 	//管理员审核项目
 	public function actionAdminshowitem() {
 		$item_id = $_GET['Item_Id'];
-		$item_id = 1;
+//		$item_id = 1;
 		$item    = new Items();
 		$result  = $item->searchItemsDetail($item_id);
 		if ($result) {
-			$msg = '<span onclick=\"closeModel()\" class=\"glyphicon glyphicon-remove delete_span\"></span><div class=\"\" id=\"detailmodel_Main\"><textarea name=\"\" cols=\"30\" rows=\"3\" class=\"detail_Maintext\">'.$result[0]['Item_Name'].'</textarea><textarea cols=\"30\" rows=\"3\" class=\"detail_Maintext\">'.$result[0]['Item_Intro'].'</textarea></div>';
-			echo '{"success":true, "msg":"'.$msg.'"}';
+			echo '{"success":true,"msg":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
 		} else {
 			echo '{"success":false}';
 		}
 	}
-
+   //item跳转管理员界面
+	function actionHrefadmin(){
+		$status   = Yii::$app->user->identity->status;
+		return $status;
+	}
 	//库存管理
 	/**
 	 * 库存分页
@@ -636,13 +639,11 @@ class AjaxuserController extends Controller {
 	 */
 	public function actionAdminupdatearticle() {
 		//判断信息是否填写完全
-		if ((empty($_POST["changeart_sel"]) && empty($_POST["changeart_inp"])) ||
-			(!empty($_POST["changeart_sel"]) && !empty($_POST["changeart_inp"])) ||
-			(!isset($_POST["changeart_sel"]) && !isset($_POST["changeart_inp"]))) {
+		if (empty($_POST["changeart_inp"])||!isset($_POST["changeart_inp"])) {
 			echo '{"success":false,"msg":"信息填写错误"}';
 			return;
 		}
-		if (!is_numeric($_POST["changeart_sel"]) && !is_numeric($_POST["changeart_inp"])) {
+		if (!is_numeric($_POST["changeart_inp"])) {
 			echo '{"success":false,"msg":"数量填写错误"}';
 			return;
 		}
@@ -659,18 +660,15 @@ class AjaxuserController extends Controller {
 	 * 减少库存数量
 	 */
 	public function actionAdminupdatearticle2() {
-		//判断信息是否填写完全
-		if ((empty($_POST["changeart_sel"]) && empty($_POST["changeart_inp"])) ||
-			(!empty($_POST["changeart_sel"]) && !empty($_POST["changeart_inp"])) ||
-			(!isset($_POST["changeart_sel"]) && !isset($_POST["changeart_inp"]))) {
+		if (empty($_POST["changeart_inp"])||!isset($_POST["changeart_inp"])) {
 			echo '{"success":false,"msg":"信息填写错误"}';
 			return;
 		}
-		if (!is_numeric($_POST["changeart_sel"]) && !is_numeric($_POST["changeart_inp"])) {
+		if (!is_numeric($_POST["changeart_inp"])) {
 			echo '{"success":false,"msg":"数量填写错误"}';
 			return;
 		}
-		if ($_POST['total'] < 0) {
+		if ($_POST["total"] < 0) {
 			echo '{"success":false,"msg":"没有这么多库存啦"}';
 			return;
 		}
