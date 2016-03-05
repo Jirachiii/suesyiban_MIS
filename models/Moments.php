@@ -89,6 +89,14 @@ class Moments extends \yii\db\ActiveRecord {
 		$this->processthemessage($arr['Content']);
 		$Dbfactory->insertIntoDb('moments', $arr);
 	}
+	//获取置顶动态
+	public function getAllTopMoment() {
+		$sql       = " SELECT moments.id,moments.XH_ID,moments.Content,moments.Mdate FROM moments INNER JOIN moment_top ON moments.id=moment_top.id";
+		$Dbfactory = DbFactory::getinstance();
+		$Moments   = $Dbfactory->findBySql($sql);
+		return $Moments;
+	}
+	//获取动态
 	public function getPageMomentWithOrder($page, $number) {
 		if ($this->decideGetMomentContinue($page, $number)) {
 			$front     = ($page-1)*$number;
@@ -103,7 +111,7 @@ class Moments extends \yii\db\ActiveRecord {
 			}
 			if ($page == 1) {
 				$idcount  = rtrim($idcount, ",");
-				$sql2     = "SELECT id,XH_ID,Content,Mdate FROM moments WHERE id NOT IN ($idcount) ORDER BY Mdate DESC ,TIME DESC LIMIT $num";
+				$sql2     = "SELECT id,XH_ID,Content,Mdate FROM moments ORDER BY Mdate DESC ,TIME DESC LIMIT $num";
 				$Moments2 = Yii::$app->db->createCommand($sql2)->queryAll();
 				$Moments  = array_merge($Moments1, $Moments2);
 			} else {

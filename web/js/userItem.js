@@ -487,3 +487,61 @@ function updatePassword() {
 		},
 	});
 }
+//获取名字
+function getName() {
+	$.ajax({
+		type: "POST",
+		url: "index.php?r=ajaxuser/getname",
+		dataType: "json",
+		success: function(data){
+			if (data.success) {
+				alert('修改成功');
+			} else {
+				alert('修改失败');
+			}
+		},
+		error: function(jqXHR){
+			alert("发生错误：" + jqXHR.status);
+			window.location.reload();
+		},
+	});
+}
+var showItOrNot = 0;
+//显示用户状态栏
+function showThing() {
+	if (showItOrNot == 0) {
+		$("#setting").removeClass("setting_show");
+		$("#setting").addClass("setting_hide");
+		$("#coverSetting").removeClass("setting_show");
+		$("#coverSetting").addClass("setting_hide");
+		showItOrNot = 1;
+	} else {
+		$("#setting").removeClass("setting_hide");
+		$("#setting").addClass("setting_show");
+		$("#coverSetting").removeClass("setting_hide");
+		$("#coverSetting").addClass("setting_show");
+		showItOrNot = 0;
+	}
+
+}
+//显示置顶动态
+function showTopMoments() {
+	$("#today_Show").empty();
+	$.ajax({
+		type: "POST",
+		url: "index.php?r=ajaxuser/gettopmoment",
+		dataType: "json",
+		success: function(data){
+			if (data.success) {
+				document.getElementById('today_Show').innerHTML = '<br><p class="TS_head">置顶动态</p><hr><div class="today_Show_miss" id="today_Show_miss"></div>';
+				document.getElementById('today_Show_miss').innerHTML = data.msg;
+			} else {
+				alert('修改失败');
+			}
+		},
+		error: function(jqXHR){
+			alert("发生错误：" + jqXHR.status);
+			window.location.reload();
+		},
+	});
+}

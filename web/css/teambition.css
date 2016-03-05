@@ -303,6 +303,7 @@ nav ,.sec_nav{
 }
 
 .setting {
+	z-index: 102;
 	position: absolute;
 	top: 40px;
 	right: 25px;
@@ -312,6 +313,13 @@ nav ,.sec_nav{
 	border: 1px solid #CCC;
 	background-color: #FFF;
 	overflow: hidden;
+	-webkit-transition:all .2s ease-in-out;
+}
+.setting_show {
+	-webkit-transform: scale(0);
+}
+.setting_hide {
+	-webkit-transform: scale(1);
 }
 .setting_block {
 	cursor: pointer;
@@ -352,4 +360,12 @@ nav ,.sec_nav{
 }
 .setting_textfield:hover, .setting_textfield:focus{
 	background-color: #EEE;
+}
+.coverSetting {
+	top: 0px;
+	left: 0px;
+	position: absolute;
+	z-index: 101;
+	height: 100%;
+	width: 100%;
 }

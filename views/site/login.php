@@ -35,7 +35,7 @@ use yii\helpers\Html;
 <body onload="loginGetIn()">
 <section class="loginhandle" id="Login">
 	<h3 class="login_h3" id="log_h">易班工作站登陆</h3><br>
-	<?php $form = ActiveForm::begin([
+<?php $form = ActiveForm::begin([
 		'id'            => 'login-form',
 		'options'       => ['class'       => 'form-horizontal'],
 		'fieldConfig'   => [
@@ -44,18 +44,18 @@ use yii\helpers\Html;
 		],
 	]);?>
 
-	<?=$form->field($model, 'username')->input('text',['class'=>'ipt','id'=>'log_ipt1']) ?>
+<?=$form->field($model, 'username')->input('text', ['class' => 'ipt', 'id' => 'log_ipt1'])?>
 
-	<?=$form->field($model, 'password')->passwordInput(['class'=>'ipt','id'=>'log_ipt2'])?>
+<?=$form->field($model, 'password')->passwordInput(['class' => 'ipt', 'id' => 'log_ipt2'])?>
 
-	<?=$form->field($model, 'rememberMe')->checkbox([
+<?=$form->field($model, 'rememberMe')->checkbox([
 		'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
 	])?>
 
-	<?=Html::submitButton('登录', ['class' => 'ipt ipt_btn', 'name' => 'login-button','id'=>'log_ipt3'])?>
+<?=Html::submitButton('登录', ['class' => 'ipt ipt_btn', 'name' => 'login-button', 'id' => 'log_ipt3'])?>
 
 
-	<?php ActiveForm::end();?>
+<?php ActiveForm::end();?>
 </section>
 <p class="ipt_p">©2015-2018 工程大易班软件开发部, All Rights Reserved.　　本站发布的所有内容，未经许可，不得转载，详见《知识产权声明》。</p>
 <script>

@@ -30,7 +30,7 @@
 	<section class="col-xs-12 home_first">
 		<div class="centerIst_btn">
 			<a class="nav_btn" onclick="getRawData()">所有动态查看</a>
-			<a class="nav_btn" onclick="getMomentTop()">置顶动态</a>
+			<a class="nav_btn" onclick="showTopMoments()">置顶动态</a>
 		</div>
 	</section>
 	<section class="col-xs-12 home_Main" id="home_Main">
@@ -46,8 +46,9 @@
 		</section>
 		<section class="col-xs-1 blockThing" id="deleteTodo"></section>
 	</section>
-	<section class="setting">
-		<div class="setting_block"><p class="setting_p">周倩叶</p></div>
+	<section class="coverSetting setting_show" onclick="showThing()" id="coverSetting"></section>
+	<section class="setting setting_show" id="setting">
+		<div class="setting_block"><p class="setting_p" id="getname"></p></div>
 		<div class="setting_underline"></div>
 		<input type="password" class="setting_textfield" placeholder="新密码" id="Up_password">
 		<div class="setting_block" onclick="updatePassword()"><p class="setting_p">更新密码</p></div>
@@ -61,12 +62,14 @@
 	<script>
 		function getRawData() {
 			$("#today_Show").empty();
+			$("#getname").empty();
 			document.getElementById('today_Show').innerHTML = '<br><p class="TS_head">动态</p><hr><div class="today_Show_miss" id="today_Show_miss"></div>';
 			var height = document.body.clientHeight -110;
 			document.getElementById('home_Main').style.height =  height+'px';
 			$.getJSON('index.php?r=json/momentsshow', function(data, textStatus) {
 				if (textStatus == 'success') {
 					document.getElementById('today_Show_miss').innerHTML = data.msg;
+					$("#getname").append(data.name);
 				} else {
 					alert("系统错误" + textStatus);
 				}

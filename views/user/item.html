@@ -91,8 +91,9 @@
 			<button class="detailmodel_btn" id="">修改</button>
 		</div> -->
 	</section>
-	<section class="setting">
-		<div class="setting_block"><p class="setting_p">周倩叶</p></div>
+	<section class="coverSetting setting_show" onclick="showThing()" id="coverSetting"></section>
+	<section class="setting setting_show" id="setting">
+		<div class="setting_block"><p class="setting_p" id="getname"></p></div>
 		<div class="setting_underline"></div>
 		<input type="password" class="setting_textfield" placeholder="新密码" id="Up_password">
 		<div class="setting_block" onclick="updatePassword()"><p class="setting_p">更新密码</p></div>
@@ -128,18 +129,23 @@
 		function getOwnItem() {
 			$.getJSON('index.php?r=json/getitems', function(data, textStatus) {
 				if (textStatus == 'success') {
+					$("#getname").empty();
 					if (data.success) {
 						$("#item_showbox").empty();
 						if (data.msg1 == 1) {
 							var msg = data.msg + '<div class="item_show" onclick="createItem()" style="background-color: #EEE;"><br><br><img src="images/addicon.png" class="item_Addicon"></div>';
 						} else {
+							$("#getname").empty();
 							var msg = data.msg;
 						}
 						$("#item_showbox").append(msg);
+						$("#getname").append(data.name);
 					} else {
 						if (data.msg1 == 1) {
-							$("#item_showbox").append('<div class="item_show" onclick="createItem()" style="background-color: #EEE;"><br><br><img src="images/addicon.png" class="item_Addicon"></div>');
+							var msg = '<div class="item_show" onclick="createItem()" style="background-color: #EEE;"><br><br><img src="images/addicon.png" class="item_Addicon"></div>';
 						}
+						$("#item_showbox").append(msg);
+						$("#getname").append(data.name);
 					}
 				} else {
 					alert("系统错误" + textStatus);

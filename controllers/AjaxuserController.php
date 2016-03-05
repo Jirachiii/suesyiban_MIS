@@ -5,6 +5,7 @@ use app\models\Files;
 use app\models\Itemdetails;
 use app\models\Itempersons;
 use app\models\Items;
+use app\models\Moments;
 use app\models\OwnTodos;
 use app\models\UserTb;
 use YII;
@@ -522,7 +523,23 @@ class AjaxuserController extends Controller {
 			echo '{"success":false}';
 		}
 	}
-
+	//置顶动态获取
+	public function actionGettopmoment() {
+		$moments = new Moments();
+		$usertb  = new UserTb();
+		$result  = $moments->getAllTopMoment();
+		$msg     = '';
+		$name    = '';
+		foreach ($result as $value) {
+			$name = $usertb->getName($value['XH_ID']);
+			$msg .= '<div class=\"moment_Sty\"><div class=\"moment_Owner\"><p class=\"centerMomentName\">'.$name.'</p></div><div class=\"moment_Content\"><p class=\"centerMomentName\">'.$value['Content'].'</p></div><div class=\"moment_Date\"><p class=\"centerMomentName\">'.$value['Mdate'].'</p></div></div>';
+		}
+		if ($msg) {
+			echo '{"success" :true , "msg":"'.$msg.'"}';
+		} else {
+			echo '{"success" :false , "msg":"没有置顶动态"}';
+		}
+	}
 	//库存管理
 	/**
 	 * 库存分页

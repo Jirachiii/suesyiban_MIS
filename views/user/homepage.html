@@ -61,10 +61,10 @@
 		</section>
 		<section class="col-xs-1 blockThing" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" id="deleteTodo">
 		</section>
-		<section class="cover"></section>
 	</section>
-	<section class="setting">
-		<div class="setting_block"><p class="setting_p">周倩叶</p></div>
+	<section class="coverSetting setting_show" onclick="showThing()" id="coverSetting"></section>
+	<section class="setting setting_show" id="setting">
+		<div class="setting_block"><p class="setting_p" id="getname"></p></div>
 		<div class="setting_underline"></div>
 		<input type="password" class="setting_textfield" placeholder="新密码" id="Up_password">
 		<div class="setting_block" onclick="updatePassword()"><p class="setting_p">更新密码</p></div>
@@ -114,6 +114,7 @@
 			$("#today_Show").empty();
 			$("#deleteTodo").empty();
 			$("#completeTodo").empty();
+			$("#getname").empty();
 			document.getElementById('today_Show').innerHTML = '<br><p class="TS_head">今天的任务</p><hr><div class="today_Show_miss" id="today_Show_miss">';
 			document.getElementById('deleteTodo').innerHTML = '<span class="glyphicon glyphicon-check trash_style" id="deleteIcon" aria-hidden="true"></span>';
 			document.getElementById('completeTodo').innerHTML = '<span class="glyphicon glyphicon-trash trash_style" id="completeIcon" aria-hidden="true"></span>';
@@ -122,6 +123,7 @@
 			$.getJSON('index.php?r=json/owntodos', function(data, textStatus) {
 				if (textStatus == 'success') {
 					document.getElementById('today_Show_miss').innerHTML = data.msg;
+					$("#getname").append(data.name);
 				} else {
 					alert("系统错误" + textStatus);
 				}
