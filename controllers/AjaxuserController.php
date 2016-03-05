@@ -403,9 +403,11 @@ class AjaxuserController extends Controller {
 	public function actionDetailshow() {
 		$id         = $_GET['id'];
 		$itemdetail = new Itemdetails();
+		$item       = new Items();
+		$XH_ID      = $item->getClassmark($id);
 		$result     = $itemdetail->detailAll($id);
 		if ($result) {
-			$result = $this->itemDetailGetItWithOrder($result);
+			$result = $this->itemDetailGetItWithOrder($result, $XH_ID);
 			echo $result;
 		} else {
 			echo '{"success":true, "msg1":"没有任务"}';
@@ -431,12 +433,17 @@ class AjaxuserController extends Controller {
 		}
 	}
 	//项目细节排序
-	private function itemDetailGetItWithOrder($query) {
+	private function itemDetailGetItWithOrder($query, $XH_ID) {
 		$rightNowUserId = Yii::$app->user->identity->XH_ID;
-		$usertb         = new UserTb();
-		$status         = $usertb->getAuthority($rightNowUserId);
-		$Lev1           = '';
-		$Lev2           = '';
+		if ($XH_ID == $rightNowUserId) {
+			$missionSt = 1;
+		} else {
+			$missionSt = 2;
+		}
+		$usertb = new UserTb();
+		$status = $usertb->getAuthority($rightNowUserId);
+		$Lev1   = '';
+		$Lev2   = '';
 		foreach ($query as $value) {
 			switch ($value['status']) {
 				case '1':
@@ -447,7 +454,7 @@ class AjaxuserController extends Controller {
 					break;
 			}
 		}
-		return '{"success":true, "authority":"'.$status.'","msg1":"'.$Lev1.'", "msg2":"'.$Lev2.'","msg3":"'.$query[0]['item_id'].'"}';
+		return '{"success":true, "authority":"'.$status.'","msg1":"'.$Lev1.'", "msg2":"'.$Lev2.'","msg3":"'.$query[0]['item_id'].'","missionSt":"'.$missionSt.'"}';
 	}
 	//显示细节并且渲染
 	public function actionDetaildetshow() {
@@ -464,10 +471,8 @@ class AjaxuserController extends Controller {
 	}
 
 	public function actionInsertitemperson() {
-		// $arr['XH_ID']   = $_POST['person'];
-		// $arr['Item_Id'] = $_POST['Item_Id'];
-		$arr['XH_ID']   = '031513216';
-		$arr['Item_Id'] = '1';
+		$arr['XH_ID']   = $_POST['person'];
+		$arr['Item_Id'] = $_POST['Item_Id'];
 		$itemperson     = new Itempersons();
 		$result         = $itemperson->insertperson($arr);
 		if ($result) {

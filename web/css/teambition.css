@@ -292,15 +292,10 @@ nav ,.sec_nav{
 	background-color: #AAA;
 }
 .detail_User {
-	
+	background-color: #ABCDEF;
 	width: 100%;
-	height: 30px;
+	height: 45px !important;
 	-webkit-transition:all .2s ease-in-out;	
-}
-.detail_User:hover {
-}
-.detail_User:focus {
-
 }
 
 .setting {

@@ -178,8 +178,12 @@ class JsonController extends Controller {
 		$status         = $usertb->getAuthority($rightNowUserId);
 		$name           = $usertb->getName($rightNowUserId);
 		$result         = $item->searchAllItems(2);
-		if ($result) {
+		$result2        = $item->searchOtherItems(2);
+		if ($result2 || $result) {
 			foreach ($result as $value) {
+				$msg .= '<div onclick=\"detailShow('.$value['Item_Id'].')\" id=\"'.$value['Item_Id'].'\" class=\"item_show\" style=\"background-image: url(images/itemImg.jpeg);\"><h3 class=\"item_showtit\">'.$value['Item_Name'].'</h3></div>';
+			}
+			foreach ($result2 as $value) {
 				$msg .= '<div onclick=\"detailShow('.$value['Item_Id'].')\" id=\"'.$value['Item_Id'].'\" class=\"item_show\" style=\"background-image: url(images/itemImg.jpeg);\"><h3 class=\"item_showtit\">'.$value['Item_Name'].'</h3></div>';
 			}
 			echo '{"success":true,"msg": "'.$msg.'","msg1":"'.$status.'","name":"'.$name.'"}';
