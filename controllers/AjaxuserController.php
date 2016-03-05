@@ -5,6 +5,7 @@ use app\models\Files;
 use app\models\Itemdetails;
 use app\models\Itempersons;
 use app\models\Items;
+use app\models\Moments;
 use app\models\OwnTodos;
 use app\models\UserTb;
 use YII;
@@ -402,9 +403,11 @@ class AjaxuserController extends Controller {
 	public function actionDetailshow() {
 		$id         = $_GET['id'];
 		$itemdetail = new Itemdetails();
+		$item       = new Items();
+		$XH_ID      = $item->getClassmark($id);
 		$result     = $itemdetail->detailAll($id);
 		if ($result) {
-			$result = $this->itemDetailGetItWithOrder($result);
+			$result = $this->itemDetailGetItWithOrder($result, $XH_ID);
 			echo $result;
 		} else {
 			echo '{"success":true, "msg1":"没有任务"}';
@@ -412,16 +415,16 @@ class AjaxuserController extends Controller {
 	}
 	//显示项目任务的一个细节（附件之类）
 	public function actionOnedetailshow() {
-		$id         = $_GET['id'];
-		$itemdetail = new Itemdetails();
-		$result     = $itemdetail->detailDet($id);
+		$id             = $_GET['id'];
+		$itemdetail     = new Itemdetails();
+		$result         = $itemdetail->detailDet($id);
 		$rightNowUserId = Yii::$app->user->identity->XH_ID;
 		$usertb         = new UserTb();
 		$status         = $usertb->getAuthority($rightNowUserId);
 		if ($result) {
-			if($status==1){
+			if ($status == 1) {
 				$msg = '<span onclick=\"closeModel()\" class=\"glyphicon glyphicon-remove delete_span\"></span><div class=\"\" id=\"detailmodel_Main\"><textarea name=\"\" id=\"detail_text\" cols=\"30\" rows=\"3\" class=\"detail_Maintext\">'.$result[0]['discribe'].'</textarea><button class=\"detailmodel_btn\" id=\"\" onclick=\"addInTodo()\">添加入今日任务</button><button onclick=\"changeDetail('.$result[0]['ItemDetail_Id'].')\" class=\"detailmodel_btn\" id=\"\">修改</button></div>';
-			}else{
+			} else {
 				$msg = '<span onclick=\"closeModel()\" class=\"glyphicon glyphicon-remove delete_span\"></span><div class=\"\" id=\"detailmodel_Main\"><p name=\"\" id=\"detail_text\" cols=\"30\" rows=\"3\" class=\"detail_Maintext\">'.$result[0]['discribe'].'</p><br><button class=\"detailmodel_btn \" id=\"\" onclick=\"addInTodo()\">添加入今日任务</button>';
 			}
 			echo '{"success":true, "msg":"'.$msg.'"}';
@@ -430,12 +433,17 @@ class AjaxuserController extends Controller {
 		}
 	}
 	//项目细节排序
-	private function itemDetailGetItWithOrder($query) {
+	private function itemDetailGetItWithOrder($query, $XH_ID) {
 		$rightNowUserId = Yii::$app->user->identity->XH_ID;
-		$usertb         = new UserTb();
-		$status         = $usertb->getAuthority($rightNowUserId);
-		$Lev1 = '';
-		$Lev2 = '';
+		if ($XH_ID == $rightNowUserId) {
+			$missionSt = 1;
+		} else {
+			$missionSt = 2;
+		}
+		$usertb = new UserTb();
+		$status = $usertb->getAuthority($rightNowUserId);
+		$Lev1   = '';
+		$Lev2   = '';
 		foreach ($query as $value) {
 			switch ($value['status']) {
 				case '1':
@@ -446,7 +454,7 @@ class AjaxuserController extends Controller {
 					break;
 			}
 		}
-		return '{"success":true, "authority":"'.$status.'","msg1":"'.$Lev1.'", "msg2":"'.$Lev2.'","msg3":"'.$query[0]['item_id'].'"}';
+		return '{"success":true, "authority":"'.$status.'","msg1":"'.$Lev1.'", "msg2":"'.$Lev2.'","msg3":"'.$query[0]['item_id'].'","missionSt":"'.$missionSt.'"}';
 	}
 	//显示细节并且渲染
 	public function actionDetaildetshow() {
@@ -463,10 +471,8 @@ class AjaxuserController extends Controller {
 	}
 
 	public function actionInsertitemperson() {
-		// $arr['XH_ID']   = $_POST['person'];
-		// $arr['Item_Id'] = $_POST['Item_Id'];
-		$arr['XH_ID']   = '031513216';
-		$arr['Item_Id'] = '1';
+		$arr['XH_ID']   = $_POST['person'];
+		$arr['Item_Id'] = $_POST['Item_Id'];
 		$itemperson     = new Itempersons();
 		$result         = $itemperson->insertperson($arr);
 		if ($result) {
@@ -531,10 +537,29 @@ class AjaxuserController extends Controller {
 			echo '{"success":false}';
 		}
 	}
+
    //item跳转管理员界面
 	function actionHrefadmin(){
 		$status   = Yii::$app->user->identity->status;
 		return $status;
+}
+	//置顶动态获取
+	public function actionGettopmoment() {
+		$moments = new Moments();
+		$usertb  = new UserTb();
+		$result  = $moments->getAllTopMoment();
+		$msg     = '';
+		$name    = '';
+		foreach ($result as $value) {
+			$name = $usertb->getName($value['XH_ID']);
+			$msg .= '<div class=\"moment_Sty\"><div class=\"moment_Owner\"><p class=\"centerMomentName\">'.$name.'</p></div><div class=\"moment_Content\"><p class=\"centerMomentName\">'.$value['Content'].'</p></div><div class=\"moment_Date\"><p class=\"centerMomentName\">'.$value['Mdate'].'</p></div></div>';
+		}
+		if ($msg) {
+			echo '{"success" :true , "msg":"'.$msg.'"}';
+		} else {
+			echo '{"success" :false , "msg":"没有置顶动态"}';
+		}
+
 	}
 	//库存管理
 	/**

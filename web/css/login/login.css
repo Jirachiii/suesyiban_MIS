@@ -44,6 +44,9 @@
 	transition-duration:.2s, 1.6s , .2s;
 	transition-timing-function:ease-in-out, ease-in-out, ease-in-out;
 }
+.handlecenter {
+	text-align: center;
+}
 .ipt_btn {
 	background-color: #696;
 	border: 0px !important;

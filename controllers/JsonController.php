@@ -131,13 +131,16 @@ class JsonController extends Controller {
 	}
 
 	public function actionOwntodos() {
-		$owntodos = new ownTodos();
-		$query    = $owntodos->findTodayMission();
+		$owntodos       = new ownTodos();
+		$query          = $owntodos->findTodayMission();
+		$rightNowUserId = Yii::$app->user->identity->XH_ID;
+		$usertb         = new UserTb();
+		$name           = $usertb->getName($rightNowUserId);
 		if ($query) {
 			$msg = $this->getItWithOrder($query);
-			echo '{"success":true,"msg":"'.$msg.'"}';
+			echo '{"success":true,"msg":"'.$msg.'","name":"'.$name.'"}';
 		} else {
-			echo '{"success":false,"msg":"没有任务"}';
+			echo '{"success":false,"msg":"没有任务","name":"'.$name.'"}';
 		}
 	}
 
@@ -173,14 +176,19 @@ class JsonController extends Controller {
 		$rightNowUserId = Yii::$app->user->identity->XH_ID;
 		$usertb         = new UserTb();
 		$status         = $usertb->getAuthority($rightNowUserId);
+		$name           = $usertb->getName($rightNowUserId);
 		$result         = $item->searchAllItems(2);
-		if ($result) {
+		$result2        = $item->searchOtherItems(2);
+		if ($result2 || $result) {
 			foreach ($result as $value) {
 				$msg .= '<div onclick=\"detailShow('.$value['Item_Id'].')\" id=\"'.$value['Item_Id'].'\" class=\"item_show\" style=\"background-image: url(images/itemImg.jpeg);\"><h3 class=\"item_showtit\">'.$value['Item_Name'].'</h3></div>';
 			}
-			echo '{"success":true,"msg": "'.$msg.'","msg1":"'.$status.'"}';
+			foreach ($result2 as $value) {
+				$msg .= '<div onclick=\"detailShow('.$value['Item_Id'].')\" id=\"'.$value['Item_Id'].'\" class=\"item_show\" style=\"background-image: url(images/itemImg.jpeg);\"><h3 class=\"item_showtit\">'.$value['Item_Name'].'</h3></div>';
+			}
+			echo '{"success":true,"msg": "'.$msg.'","msg1":"'.$status.'","name":"'.$name.'"}';
 		} else {
-			echo '{"success":false}';
+			echo '{"success":false,"msg1":"'.$status.'","name":"'.$name.'"}';
 		}
 	}
 	//管理员审核项目
@@ -219,6 +227,7 @@ class JsonController extends Controller {
 	}
 	//
 	public function actionMomentsshow() {
+
 		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
 		$rightNowUserName = Yii::$app->user->identity->Name;
 		$moments = new Moments();
@@ -231,6 +240,7 @@ class JsonController extends Controller {
 			echo '{"success" :true , "msg":"'.$msg.'","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
 		} else {
 			echo '{"success" :false , "msg":"没有动态","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
+
 		}
 	}
 	//这下面都不属于这边，以后更换位置
