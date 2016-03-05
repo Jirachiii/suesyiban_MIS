@@ -65,7 +65,7 @@ class Items extends \yii\db\ActiveRecord {
 
 	public function searchAllItems($status) {
 		$XH_ID     = \Yii::$app->user->identity->XH_ID;
-		$sql       = 'SELECT Item_Id,Item_Name FROM items WHERE XH_ID = \''.$XH_ID.'\' and Status = '.$status;
+		$sql       = 'SELECT Item_Id,Item_Name FROM items WHERE Status = '.$status;
 //		$Dbfactory = DbFactory::getinstance();
 //		$query     = $Dbfactory->doQuery($sql);
 //		return $Dbfactory->findAll($query);
