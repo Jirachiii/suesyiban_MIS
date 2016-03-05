@@ -13,10 +13,14 @@ function searchOrder(){
             success:function(data){
                 if (data.success) {
                     if (data.anpai == '') {
+                        $("#getname").empty();
+                        $("#getname").append(data.name);
                         $("#first_arr").html("暂无安排");
                         $("#second_arr").html("暂无安排");
                         $("#third_arr").html("暂无安排");
                     } else {
+                        $("#getname").empty();
+                        $("#getname").append(data.name);
                         $("#first_arr").html("");
                         $("#second_arr").html("");
                         $("#third_arr").html("");
@@ -51,6 +55,8 @@ function searchOrder(){
                     };
                 } else {
                     document.getElementById('zhibanshow').innerHTML = "出现错误：" + data.msg;
+                    $("#getname").empty();
+                    $("#getname").append(data.name);
                 }
             },
             error:function(data){

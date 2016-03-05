@@ -42,8 +42,13 @@ function detailShow(id){
 			dataType: "json",
 			success: function(data){
 				if (data.success) {
+					$("#item_option_1").remove();
 					$('#Detail_Doing').empty();
 					$('#Detail_Done').empty();
+					if (data.missionSt == 1) {
+						var itemMessage = '<section class="det_block" id="item_option_1"><h3 class="det_h3">项目设置</h3><br><div class="Detail_sty" id="Detail_setting"><div class="detail_add" onclick="getDoneItem()"><p class="Thedetail_p detailadd_p">归档此项目</p></div> <br><div class="detail_add" onclick="deleteItem()"><p class="Thedetail_p detailadd_p">删除项目</p></div> <br><div><input type="text" class="detail_User setting_textfield" placeholder="用户" id="insertUser"><br><br><div class="detail_add" onclick="insertUser()"><p class="Thedetail_p detailadd_p">插入</p></div></div></div></section>';
+						$("#item_option_2").before(itemMessage);
+					}
 					var msg = '<div id="item_detail_add" class="detail_add" onclick="AddDetail('+id+')"><p class="Thedetail_p detailadd_p" >添加...</p></div>';
 					$('#Detail_Doing').append(msg);
 					$('#Detail_Doing').append(data.msg1);
@@ -54,11 +59,10 @@ function detailShow(id){
 				}
 				if(data.authority!=1){
 					$("#item_option_1").hide();
-					$("#item_option_3").hide();
+					// $("#item_option_3").hide();
 					$("#item_detail_add").hide();
 				}
 				document.getElementById('detailShow').style.top = '50px';
-
 			},
 
 			error: function(jqXHR){
@@ -494,18 +498,77 @@ function updatePassword() {
 		},
 	});
 }
+
 //跳转管理员
-function hrefadmin(){
+function hrefadmin() {
 	$.ajax({
 		type: "POST",
 		url: "index.php?r=ajaxuser/hrefadmin",
 		dataType: "json",
 
-		success: function(data){
-			if(data!=1){
+		success: function (data) {
+			if (data != 1) {
 				alert("您没有权限")
-			}else{
-				location.href="?r=admin/index"
+			} else {
+				location.href = "?r=admin/index"
+			}
+		},
+		error: function (jqXHR) {
+			alert("发生错误：" + jqXHR.status);
+			window.location.reload();
+		},
+	});
+}
+//获取名字
+function getName() {
+	$.ajax({
+		type: "POST",
+		url: "index.php?r=ajaxuser/getname",
+		dataType: "json",
+		success: function(data){
+			if (data.success) {
+				alert('修改成功');
+			} else {
+				alert('修改失败');
+			}
+		},
+		error: function(jqXHR){
+			alert("发生错误：" + jqXHR.status);
+			window.location.reload();
+		},
+	});
+}
+var showItOrNot = 0;
+//显示用户状态栏
+function showThing() {
+	if (showItOrNot == 0) {
+		$("#setting").removeClass("setting_show");
+		$("#setting").addClass("setting_hide");
+		$("#coverSetting").removeClass("setting_show");
+		$("#coverSetting").addClass("setting_hide");
+		showItOrNot = 1;
+	} else {
+		$("#setting").removeClass("setting_hide");
+		$("#setting").addClass("setting_show");
+		$("#coverSetting").removeClass("setting_hide");
+		$("#coverSetting").addClass("setting_show");
+		showItOrNot = 0;
+	}
+
+}
+//显示置顶动态
+function showTopMoments() {
+	$("#today_Show").empty();
+	$.ajax({
+		type: "POST",
+		url: "index.php?r=ajaxuser/gettopmoment",
+		dataType: "json",
+		success: function(data){
+			if (data.success) {
+				document.getElementById('today_Show').innerHTML = '<br><p class="TS_head">置顶动态</p><hr><div class="today_Show_miss" id="today_Show_miss"></div>';
+				document.getElementById('today_Show_miss').innerHTML = data.msg;
+			} else {
+				alert('获取失败');
 			}
 		},
 		error: function(jqXHR){

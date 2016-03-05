@@ -52,6 +52,13 @@ class Items extends \yii\db\ActiveRecord {
 			'Date'       => 'Date',
 		];
 	}
+	//取出项目创始人
+	public function getClassmark($id) {
+		$Dbfactory = DbFactory::getinstance();
+		$id        = $Dbfactory->dbSqlProtected($id);
+		$XH_ID     = $Dbfactory->findOnlyOne('XH_ID', 'items', 'Item_Id', $id);
+		return $XH_ID;
+	}
 	//删除
 	public function deleteItem($id) {
 		$Dbfactory = DbFactory::getinstance();
@@ -62,17 +69,24 @@ class Items extends \yii\db\ActiveRecord {
 		$Dbfactory = DbFactory::getinstance();
 		return $Dbfactory->insertIntoDb('items', $arr);
 	}
-
+	//管理员获取自己创建的所有项目
 	public function searchAllItems($status) {
-		$XH_ID     = \Yii::$app->user->identity->XH_ID;
-		$sql       = 'SELECT Item_Id,Item_Name FROM items WHERE Status = '.$status;
-//		$Dbfactory = DbFactory::getinstance();
-//		$query     = $Dbfactory->doQuery($sql);
-//		return $Dbfactory->findAll($query);
-		$result=Yii::$app->db->createCommand($sql)->queryAll();
+		$XH_ID = \Yii::$app->user->identity->XH_ID;
+		$sql   = 'SELECT Item_Id,Item_Name FROM items WHERE Status = '.$status.' AND XH_ID = \''.$XH_ID.'\'';
+		//		$Dbfactory = DbFactory::getinstance();
+		//		$query     = $Dbfactory->doQuery($sql);
+		//		return $Dbfactory->findAll($query);
+		$result = Yii::$app->db->createCommand($sql)->queryAll();
 		return $result;
 	}
-	//
+	//获取别的管理员添加的项目
+	public function searchOtherItems($status) {
+		$XH_ID  = \Yii::$app->user->identity->XH_ID;
+		$sql    = 'SELECT items.Item_Id,items.Item_Name FROM items WHERE Status = '.$status.' AND Item_Id IN (SELECT Item_Id FROM itempersons WHERE XH_ID =\''.$XH_ID.'\')';
+		$result = Yii::$app->db->createCommand($sql)->queryAll();
+		return $result;
+	}
+	//用户获取所有项目细节
 	public function searchItemsDetail($Item_Id) {
 		$sql       = 'SELECT * FROM items WHERE  Item_Id = '.$Item_Id;
 		$Dbfactory = DbFactory::getinstance();

@@ -1,11 +1,10 @@
 <?php
 namespace app\controllers;
-use app\models\Kb;
-use app\models\Kbmember;
+use app\models\UserTb;
 use app\models\Zhibantable;
-use yii\web\Controller;
-use yii\db\Query;
 use yii;
+
+use yii\web\Controller;
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:POST,GET');
 header('Access-Control-Allow-Credentials:true');
@@ -17,20 +16,21 @@ header("Content-Type: application/json;charset=utf-8");
  */
 
 class EmptyclassController extends Controller {
-    public $enableCsrfValidation = false;
-    /**
-     * 更新成员们的课表,从kb存到memberkb
-     */
-    public function actionUpdatememberkb(){
-        $updatememberkb=new Zhibantable();
-        $result=$updatememberkb->updatememberkb();
-        if($result==true){
-            $mes = '{"ifsuccess":true,"msg":"更新成功"}';
-        }else{
-            $mes = '{"ifsuccess":false，"msg":"更新失败：没有成员"}';
-        }
-        echo $mes;
-    }
+	public $enableCsrfValidation = false;
+	/**
+	 * 更新成员们的课表,从kb存到memberkb
+	 */
+	public function actionUpdatememberkb() {
+		$updatememberkb = new Zhibantable();
+		$result         = $updatememberkb->updatememberkb();
+		if ($result == true) {
+			$mes = '{"ifsuccess":true,"msg":"更新成功"}';
+		} else {
+			$mes = '{"ifsuccess":false，"msg":"更新失败：没有成员"}';
+		}
+		echo $mes;
+	}
+
 
     /**
      * 查询一周的安排（左边的视图）
@@ -76,75 +76,79 @@ class EmptyclassController extends Controller {
         echo $content;
     }
 
-    /**
-     * 安排排班，插入数据库
-     */
-    public function actionManagest(){
-        $request=yii::$app->request;
-        $stname=$request->post('stname');
-        $xh=$request->post('xh');
-        $whichweek=$request->post('whichweek');
-        $weekday=$request->post('weekday');
-        $zhibantime=$request->post("zhibantime");
-        if(empty($stname)||empty($xh)||empty($whichweek)||empty($weekday)||empty($zhibantime)){
-            echo '{"success":false,"msg":"安排值班失败！"}';
-        }else{
-            $bb=new Zhibantable();
-            $year_xq=$bb->xuenianxueqi();
-            $result=$bb->managest($stname,$xh,$whichweek,$weekday,$zhibantime,$year_xq);
-            echo $result;
-        }
 
-    }
 
-    /**
-     * 删除安排
-     */
-    public function actionDelanpai(){
-        $request=YII::$app->request;
-        $anpai_id=$request->post('anpai_id');
-        $zhibantable=new Zhibantable();
-        $result=$zhibantable->delanpai($anpai_id);
-        echo $result;
+	/**
+	 * 安排排班，插入数据库
+	 */
+	public function actionManagest() {
+		$request    = yii::$app->request;
+		$stname     = $request->post('stname');
+		$xh         = $request->post('xh');
+		$whichweek  = $request->post('whichweek');
+		$weekday    = $request->post('weekday');
+		$zhibantime = $request->post("zhibantime");
+		if (empty($stname) || empty($xh) || empty($whichweek) || empty($weekday) || empty($zhibantime)) {
+			echo '{"success":false,"msg":"安排值班失败！"}';
+		} else {
+			$bb      = new Zhibantable();
+			$year_xq = $bb->xuenianxueqi();
+			$result  = $bb->managest($stname, $xh, $whichweek, $weekday, $zhibantime, $year_xq);
+			echo $result;
+		}
 
-    }
+	}
 
-    /**
-     * 获取学生姓名学号（人工排班）
-     * @return array|string
-     */
-    public function actionGetnamemanual(){
-        $getname=new Zhibantable();
-        $content=$getname->genamemanual();
-        return $content;
-    }
+	/**
+	 * 删除安排
+	 */
+	public function actionDelanpai() {
+		$request     = YII::$app->request;
+		$anpai_id    = $request->post('anpai_id');
+		$zhibantable = new Zhibantable();
+		$result      = $zhibantable->delanpai($anpai_id);
+		echo $result;
 
-    /**
-     * 人工排班插入数据库
-     */
-    public function actionInsertmanual(){
-        $request=yii::$app->request;
-        $stname=$request->post('stname');
-        $xh=$request->post('xh');
-        $whichweek=$request->post('whichweek');
-        $weekday=$request->post('weekday');
-        $zhibantime=$request->post("zhibantime");
-        $insertmanual=new Zhibantable();
-        $result=$insertmanual->insertanpaimanual($stname,$xh,$whichweek,$weekday,$zhibantime);
-        echo $result;
-    }
+	}
 
-    public function actionSearchorder(){
-        $nowuser    = \Yii::$app->user->identity->XH_ID;
-        $request=Yii::$app->request;
-        $session=Yii::$app->session;
-        $whichweek=$request->get('whichweek_user');
-        $weekday=$request->get('weekday_user');
-        $session['whichweek_2']=$whichweek;
-        $session['weekday_2']=$weekday;
-        $anpaitable=new Zhibantable();
-        $year_xq=$anpaitable->xuenianxueqi();
-        $content=$anpaitable->findanpaidata_2($session['whichweek_2'],$session['weekday_2'],$year_xq,$nowuser);
-        echo '{"success":true,"anpai":'.json_encode($content,JSON_UNESCAPED_UNICODE).'}';
-    }
+	/**
+	 * 获取学生姓名学号（人工排班）
+	 * @return array|string
+	 */
+	public function actionGetnamemanual() {
+		$getname = new Zhibantable();
+		$content = $getname->genamemanual();
+		return $content;
+	}
+
+	/**
+	 * 人工排班插入数据库
+	 */
+	public function actionInsertmanual() {
+		$request      = yii::$app->request;
+		$stname       = $request->post('stname');
+		$xh           = $request->post('xh');
+		$whichweek    = $request->post('whichweek');
+		$weekday      = $request->post('weekday');
+		$zhibantime   = $request->post("zhibantime");
+		$insertmanual = new Zhibantable();
+		$result       = $insertmanual->insertanpaimanual($stname, $xh, $whichweek, $weekday, $zhibantime);
+		echo $result;
+	}
+
+	public function actionSearchorder() {
+		$nowuser                = \Yii::$app->user->identity->XH_ID;
+		$usertb                 = new UserTb();
+		$name                   = $usertb->getName($nowuser);
+		$request                = Yii::$app->request;
+		$session                = Yii::$app->session;
+		$whichweek              = $request->get('whichweek_user');
+		$weekday                = $request->get('weekday_user');
+		$session['whichweek_2'] = $whichweek;
+		$session['weekday_2']   = $weekday;
+		$anpaitable             = new Zhibantable();
+		$year_xq                = $anpaitable->xuenianxueqi();
+		$content                = $anpaitable->findanpaidata_2($session['whichweek_2'], $session['weekday_2'], $year_xq, $nowuser);
+		echo '{"success":true,"name":"'.$name.'","anpai":'.json_encode($content, JSON_UNESCAPED_UNICODE).'}';
+	}
 }
