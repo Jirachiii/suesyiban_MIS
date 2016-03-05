@@ -12,7 +12,7 @@ use yii\web\Controller;
 class SiteController extends Controller {
 
 	public $enableCsrfValidation = false;
-	public $defaultAction        = 'index';
+	// public $defaultAction        = 'index';
 
 	public function behaviors() {
 		return [
