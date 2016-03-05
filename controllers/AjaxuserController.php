@@ -415,8 +415,15 @@ class AjaxuserController extends Controller {
 		$id         = $_GET['id'];
 		$itemdetail = new Itemdetails();
 		$result     = $itemdetail->detailDet($id);
+		$rightNowUserId = Yii::$app->user->identity->XH_ID;
+		$usertb         = new UserTb();
+		$status         = $usertb->getAuthority($rightNowUserId);
 		if ($result) {
-			$msg = '<span onclick=\"closeModel()\" class=\"glyphicon glyphicon-remove delete_span\"></span><div class=\"\" id=\"detailmodel_Main\"><textarea name=\"\" id=\"detail_text\" cols=\"30\" rows=\"3\" class=\"detail_Maintext\">'.$result[0]['discribe'].'</textarea><button class=\"detailmodel_btn\" id=\"\" onclick=\"addInTodo()\">添加入今日任务</button><button onclick=\"changeDetail('.$result[0]['ItemDetail_Id'].')\" class=\"detailmodel_btn\" id=\"\">修改</button></div>';
+			if($status==1){
+				$msg = '<span onclick=\"closeModel()\" class=\"glyphicon glyphicon-remove delete_span\"></span><div class=\"\" id=\"detailmodel_Main\"><textarea name=\"\" id=\"detail_text\" cols=\"30\" rows=\"3\" class=\"detail_Maintext\">'.$result[0]['discribe'].'</textarea><button class=\"detailmodel_btn\" id=\"\" onclick=\"addInTodo()\">添加入今日任务</button><button onclick=\"changeDetail('.$result[0]['ItemDetail_Id'].')\" class=\"detailmodel_btn\" id=\"\">修改</button></div>';
+			}else{
+				$msg = '<span onclick=\"closeModel()\" class=\"glyphicon glyphicon-remove delete_span\"></span><div class=\"\" id=\"detailmodel_Main\"><p name=\"\" id=\"detail_text\" cols=\"30\" rows=\"3\" class=\"detail_Maintext\">'.$result[0]['discribe'].'</p><br><button class=\"detailmodel_btn \" id=\"\" onclick=\"addInTodo()\">添加入今日任务</button>';
+			}
 			echo '{"success":true, "msg":"'.$msg.'"}';
 		} else {
 			echo '{"success":false,"msg":"系统错误"}';
@@ -424,6 +431,9 @@ class AjaxuserController extends Controller {
 	}
 	//项目细节排序
 	private function itemDetailGetItWithOrder($query) {
+		$rightNowUserId = Yii::$app->user->identity->XH_ID;
+		$usertb         = new UserTb();
+		$status         = $usertb->getAuthority($rightNowUserId);
 		$Lev1 = '';
 		$Lev2 = '';
 		foreach ($query as $value) {
@@ -436,7 +446,7 @@ class AjaxuserController extends Controller {
 					break;
 			}
 		}
-		return '{"success":true, "msg1":"'.$Lev1.'", "msg2":"'.$Lev2.'","msg3":"'.$query[0]['item_id'].'"}';
+		return '{"success":true, "authority":"'.$status.'","msg1":"'.$Lev1.'", "msg2":"'.$Lev2.'","msg3":"'.$query[0]['item_id'].'"}';
 	}
 	//显示细节并且渲染
 	public function actionDetaildetshow() {

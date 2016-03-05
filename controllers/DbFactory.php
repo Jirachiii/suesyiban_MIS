@@ -34,6 +34,9 @@ class DbFactory {
 		$username   = $connection->username;
 		$password   = $connection->password;
 		$con        = mysqli_connect($host, $username, $password, $dbname);
+		if(!mysqli_query($con,'set names utf8')){
+			echo mysqli_error($con);
+		}
 		if (mysqli_connect_error($con)) {
 			return "Failed to connect to database: ".mysqli_connect_error();
 		}
