@@ -193,6 +193,8 @@ class JsonController extends Controller {
 	}
 	//管理员审核项目
 	public function actionAdmingetallitems() {
+		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
+		$rightNowUserName = Yii::$app->user->identity->Name;
 		$item   = new Items();
 		$result = $item->AdminAllItems(1, 5);
 		if ($result) {
@@ -200,7 +202,7 @@ class JsonController extends Controller {
 			foreach ($result as $key => $value) {
 				$msg .= '<tr><td>'.($key+1).'</td><td>'.$this->adminStatusThatHumanCanRead($value['status']).'</td><td>'.$value['username'].'</td><td>'.$value['Item_Name'].'</td><td>'.$value['Date'].'</td><td><div class=\"Set_dele glyphicon glyphicon-ok\" onclick=\"ItemPass('.$value['Item_Id'].')\"></div>｜<div class=\"Set_dele glyphicon glyphicon-remove\" onclick=\"ItemFail('.$value['Item_Id'].')\"></div>｜<div class=\"Set_dele glyphicon glyphicon-eye-open\" onclick=\"ItemDescribe('.$value['Item_Id'].')\"></div></td></tr>';
 			}
-			echo '{"success":true,"msg":"'.$msg.'"}';
+			echo '{"success":true,"msg":"'.$msg.'","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
 		} else {
 			echo '{"success":true,"msg":"获取不到"}';
 		}
@@ -225,21 +227,20 @@ class JsonController extends Controller {
 	}
 	//
 	public function actionMomentsshow() {
-		$moments        = new Moments();
-		$result         = $moments->getPageMomentWithOrder(1, 20);
-		$msg            = '';
-		$rightNowUserId = Yii::$app->user->identity->XH_ID;
-		$usertb         = new UserTb();
-		$name           = $usertb->getName($rightNowUserId);
-		foreach ($result as $key => $value) {
-			if ($key != 0) {
-				$msg .= '<div class=\"moment_Sty\"><div class=\"moment_Owner\"><p class=\"centerMomentName\">'.$value['username'].'</p></div><div class=\"moment_Content\"><p class=\"centerMomentName\">'.$value['Content'].'</p></div><div class=\"moment_Date\"><p class=\"centerMomentName\">'.$value['Mdate'].'</p></div></div>';
-			}
+
+		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
+		$rightNowUserName = Yii::$app->user->identity->Name;
+		$moments = new Moments();
+		$result  = $moments->getPageMomentWithOrder(1, 20);
+		$msg     = '';
+		foreach ($result as $value) {
+			$msg .= '<div class=\"moment_Sty\"><div class=\"moment_Owner\"><p class=\"centerMomentName\">'.$value['username'].'</p></div><div class=\"moment_Content\"><p class=\"centerMomentName\">'.$value['Content'].'</p></div><div class=\"moment_Date\"><p class=\"centerMomentName\">'.$value['Mdate'].'</p></div></div>';
 		}
 		if ($msg) {
-			echo '{"success" :true , "msg":"'.$msg.'","name":"'.$name.'"}';
+			echo '{"success" :true , "msg":"'.$msg.'","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
 		} else {
-			echo '{"success" :false , "msg":"没有动态","name":"'.$name.'"}';
+			echo '{"success" :false , "msg":"没有动态","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
+
 		}
 	}
 	//这下面都不属于这边，以后更换位置

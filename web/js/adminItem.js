@@ -2,6 +2,7 @@ function selectAllItem() {
 	$('#userMsgShow').empty();
 	$.getJSON('index.php?r=json/admingetallitems', function(data, textStatus) {
 		if (textStatus == 'success') {
+			$("#head a").first().attr("id",data.userIdNow).html(data.userName+'<span class="caret"></span>')
 			document.getElementById('userMsgShow').innerHTML = data.msg;
 		} else {
 			alert("系统错误" + textStatus);
@@ -96,9 +97,10 @@ function ItemDescribe(itemId) {
 		},
 		success: function(data){
 			if (data.success) {
-				document.getElementById('detail_model').style.left = '50%';
-				$("#detail_model").empty();
-				$("#detail_model").append(data.msg);
+				itemDetailshow()
+				$("#item_name_1").html(data.msg[0].Item_Name)
+				$("#item_date_1").html("发布日期"+data.msg[0].Date)
+				$("#item_content_1").html(data.msg[0].Item_Intro)
 			} else {
 				alert('获取失败');
 				window.location.reload();
@@ -109,4 +111,18 @@ function ItemDescribe(itemId) {
 			window.location.reload();
 		},
 	});
+}
+//显示项目详情
+function itemDetailshow(){
+	document.getElementById("coverDiv_item_1").style.top = '0px';
+	document.getElementById("SetDiv_item_1").style.top = '5%';
+	document.getElementById("SetDiv_item_1").style.opacity = 1;
+	$("#item_name_1").val("");
+	$("#item_content_1").html("");
+}
+function hideAll_item_1 (){
+	document.getElementById("coverDiv_item_1").style.top = '-999px';
+	document.getElementById("SetDiv_item_1").style.top = '-600px';
+	document.getElementById("SetDiv_item_1").style.opacity = 0;
+
 }

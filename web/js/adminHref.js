@@ -25,3 +25,6 @@ function SignIn() {
 function MomentsMene() {
 	window.location.href='index.php?r=admin/momentsmene';
 }
+function hrefuser(){
+	window.location.href='index.php?r=user/item';
+}

@@ -13,8 +13,20 @@
 		<style>html,body {width: 100%; height: 100%;}</style>
 	</head>
 	<body>
-		<header class="Ad_head">
+		<header class="Ad_head" id="head">
 			<button class="btn btn-primary hd_downbtn" onclick="tiggle()">下拉</button>
+			<ul class="nav navbar-nav myloginfo" >
+				<li class="dropdown">
+					<a href="##" class="dropdown-toggle " data-toggle="dropdown" >
+
+					</a>
+					<ul class="dropdown-menu">
+						<li class="hrefpointet" onclick="hrefuser()">用户界面</li>
+						<li><hr></li>
+						<li><form action="index.php?r=site/logout" method="post"><input class="mylogoutbtn" type="submit" value="退出"></form></li>
+					</ul>
+				</li>
+			</ul>
 		</header>
 		<div class="col-xs-2 Ad_Lef" id="showandhide">
 			<br>
@@ -166,6 +178,7 @@
         <script src="js/adminHref.js"></script>
         <script src="js/jquery.min.js"></script>
 		<script src="js/adminEmptyclass.js"></script>
+		<script src="js/bootstrap.min.js"></script>
 		<script>
 			$(function(){
 				var week_sel=document.getElementById("whichweek")

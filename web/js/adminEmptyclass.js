@@ -135,6 +135,7 @@ function loadanpai(){
             dataType:"json",
             success:function(data){
                 if (data.success) {
+                    $("#head a").first().attr("id",data.userIdNow).html(data.userName+'<span class="caret"></span>')
                     if (data.anpai == '') {
                         $("#first_arr").html("暂无安排");
                         $("#second_arr").html("暂无安排");

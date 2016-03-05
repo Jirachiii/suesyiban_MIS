@@ -91,7 +91,7 @@ class Moments extends \yii\db\ActiveRecord {
 	}
 	//获取置顶动态
 	public function getAllTopMoment() {
-		$sql       = " SELECT moments.id,moments.XH_ID,moments.Content,moments.Mdate FROM moments INNER JOIN moment_top ON moments.id=moment_top.id";
+		$sql       = " SELECT moments.id,moments.XH_ID,moments.Content,moments.Mdate FROM moments INNER JOIN moment_top ON moments.id=moment_top.moment_id";
 		$Dbfactory = DbFactory::getinstance();
 		$Moments   = $Dbfactory->findBySql($sql);
 		return $Moments;

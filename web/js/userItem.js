@@ -498,6 +498,27 @@ function updatePassword() {
 		},
 	});
 }
+
+//跳转管理员
+function hrefadmin() {
+	$.ajax({
+		type: "POST",
+		url: "index.php?r=ajaxuser/hrefadmin",
+		dataType: "json",
+
+		success: function (data) {
+			if (data != 1) {
+				alert("您没有权限")
+			} else {
+				location.href = "?r=admin/index"
+			}
+		},
+		error: function (jqXHR) {
+			alert("发生错误：" + jqXHR.status);
+			window.location.reload();
+		},
+	});
+}
 //获取名字
 function getName() {
 	$.ajax({
@@ -547,7 +568,7 @@ function showTopMoments() {
 				document.getElementById('today_Show').innerHTML = '<br><p class="TS_head">置顶动态</p><hr><div class="today_Show_miss" id="today_Show_miss"></div>';
 				document.getElementById('today_Show_miss').innerHTML = data.msg;
 			} else {
-				alert('修改失败');
+				alert('获取失败');
 			}
 		},
 		error: function(jqXHR){

@@ -109,6 +109,8 @@ class Articles extends \yii\db\ActiveRecord {
 	 * @return array|string
 	 */
 	public  function  showarticledata($page,$numbers){
+		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
+		$rightNowUserName = Yii::$app->user->identity->Name;
 		$index=($page-1)*$numbers;
 		$result   = (new Query())
 			//			->select(['Art_Name', 'status'])
@@ -126,9 +128,9 @@ class Articles extends \yii\db\ActiveRecord {
 			return $result;
 		}
 		if(empty($result)){
-			$result = '{"success":false,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"allPage":'.$allPage.',"msg":"未找到条目"}';
+			$result = '{"success":false,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"allPage":'.$allPage.',"msg":"未找到条目","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
 		}else {
-			$result = '{"success":true,"articles":' . json_encode($result, JSON_UNESCAPED_UNICODE) . ',"allPage":' . $allPage . '}';
+			$result = '{"success":true,"articles":' . json_encode($result, JSON_UNESCAPED_UNICODE) . ',"allPage":' . $allPage . ',"userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
 		}
 		return $result;
 	}

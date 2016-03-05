@@ -31,47 +31,52 @@ class EmptyclassController extends Controller {
 		echo $mes;
 	}
 
-	/**
-	 * 查询一周的安排（左边的视图）
-	 */
-	public function actionSearchanpai() {
-		$request                = Yii::$app->request;
-		$session                = Yii::$app->session;
-		$whichweek              = $request->get('whichweek_2');
-		$weekday                = $request->get('weekday_2');
-		$session['whichweek_2'] = $whichweek;
-		$session['weekday_2']   = $weekday;
-		$anpaitable             = new Zhibantable();
-		$year_xq                = $anpaitable->xuenianxueqi();
-		$content                = $anpaitable->findanpaidata($session['whichweek_2'], $session['weekday_2'], $year_xq);
-		echo '{"success":true,"anpai":'.json_encode($content, JSON_UNESCAPED_UNICODE).'}';
-	}
-	/**
-	 * 搜索有空值班的学生(右边的视图)
-	 */
-	public function actionSearchemptyclass() {
-		$request = Yii::$app->request;
-		if (empty($request->get('whichweek')) || empty($request->get('zhibantime')) || empty($request->get('weekday'))) {
-			echo '{"success":false,"msg":"请完成筛选条件"}';
-			return;
-		}
-		$whichweek             = $request->get('whichweek');
-		$zhibantime            = $request->get('zhibantime');
-		$weekday               = $request->get('weekday');
-		$page                  = $request->get('page');
-		$aa                    = new Zhibantable();
-		$content               = $aa->getemptyst($whichweek, $weekday, $zhibantime);
-		$session               = YII::$app->session;
-		$session['whichweek']  = $whichweek;
-		$session['weekday']    = $weekday;
-		$session['zhibantime'] = $zhibantime;
-		if (!empty($content)) {
-			$content = $aa->showselectanpai($content, $whichweek, $weekday, $zhibantime, $page, 6);
-		} else {
-			$content = '{"success":false,"msg":"没有找到有空的学生"}';
-		}
-		echo $content;
-	}
+
+    /**
+     * 查询一周的安排（左边的视图）
+     */
+    public function actionSearchanpai(){
+        $request=Yii::$app->request;
+        $session=Yii::$app->session;
+        $rightNowUserId   = Yii::$app->user->identity->XH_ID;
+        $rightNowUserName = Yii::$app->user->identity->Name;
+        $whichweek=$request->get('whichweek_2');
+        $weekday=$request->get('weekday_2');
+        $session['whichweek_2']=$whichweek;
+        $session['weekday_2']=$weekday;
+        $anpaitable=new Zhibantable();
+        $year_xq=$anpaitable->xuenianxueqi();
+        $content=$anpaitable->findanpaidata($session['whichweek_2'],$session['weekday_2'],$year_xq);
+        echo '{"success":true,"anpai":'.json_encode($content,JSON_UNESCAPED_UNICODE).',"userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
+    }
+    /**
+     * 搜索有空值班的学生(右边的视图)
+     */
+    public function actionSearchemptyclass(){
+        $request=Yii::$app->request;
+        if(empty($request->get('whichweek'))||empty($request->get('zhibantime'))||empty($request->get('weekday'))){
+            echo '{"success":false,"msg":"请完成筛选条件"}';
+            return;
+        }
+        $whichweek=$request->get('whichweek');
+        $zhibantime=$request->get('zhibantime');
+        $weekday=$request->get('weekday');
+        $page=$request->get('page');
+        $aa=new Zhibantable();
+        $content=$aa->getemptyst($whichweek,$weekday,$zhibantime);
+        $session=YII::$app->session;
+        $session['whichweek']=$whichweek;
+        $session['weekday']=$weekday;
+        $session['zhibantime']=$zhibantime;
+        if(!empty($content)){
+            $content=$aa->showselectanpai($content,$whichweek,$weekday,$zhibantime,$page,6);
+        }else{
+            $content='{"success":false,"msg":"没有找到有空的学生"}';
+        }
+        echo $content;
+    }
+
+
 
 	/**
 	 * 安排排班，插入数据库
