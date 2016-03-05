@@ -65,7 +65,7 @@ class Items extends \yii\db\ActiveRecord {
 
 	public function searchAllItems($status) {
 		$XH_ID     = \Yii::$app->user->identity->XH_ID;
-		$sql       = 'SELECT Item_Id,Item_Name FROM items WHERE XH_ID = \''.$XH_ID.'\' and Status = '.$status;
+		$sql       = 'SELECT Item_Id,Item_Name FROM items WHERE Status = '.$status;
 //		$Dbfactory = DbFactory::getinstance();
 //		$query     = $Dbfactory->doQuery($sql);
 //		return $Dbfactory->findAll($query);
@@ -88,7 +88,7 @@ class Items extends \yii\db\ActiveRecord {
 	public function AdminSearchAllItems($status, $page, $number) {
 		if ($this->decideGetMomentContinue($page, $number)) {
 			$front     = ($page-1)*$number;
-			$sql       = 'SELECT XH_ID,Item_Name,Item_Intro,Date FROM items WHERE Status = '.$status.' ORDER BY Date DESC LIMIT '.$front.','.$number;
+			$sql       = 'SELECT XH_ID,Item_Name,Item_Intro,Item_Id, Date FROM items WHERE Status = '.$status.' ORDER BY Date DESC LIMIT '.$front.','.$number;
 			$Dbfactory = DbFactory::getinstance();
 			$items     = $Dbfactory->findBySql($sql);
 			$user      = new UserTb();

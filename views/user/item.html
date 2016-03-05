@@ -57,7 +57,7 @@
 	</section>
 	<section class="detailShow" id="detailShow">
 		<span onclick="closeDet()" class="glyphicon glyphicon-remove delete_span"></span>
-		<section class="det_block">
+		<section class="det_block" id="item_option_1">
 			<h3 class="det_h3">项目设置</h3><br>
 			<div class="Detail_sty" id="Detail_setting">
 				<div class="detail_add" onclick="getDoneItem()"><p class="Thedetail_p detailadd_p">归档此项目</p></div> <br>
@@ -68,7 +68,7 @@
 				</div>
 			</div>
 		</section>
-		<section class="det_block">
+		<section class="det_block" id="item_option_2">
 			<h3 class="det_h3">进行中</h3><br>
 			<div class="Detail_sty" id="Detail_Doing" ondrop="drop(event)" ondragover="allowDrop(event)">
 <!-- 				<div class="Thedetail" onclick="detailDet()" draggable="true" id="get1" ondragstart="drag(event)">
@@ -77,7 +77,7 @@
 				<div class="detail_add"><p class="Thedetail_p detailadd_p">添加...</p></div> -->
 			</div>
 		</section>
-		<section class="det_block">
+		<section class="det_block" id="item_option_3">
 			<h3 class="det_h3">已完成</h3><br>
 			<div class="Detail_sty" id="Detail_Done" ondrop="drop(event)" ondragover="allowDrop(event)">
 			</div>

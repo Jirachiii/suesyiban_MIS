@@ -209,7 +209,7 @@ class JsonController extends Controller {
 				return '待审核';
 				break;
 			case 2:
-				return '已审核';
+				return '审核通过';
 				break;
 			case 3:
 				return '已完成';

@@ -278,7 +278,8 @@ nav ,.sec_nav{
 .detailmodel_btn {
 	margin: 10px 0px;
 	border: 0px;
-	background-color: #EEE;
+	color: #EEE;
+	background-color: mediumturquoise;
 	position: relative;
 	top: 60px;
 	width: 80%;

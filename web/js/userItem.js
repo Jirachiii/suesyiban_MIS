@@ -33,7 +33,6 @@ function InsertItem() {
 //ajax显示
 function detailShow(id){
 	itemIdOnAllShow = id;
-	document.getElementById('detailShow').style.top = '50px';
 	$.ajax({
 		    type: "GET",
 			url: "index.php?r=ajaxuser/detailshow",
@@ -45,15 +44,23 @@ function detailShow(id){
 				if (data.success) {
 					$('#Detail_Doing').empty();
 					$('#Detail_Done').empty();
-					var msg = '<div class="detail_add" onclick="AddDetail('+id+')"><p class="Thedetail_p detailadd_p">添加...</p></div>';
+					var msg = '<div id="item_detail_add" class="detail_add" onclick="AddDetail('+id+')"><p class="Thedetail_p detailadd_p" >添加...</p></div>';
 					$('#Detail_Doing').append(msg);
 					$('#Detail_Doing').append(data.msg1);
 					$('#Detail_Done').append(data.msg2);
 				} else {
 					alert('获取失败');
 					window.location.reload();
-				}  
+				}
+				if(data.authority!=1){
+					$("#item_option_1").hide();
+					$("#item_option_3").hide();
+					$("#item_detail_add").hide();
+				}
+				document.getElementById('detailShow').style.top = '50px';
+
 			},
+
 			error: function(jqXHR){
 				alert("发生错误：" + jqXHR.status);
 				window.location.reload();
@@ -234,7 +241,7 @@ function detailDet(id) {
 }
 //团队任务添加进个人任务
 function addInTodo() {
-	var discribe = $("#detail_text").val();
+	var discribe = $("#detail_text").html();
 	if (discribe) {
 		$.ajax({
 		    type: "POST",
