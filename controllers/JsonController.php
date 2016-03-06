@@ -196,15 +196,22 @@ class JsonController extends Controller {
 		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
 		$rightNowUserName = Yii::$app->user->identity->Name;
 		$item   = new Items();
-		$result = $item->AdminAllItems(1, 5);
+		$nowpage=$_GET['nowpage'];
+		$allpage=$_GET['allpage'];
+		$countallpages=$item->getItempages(5);
+		if($allpage>$countallpages||$allpage<0){
+			$result='{"success":false,"msg":"查询出错","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'","allpage":"'.$countallpages.'"}';
+			return $result;
+		}
+		$result = $item->AdminAllItems($nowpage, 5);
 		if ($result) {
 			$msg = '<thead><tr><td>编号</td><td>状态</td><td>姓名</td><td>项目名</td><td>时间</td><td>通过|不通过|详细</td></tr></thead><tbody>';
 			foreach ($result as $key => $value) {
 				$msg .= '<tr><td>'.($key+1).'</td><td>'.$this->adminStatusThatHumanCanRead($value['status']).'</td><td>'.$value['username'].'</td><td>'.$value['Item_Name'].'</td><td>'.$value['Date'].'</td><td><div class=\"Set_dele glyphicon glyphicon-ok\" onclick=\"ItemPass('.$value['Item_Id'].')\"></div>｜<div class=\"Set_dele glyphicon glyphicon-remove\" onclick=\"ItemFail('.$value['Item_Id'].')\"></div>｜<div class=\"Set_dele glyphicon glyphicon-eye-open\" onclick=\"ItemDescribe('.$value['Item_Id'].')\"></div></td></tr>';
 			}
-			echo '{"success":true,"msg":"'.$msg.'","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
+			echo '{"success":true,"msg":"'.$msg.'","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'","allpage":"'.$countallpages.'"}';
 		} else {
-			echo '{"success":true,"msg":"获取不到"}';
+			echo '{"success":true,"msg":"没有项目","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'","allpage":"'.$countallpages.'"}';
 		}
 
 	}
