@@ -267,8 +267,13 @@ td {
 }
 .pageStyle_anpai{
 	position: absolute;
-	bottom: 1px;	
+	bottom: 1px;
 	right: 400px;
+}
+.pageStyle_item{
+	position: absolute;
+	bottom: 1px;
+	right: 600px;
 }
 .yema_user a{
 	margin:10px;
@@ -299,6 +304,12 @@ td {
 	font-size: 1.3em;
 	cursor:pointer;
 }
+.yema_item a{
+	 margin:10px;
+	 padding: 5px;
+	 font-size: 1.3em;
+	 cursor:pointer;
+ }
 .mylogoutbtn{
 	border: 0;
 	background: inherit;

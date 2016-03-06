@@ -61,8 +61,8 @@
 			<div class="Ad_RShow"><br>
 				<span class="Ad_btns">
 					<a class="nav_btn" onclick="selectAllItem()">所有项目</a>
-					<input class="enjoy-css" type="text" id="searchUser" placeholder="项目名" onkeydown='if(event.keyCode==13){searchUserhandle()}'>
-					<a class="nav_btn" onclick="searchUserhandle()">搜索</a>
+					<input class="enjoy-css" type="text" id="searchitem" placeholder="项目名" onkeydown='if(event.keyCode==13){searchitem()}'>
+					<a class="nav_btn" onclick="searchitem()">搜索</a>
 					<span class="myword">状态选择：</span>
 					<select name="sel_status" class="myselect" id="sel_status" onchange="selectItem()" onclick='document.getElementById("searchUser").value=""'>
 						<option value="0">显示全部</option>
@@ -77,6 +77,10 @@
 				<div class="Ad_User_Main">
 					<table id="userMsgShow" class="table table-condensed table-hover">
 					</table>
+				</div>
+				<div class="pageStyle_item">
+					<button id="item_prev" class="btn-sm btn_prev" onclick="beforePage_item()">上一页</button>
+					<button id="item_aft" class="btn-sm btn_after" onclick="afterPage_item()">下一页</button>
 				</div>
 			</div>
 		</section>
