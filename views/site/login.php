@@ -17,8 +17,6 @@ use yii\helpers\Html;
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<link rel="stylesheet" href="css/main/bootstrap.css">
 	<link rel="stylesheet" href="css/login/login.css">
-	<link rel="stylesheet" type="text/css" href="css/bootcss.css">
-	<link rel="stylesheet" href="css/login.css">
 	<title>document</title>
 	<style>
 		html,body {
@@ -28,6 +26,8 @@ use yii\helpers\Html;
 			background-size: percentage;
 			background-position: 50% 50%;
 			overflow: hidden;
+			/*background-repeat: no-repeat;*/
+			
 		}
 
 	</style>
@@ -47,7 +47,7 @@ use yii\helpers\Html;
 
 <?=$form->field($model, 'password')->passwordInput(['class' => 'ipt', 'id' => 'log_ipt2', 'placeholder' => '密码'])?>
 <!-- <?=$form->field($model, 'rememberMe')->checkbox([
-		'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
+		'template' => "<div class=\"col-lg-offset-1 col-lg-3 \">{input} {label}</div>\n<div class=\"col-lg-8 \">{error}</div>",
 	])?>-->
 
 <?=Html::submitButton('登录', ['class' => 'ipt ipt_btn', 'name' => 'login-button', 'id' => 'log_ipt3', 'placeholder' => '密码'])?>
