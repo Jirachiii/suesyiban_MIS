@@ -237,11 +237,13 @@ class JsonController extends Controller {
 
 		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
 		$rightNowUserName = Yii::$app->user->identity->Name;
-		$moments = new Moments();
-		$result  = $moments->getPageMomentWithOrder(1, 20);
-		$msg     = '';
-		foreach ($result as $value) {
-			$msg .= '<div class=\"moment_Sty\"><div class=\"moment_Owner\"><p class=\"centerMomentName\">'.$value['username'].'</p></div><div class=\"moment_Content\"><p class=\"centerMomentName\">'.$value['Content'].'</p></div><div class=\"moment_Date\"><p class=\"centerMomentName\">'.$value['Mdate'].'</p></div></div>';
+		$moments          = new Moments();
+		$result           = $moments->getPageMomentWithOrder(1, 20);
+		$msg              = '';
+		foreach ($result as $key => $value) {
+			if ($key != 0) {
+				$msg .= '<div class=\"moment_Sty\"><div class=\"moment_Owner\"><p class=\"centerMomentName\">'.$value['username'].'</p></div><div class=\"moment_Content\"><p class=\"centerMomentName\">'.$value['Content'].'</p></div><div class=\"moment_Date\"><p class=\"centerMomentName\">'.$value['Mdate'].'</p></div></div>';
+			}
 		}
 		if ($msg) {
 			echo '{"success" :true , "msg":"'.$msg.'","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
