@@ -195,8 +195,8 @@ class JsonController extends Controller {
 	public function actionAdmingetallitems() {
 		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
 		$rightNowUserName = Yii::$app->user->identity->Name;
-		$item   = new Items();
-		$result = $item->AdminAllItems(1, 5);
+		$item             = new Items();
+		$result           = $item->AdminAllItems(1, 5);
 		if ($result) {
 			$msg = '<thead><tr><td>编号</td><td>状态</td><td>姓名</td><td>项目名</td><td>时间</td><td>通过|不通过|详细</td></tr></thead><tbody>';
 			foreach ($result as $key => $value) {
@@ -230,11 +230,13 @@ class JsonController extends Controller {
 
 		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
 		$rightNowUserName = Yii::$app->user->identity->Name;
-		$moments = new Moments();
-		$result  = $moments->getPageMomentWithOrder(1, 20);
-		$msg     = '';
-		foreach ($result as $value) {
-			$msg .= '<div class=\"moment_Sty\"><div class=\"moment_Owner\"><p class=\"centerMomentName\">'.$value['username'].'</p></div><div class=\"moment_Content\"><p class=\"centerMomentName\">'.$value['Content'].'</p></div><div class=\"moment_Date\"><p class=\"centerMomentName\">'.$value['Mdate'].'</p></div></div>';
+		$moments          = new Moments();
+		$result           = $moments->getPageMomentWithOrder(1, 20);
+		$msg              = '';
+		foreach ($result as $key => $value) {
+			if ($key != 0) {
+				$msg .= '<div class=\"moment_Sty\"><div class=\"moment_Owner\"><p class=\"centerMomentName\">'.$value['username'].'</p></div><div class=\"moment_Content\"><p class=\"centerMomentName\">'.$value['Content'].'</p></div><div class=\"moment_Date\"><p class=\"centerMomentName\">'.$value['Mdate'].'</p></div></div>';
+			}
 		}
 		if ($msg) {
 			echo '{"success" :true , "msg":"'.$msg.'","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';

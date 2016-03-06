@@ -528,9 +528,9 @@ class AjaxuserController extends Controller {
 	//管理员审核项目
 	public function actionAdminshowitem() {
 		$item_id = $_GET['Item_Id'];
-//		$item_id = 1;
-		$item    = new Items();
-		$result  = $item->searchItemsDetail($item_id);
+		//		$item_id = 1;
+		$item   = new Items();
+		$result = $item->searchItemsDetail($item_id);
 		if ($result) {
 			echo '{"success":true,"msg":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
 		} else {
@@ -538,11 +538,11 @@ class AjaxuserController extends Controller {
 		}
 	}
 
-   //item跳转管理员界面
-	function actionHrefadmin(){
-		$status   = Yii::$app->user->identity->status;
+	//item跳转管理员界面
+	function actionHrefadmin() {
+		$status = Yii::$app->user->identity->status;
 		return $status;
-}
+	}
 	//置顶动态获取
 	public function actionGettopmoment() {
 		$moments = new Moments();
@@ -664,7 +664,7 @@ class AjaxuserController extends Controller {
 	 */
 	public function actionAdminupdatearticle() {
 		//判断信息是否填写完全
-		if (empty($_POST["changeart_inp"])||!isset($_POST["changeart_inp"])) {
+		if (empty($_POST["changeart_inp"]) || !isset($_POST["changeart_inp"])) {
 			echo '{"success":false,"msg":"信息填写错误"}';
 			return;
 		}
@@ -685,7 +685,7 @@ class AjaxuserController extends Controller {
 	 * 减少库存数量
 	 */
 	public function actionAdminupdatearticle2() {
-		if (empty($_POST["changeart_inp"])||!isset($_POST["changeart_inp"])) {
+		if (empty($_POST["changeart_inp"]) || !isset($_POST["changeart_inp"])) {
 			echo '{"success":false,"msg":"信息填写错误"}';
 			return;
 		}

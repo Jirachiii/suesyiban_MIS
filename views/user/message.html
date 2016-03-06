@@ -71,7 +71,7 @@
 			$.getJSON('index.php?r=json/momentsshow', function(data, textStatus) {
 				if (textStatus == 'success') {
 					document.getElementById('today_Show_miss').innerHTML = data.msg;
-					$("#getname").append(data.username);
+					$("#getname").append(data.userName);
 				} else {
 					alert("系统错误" + textStatus);
 				}
