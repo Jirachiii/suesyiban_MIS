@@ -33,7 +33,7 @@ class AjaxuserController extends Controller {
 					, 'getdonemask', 'handleLength', 'insertitem', 'todopastoneweek', 'todowillhandle', 'todogetitwithorder'
 					, 'detaildetshow', 'deleteitem', 'insertdetail', 'changediscribe', 'ddminshowitem', 'articlepagchange'
 					, 'adminsearcharticle', 'adminsearcharticlefenye', 'adminselectarticle', 'articlepagchangesel', 'admininsertarticle'
-					, 'deletearticle', 'adminupdatearticle', 'adminupdatearticle2', 'adminupdatearticle3'],
+					, 'deletearticle', 'adminupdatearticle', 'adminupdatearticle2', 'adminupdatearticle3','searchitem'],
 				'rules' => [
 					[
 						'allow'   => true,
@@ -47,7 +47,7 @@ class AjaxuserController extends Controller {
 							, 'getdonemask', 'handleLength', 'insertitem', 'todopastoneweek', 'todowillhandle', 'todogetitwithorder'
 							, 'detaildetshow', 'deleteitem', 'insertdetail', 'changediscribe', 'ddminshowitem', 'articlepagchange'
 							, 'adminsearcharticle', 'adminsearcharticlefenye', 'adminselectarticle', 'articlepagchangesel', 'admininsertarticle'
-							, 'deletearticle', 'adminupdatearticle', 'adminupdatearticle2', 'adminupdatearticle3'],
+							, 'deletearticle', 'adminupdatearticle', 'adminupdatearticle2', 'adminupdatearticle3','searchitem'],
 						'allow'         => true,
 						'roles'         => ['@'],
 						'matchCallback' => function ($rule, $action) {
@@ -172,16 +172,18 @@ class AjaxuserController extends Controller {
 	//获取所有状态
 	public function actionAdminstatusgetitems() {
 		$status = $_GET['status'];
+		$page=$_GET['page'];
 		$items  = new items();
-		$result = $items->AdminSearchAllItems($status, 1, 5);
+		$countpage=$items->getItempages_sel($status,5);
+		$result = $items->AdminSearchAllItems($status, $page, 5);
 		if ($result) {
 			$msg = '<thead><tr><td>编号</td><td>学号</td><td>姓名</td><td>项目名</td><td>时间</td><td>通过|不通过|详细</td></tr></thead><tbody>';
 			foreach ($result as $key => $value) {
 				$msg .= '<tr><td>'.($key+1).'</td><td>'.$value['XH_ID'].'</td><td>'.$value['username'].'</td><td>'.$value['Item_Name'].'</td><td>'.$value['Date'].'</td><td><div class=\"Set_dele glyphicon glyphicon-ok\" onclick=\"ItemPass('.$value['Item_Id'].')\"></div>｜<div class=\"Set_dele glyphicon glyphicon-remove\" onclick=\"ItemFail('.$value['Item_Id'].')\"></div>｜<div class=\"Set_dele glyphicon glyphicon-eye-open\" onclick=\"ItemDescribe('.$value['Item_Id'].')\"></div></td></tr>';
 			}
-			echo '{"success":true,"msg":"'.$msg.'"}';
+			echo '{"success":true,"msg":"'.$msg.'","allpage":"'.$countpage.'"}';
 		} else {
-			echo '{"success":true,"msg":"获取不到"}';
+			echo '{"success":true,"msg":"没有项目","allpage":"'.$countpage.'"}';
 		}
 	}
 	//
@@ -227,6 +229,25 @@ class AjaxuserController extends Controller {
 					echo '{"success":true, "msg":"没有项目"}';
 				}
 				break;
+		}
+	}
+
+	//搜索项目
+	function actionSearchitem(){
+		$request=yii::$app->request;
+		$page=$request->get('page');
+		$content=$request->get('content');
+		$items  = new items();
+		$countpage=$items->getItempages_s($content,5);
+		$result = $items->AdminSearchItems($content, $countpage,$page, 5);
+		if ($result) {
+			$msg = '<thead><tr><td>编号</td><td>状态</td><td>姓名</td><td>项目名</td><td>时间</td><td>通过|不通过|详细</td></tr></thead><tbody>';
+			foreach ($result as $key => $value) {
+				$msg .= '<tr><td>'.($key+1).'</td><td>'.$this->adminStatusThatHumanCanRead($value['Status']).'</td><td>'.$value['username'].'</td><td>'.$value['Item_Name'].'</td><td>'.$value['Date'].'</td><td><div class=\"Set_dele glyphicon glyphicon-ok\" onclick=\"ItemPass('.$value['Item_Id'].')\"></div>｜<div class=\"Set_dele glyphicon glyphicon-remove\" onclick=\"ItemFail('.$value['Item_Id'].')\"></div>｜<div class=\"Set_dele glyphicon glyphicon-eye-open\" onclick=\"ItemDescribe('.$value['Item_Id'].')\"></div></td></tr>';
+			}
+			echo '{"success":true,"msg":"'.$msg.'","allpage":"'.$countpage.'"}';
+		} else {
+			echo '{"success":true,"msg":"没有项目","allpage":"'.$countpage.'"}';
 		}
 	}
 	//重置密码
@@ -725,5 +746,22 @@ class AjaxuserController extends Controller {
 		$aimarticle->save(false);
 		//		$a=$aimarticle->status;
 		echo '{"success":true,"msg":"更改成功！"}';
+	}
+
+	private function adminStatusThatHumanCanRead($status) {
+		switch ($status) {
+			case 1:
+				return '待审核';
+				break;
+			case 2:
+				return '审核通过';
+				break;
+			case 3:
+				return '已完成';
+				break;
+			case 4:
+				return '未通过';
+				break;
+		}
 	}
 }

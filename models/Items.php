@@ -3,6 +3,7 @@
 namespace app\models;
 use app\controllers\DbFactory;
 use Yii;
+use yii\db\Query;
 
 /**
  * This is the model class for table "Items".
@@ -116,6 +117,30 @@ class Items extends \yii\db\ActiveRecord {
 			return false;
 		}
 	}
+	//搜索项目
+	public function AdminSearchItems($content, $countpage,$page, $number) {
+		if ($page<=$countpage) {
+			$index     = ($page-1)*$number;
+			$items = (new Query())
+//				->select('Item_Id','XH_ID','Item_Name','Item_Intro','Date','status')
+				->from('items')
+				->where( ['like', 'Item_Name', $content])
+				->orderBy('Date DESC')
+				->limit($number)
+				->offset($index)
+				->all();
+
+			$user      = new UserTb();
+			foreach ($items as $key => $value) {
+				$XH                      = $value['XH_ID'];
+				$username                = $user->getName($XH);
+				$items[$key]['username'] = $username;
+			}
+			return $items;
+		} else {
+			return false;
+		}
+	}
 	//获取所有项目
 	public function AdminAllItems($page, $number) {
 		if ($this->decideGetMomentContinue($page, $number)) {
@@ -134,6 +159,28 @@ class Items extends \yii\db\ActiveRecord {
 			return false;
 		}
 	}
+	//获取总的项目数
+	public  function  getItempages($number){
+		$all=self::find()->count();
+		$allpages=ceil($all/$number);
+		return $allpages;
+	}
+	//获取总的项目数(select)
+	public  function  getItempages_sel($status,$number){
+		$all=self::find()->where(['Status'=>$status])->count();
+		$allpages=ceil($all/$number);
+		return $allpages;
+	}
+	//获取总的项目数(search)
+	public  function  getItempages_s($content,$number){
+		$all=(new Query())
+			->from('items')
+			->where(['like','Item_Name', $content])
+			->count();
+		$allpages=ceil($all/$number);
+		return $allpages;
+	}
+
 	private function decideGetMomentContinue($page, $number) {
 		$frontCount = ($page-1)*$number;
 		$Count      = $this->getCount();
