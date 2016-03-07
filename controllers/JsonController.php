@@ -40,6 +40,15 @@ class JsonController extends Controller {
 							return Yii::$app->user->identity->status == 1;
 						}
 					],
+					//2级管理员有权限
+					[
+						'allow'         => true,
+						'actions'       =>['momentsshow','owntodos','getitems'],
+						'roles'         => ['@'],
+						'matchCallback' => function ($rule, $action) {
+							return Yii::$app->user->identity->status == 2;
+						}
+					],
 
 				],
 			],
