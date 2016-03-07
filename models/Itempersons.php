@@ -3,6 +3,7 @@
 namespace app\models;
 use app\controllers\DbFactory;
 use Yii;
+use yii\db\Query;
 
 /**
  * This is the model class for table "itempersons".
@@ -50,6 +51,12 @@ class Itempersons extends \yii\db\ActiveRecord {
 	//插入用户
 	public function insertperson($arr) {
 		$Dbfactory = DbFactory::getinstance();
-		return $Dbfactory->insertIntoDb('itempersons', $arr);
+		$userexit=(new Query())->select(['XH_ID'])->from('itempersons')->where(['and',['Item_Id' => $arr['Item_Id']],['XH_ID' => $arr['XH_ID']]])->all();
+		if($userexit){
+			return false;
+		}else{
+			return $Dbfactory->insertIntoDb('itempersons', $arr);
+		}
+
 	}
 }

@@ -80,6 +80,30 @@ class Items extends \yii\db\ActiveRecord {
 		$result = Yii::$app->db->createCommand($sql)->queryAll();
 		return $result;
 	}
+	//获取部员列表
+	public function getitemuser($itemid){
+		if($content=(new Query())->select(['Name','XH_ID'])->from('user_tb')->all()){
+			//获取该项目已有学生
+			$userexit=(new Query())->select(['XH_ID'])->from('itempersons')->where(['Item_Id' => $itemid])->all();
+			$userarr=array();
+			foreach($userexit as $key=>$value){
+				$userarr[]=$value['XH_ID'];
+			}
+			foreach($content as $key=>$value ){
+				if(in_array($value['XH_ID'],$userarr)){
+					$content[$key]['isin']="已添加";
+				}else{
+					$content[$key]['isin']="";
+				}
+			}
+			$content = '{"success":true,"name":'.json_encode($content, JSON_UNESCAPED_UNICODE).'}';
+			return $content;
+		}else{
+			$content = '{"success":false,"name":"用户未找到"}';
+			return $content;
+		}
+
+	}
 	//获取别的管理员添加的项目
 	public function searchOtherItems($status) {
 		$XH_ID  = \Yii::$app->user->identity->XH_ID;

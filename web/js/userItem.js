@@ -46,13 +46,14 @@ function detailShow(id){
 					$('#Detail_Doing').empty();
 					$('#Detail_Done').empty();
 					if (data.missionSt == 1) {
-						var itemMessage = '<section class="det_block" id="item_option_1"><h3 class="det_h3">项目设置</h3><br><div class="Detail_sty" id="Detail_setting"><div class="detail_add" onclick="getDoneItem()"><p class="Thedetail_p detailadd_p">归档此项目</p></div> <br><div class="detail_add" onclick="deleteItem()"><p class="Thedetail_p detailadd_p">删除项目</p></div> <br><div><input type="text" class="detail_User setting_textfield" placeholder="用户" id="insertUser"><br><br><div class="detail_add" onclick="insertUser()"><p class="Thedetail_p detailadd_p">插入</p></div></div></div></section>';
+						var itemMessage = '<section class="det_block" id="item_option_1"><h3 class="det_h3">项目设置</h3><br><div class="Detail_sty" id="Detail_setting"><div class="detail_add" onclick="getDoneItem()"><p class="Thedetail_p detailadd_p">归档此项目</p></div> <br><div class="detail_add" onclick="deleteItem()"><p class="Thedetail_p detailadd_p">删除项目</p></div> <br><div><select name="" id="insertUser" class="form-control"></select><br><br><div class="detail_add" onclick="insertUser()"><p class="Thedetail_p detailadd_p">插入</p></div><div><br><br><p id="insetusermsg"></p></div></div></div></section>';
 						$("#item_option_2").before(itemMessage);
 					}
 					var msg = '<div id="item_detail_add" class="detail_add" onclick="AddDetail('+id+')"><p class="Thedetail_p detailadd_p" >添加...</p></div>';
 					$('#Detail_Doing').append(msg);
 					$('#Detail_Doing').append(data.msg1);
 					$('#Detail_Done').append(data.msg2);
+					getitemusername(id)
 				} else {
 					alert('获取失败');
 					window.location.reload();
@@ -70,6 +71,37 @@ function detailShow(id){
 				window.location.reload();
 			},
 	});
+}
+/**
+ * 获取项目参与者部员名字
+ */
+function getitemusername(id){
+	$.ajax({
+		type:"GET",
+		url:"index.php?r=ajaxuser/getitemuser",
+		data:{
+			itemid:id
+		},
+		dataType:"json",
+		success:function(data){
+			if (data.success) {
+				if (data.Name = '') {
+					$("#insetusermsg").html("没有部员");
+				} else {
+					var username=document.getElementById("insertUser")
+					for (var i = 0; i < data.name.length; i++) {
+						username.options.add(new Option(data.name[i].Name+'('+data.name[i].XH_ID+')'+data.name[i].isin,data.name[i].XH_ID))
+					};
+				};
+			} else {
+				document.getElementById('anpai_result').innerHTML = "出现错误：" + data.msg;
+			}
+		},
+		error:function(data){
+			alert("获取失败!")
+		}
+	})
+
 }
 //ajax实现和数据库的交换，传参，第一个为状态，第二个为事件
 function dbStatusChange(urgentLev,ev) {
@@ -390,7 +422,7 @@ function ItemCompleted() {
 //使归档
 function getDoneItem() {
 	var handleOrNot = confirm('确定归档？');
-	if(deleteOrNot == true) {
+	if(handleOrNot == true) {
 		$.ajax({
 			type: "POST",
 			url: "index.php?r=ajaxuser/changeitemstatus",
@@ -403,6 +435,7 @@ function getDoneItem() {
 				if (data.success) {
 					$("#item_showbox").empty();
 					$("#item_showbox").append(data.msg);
+					location.reload()
 				} else {
 					alert('获取失败');
 					window.location.reload();
@@ -417,7 +450,7 @@ function getDoneItem() {
 }
 //删除项目
 function deleteItem() {
-	var handleOrNot = confirm('确定删除？');
+	var deleteOrNot = confirm('确定删除？');
 	if(deleteOrNot == true) {
 		$.ajax({
 			type: "POST",
@@ -459,10 +492,10 @@ function insertUser() {
 		},
 		success: function(data){
 			if (data.success) {
-				alert('添加成功');
+				//$("#insetusermsg").html('组员添加成功');
+				alert(data.msg)
 			} else {
-				alert('添加失败');
-				window.location.reload();
+				alert(data.msg)
 			}
 		},
 		error: function(jqXHR){

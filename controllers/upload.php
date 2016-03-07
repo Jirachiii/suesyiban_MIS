@@ -21,6 +21,57 @@ class upload {
 	 * @param array $dontallowExt
 	 * @param array $dontallowMime
 	 */
+	public function behaviors() {
+		return [
+			'access' => [
+				'class' => AccessControl::className(),
+				'only'  => [],
+				'rules' => [
+					[
+						'allow'   => true,
+						'actions' => ['login'],
+						'roles'   => ['?'],
+					],
+					//1级管理员权限控制
+					[
+						'actions'       => [],
+						'allow'         => true,
+						'roles'         => ['@'],
+						'matchCallback' => function ($rule, $action) {
+							return Yii::$app->user->identity->status == 1;
+						}
+					],
+					//2级管理员权限控制
+					[
+						'actions'       => [],
+						'allow'         => true,
+						'roles'         => ['@'],
+						'matchCallback' => function ($rule, $action) {
+							return Yii::$app->user->identity->status == 2;
+						}
+					],
+				],
+			],
+			'verbs'    => [
+				'class'   => VerbFilter::className(),
+				'actions' => [
+					'logout' => ['post'],
+				],
+			],
+		];
+	}
+
+	public function actions() {
+		return [
+			'error'  => [
+				'class' => 'yii\web\ErrorAction',
+			],
+			'captcha'          => [
+				'class'           => 'yii\captcha\CaptchaAction',
+				'fixedVerifyCode' => YII_ENV_TEST?'testme':null,
+			],
+		];
+	}
 	public function __construct($fileName = 'myFile', $uploadPath = './uploads', $imgFlag = true, $maxSize = 33554432, $dontallowExt = array('php', 'html', 'js', 'sh'), $dontallowMime = array('text/html', 'text/php', 'application/x-javascript', 'application/x-sh')) {
 		$this->fileName      = $fileName;
 		$this->maxSize       = $maxSize;
