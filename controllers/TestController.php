@@ -7,6 +7,8 @@ use app\models\OwnTodos;
 use app\models\TestTb;
 use app\models\UserTb;
 use yii\web\Controller;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:POST,GET');
 header('Access-Control-Allow-Credentials:true');

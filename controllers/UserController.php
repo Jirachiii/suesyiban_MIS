@@ -1,8 +1,9 @@
 <?php
 namespace app\controllers;
-
+use yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\filters\AccessControl;
 
 /**
  * 用户界面的集合
@@ -38,6 +39,30 @@ class UserController extends Controller {
  	}
 	public function behaviors() {
 		return [
+			'access' => [
+				'class' => AccessControl::className(),
+				'only'  => ['index','item','itemdetail','getmess','homepage','order'],
+				'rules' => [
+					//1级管理员权限控制
+					[
+						'actions'       => ['index','item','itemdetail','getmess','homepage','order'],
+						'allow'         => true,
+						'roles'         => ['@'],
+						'matchCallback' => function ($rule, $action) {
+							return Yii::$app->user->identity->status == 1;
+						}
+					],
+					//2级管理员权限控制
+					[
+						'actions'       => [],
+						'allow'         => true,
+						'roles'         => ['@'],
+						'matchCallback' => function ($rule, $action) {
+							return Yii::$app->user->identity->status == 2;
+						}
+					],
+				],
+			],
 			'verbs'    => [
 				'class'   => VerbFilter::className(),
 				'actions' => [

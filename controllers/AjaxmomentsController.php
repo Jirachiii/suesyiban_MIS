@@ -6,6 +6,9 @@ use app\models\UserTb;
 use Faker\Provider\DateTime;
 use yii\web\Controller;
 use yii\db\Query;
+use yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:POST,GET');
@@ -18,7 +21,46 @@ header("Content-Type: application/json;charset=utf-8");
  */
 
 class AjaxmomentsController extends Controller {
+	public function behaviors() {
+		return [
+			'access' => [
+				'class' => AccessControl::className(),
+				'only'  => ['deleteonemoment','pagechange', 'pagechange_s',  'adminsearchmoment','adminupdatemoment','adminupdatemoment_1', 'adminupdatemoment_2'],
+				'rules' => [
 
+					//只有1级管理员有权限
+					[
+						'actions'       => ['deleteonemoment','pagechange', 'pagechange_s',  'adminsearchmoment','adminupdatemoment','adminupdatemoment_1', 'adminupdatemoment_2'],
+						'allow'         => true,
+						'roles'         => ['@'],
+						'matchCallback' => function ($rule, $action) {
+							return Yii::$app->user->identity->status == 1;
+						}
+					],
+
+				],
+			],
+
+			'verbs'    => [
+				'class'   => VerbFilter::className(),
+				'actions' => [
+					'logout' => ['post'],
+				],
+			],
+		];
+	}
+
+	public function actions() {
+		return [
+			'error'  => [
+				'class' => 'yii\web\ErrorAction',
+			],
+			'captcha'          => [
+				'class'           => 'yii\captcha\CaptchaAction',
+				'fixedVerifyCode' => YII_ENV_TEST?'testme':null,
+			],
+		];
+	}
 	public $enableCsrfValidation = false;
 	//删除一条记录
 	public function actionDeleteonemoment() {

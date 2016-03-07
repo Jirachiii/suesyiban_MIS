@@ -28,12 +28,12 @@ class AjaxuserController extends Controller {
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only'  => ['admininsertuser', 'userpagechange', 'changeuserstatus', 'adminstatusgetitems'
-					, 'changeitemstatus', 'getitembystatus', 'resetpass', 'deleteone', 'inserttodo', 'changetodostatus'
+				'only'  => ['admininsertuser', 'userpagechange','adminsearchuser', 'changeuserstatus', 'adminstatusgetitems','updateuserpassword'
+					, 'changeitemstatus', 'getitembystatus','searchitem', 'resetpass', 'deleteone', 'inserttodo', 'changetodostatus','deleteownertodo'
 					, 'getdonemask', 'handleLength', 'insertitem', 'todopastoneweek', 'todowillhandle', 'todogetitwithorder'
-					, 'detaildetshow', 'deleteitem', 'insertdetail', 'changediscribe', 'ddminshowitem', 'articlepagchange'
+					, 'detaildetshow','detailshow', 'onedetailshow','insertitemperson','deleteitem', 'insertdetail', 'changediscribe', 'adminshowitem', 'gettopmoment','articlepagchange'
 					, 'adminsearcharticle', 'adminsearcharticlefenye', 'adminselectarticle', 'articlepagchangesel', 'admininsertarticle'
-					, 'deletearticle', 'adminupdatearticle', 'adminupdatearticle2', 'adminupdatearticle3','searchitem'],
+					, 'deletearticle', 'adminupdatearticle', 'adminupdatearticle2', 'adminupdatearticle3','getitemuser'],
 				'rules' => [
 					[
 						'allow'   => true,
@@ -42,12 +42,12 @@ class AjaxuserController extends Controller {
 					],
 					//1级管理员有权限
 					[
-						'actions' => ['admininsertuser', 'userpagechange', 'changeuserstatus', 'adminstatusgetitems'
-							, 'changeitemstatus', 'getitembystatus', 'resetpass', 'deleteone', 'inserttodo', 'changetodostatus'
+						'actions' =>  ['admininsertuser', 'userpagechange','adminsearchuser', 'changeuserstatus', 'adminstatusgetitems','updateuserpassword'
+							, 'changeitemstatus', 'getitembystatus','searchitem', 'resetpass', 'deleteone', 'inserttodo', 'changetodostatus','deleteownertodo'
 							, 'getdonemask', 'handleLength', 'insertitem', 'todopastoneweek', 'todowillhandle', 'todogetitwithorder'
-							, 'detaildetshow', 'deleteitem', 'insertdetail', 'changediscribe', 'ddminshowitem', 'articlepagchange'
+							, 'detaildetshow','detailshow', 'onedetailshow','insertitemperson','deleteitem', 'insertdetail', 'changediscribe', 'adminshowitem', 'gettopmoment','articlepagchange'
 							, 'adminsearcharticle', 'adminsearcharticlefenye', 'adminselectarticle', 'articlepagchangesel', 'admininsertarticle'
-							, 'deletearticle', 'adminupdatearticle', 'adminupdatearticle2', 'adminupdatearticle3','searchitem'],
+							, 'deletearticle', 'adminupdatearticle', 'adminupdatearticle2', 'adminupdatearticle3','getitemuser'],
 						'allow'         => true,
 						'roles'         => ['@'],
 						'matchCallback' => function ($rule, $action) {
@@ -427,11 +427,19 @@ class AjaxuserController extends Controller {
 		$item       = new Items();
 		$XH_ID      = $item->getClassmark($id);
 		$result     = $itemdetail->detailAll($id);
+		$rightNowUserId = Yii::$app->user->identity->XH_ID;
+		if ($XH_ID == $rightNowUserId) {
+			$missionSt = 1;
+		} else {
+			$missionSt = 2;
+		}
 		if ($result) {
-			$result = $this->itemDetailGetItWithOrder($result, $XH_ID);
+			$result = $this->itemDetailGetItWithOrder($result, $missionSt);
 			echo $result;
 		} else {
-			echo '{"success":true, "msg1":"没有任务"}';
+			$usertb = new UserTb();
+			$status = $usertb->getAuthority($rightNowUserId);
+			echo '{"success":true, "authority":"'.$status.'", "msg1":"没有任务","missionSt":"'.$missionSt.'"}';
 		}
 	}
 	//显示项目任务的一个细节（附件之类）
@@ -454,13 +462,8 @@ class AjaxuserController extends Controller {
 		}
 	}
 	//项目细节排序
-	private function itemDetailGetItWithOrder($query, $XH_ID) {
+	private function itemDetailGetItWithOrder($query, $missionSt) {
 		$rightNowUserId = Yii::$app->user->identity->XH_ID;
-		if ($XH_ID == $rightNowUserId) {
-			$missionSt = 1;
-		} else {
-			$missionSt = 2;
-		}
 		$usertb = new UserTb();
 		$status = $usertb->getAuthority($rightNowUserId);
 		$Lev1   = '';
@@ -492,14 +495,18 @@ class AjaxuserController extends Controller {
 	}
 
 	public function actionInsertitemperson() {
+		if(empty($_POST['person'])||empty($_POST['Item_Id'])||!isset($_POST['Item_Id'])||!isset($_POST['person'])){
+			echo '{"success":false,"msg":"选择有误"}';
+			return;
+		}
 		$arr['XH_ID']   = $_POST['person'];
 		$arr['Item_Id'] = $_POST['Item_Id'];
 		$itemperson     = new Itempersons();
 		$result         = $itemperson->insertperson($arr);
 		if ($result) {
-			echo '{"success":true}';
+			echo '{"success":true,"msg":"组员添加成功"}';
 		} else {
-			echo '{"success":false}';
+			echo '{"success":false,"msg":"该组员已参加此项目"}';
 		}
 	}
 
@@ -763,5 +770,11 @@ class AjaxuserController extends Controller {
 				return '未通过';
 				break;
 		}
+	}
+	public function actionGetitemuser() {
+		$itemid=$_GET['itemid'];
+		$item = new Items();
+		$content = $item->getitemuser($itemid);
+		return $content;
 	}
 }

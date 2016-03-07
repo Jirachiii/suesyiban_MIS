@@ -29,17 +29,12 @@ class JsonController extends Controller {
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only'  => ['getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
+				'only'  => [ 'getmomentdata','getuserdata', 'getarticledata','getitemdetail', 'owntodos','getitems','admingetallitems','momentsshow','test'],
 				'rules' => [
-					[
-						'allow'   => true,
-						'actions' => ['login'],
-						'roles'   => ['?'],
-					],
 					//只有1级管理员有权限
 					[
 						'allow'         => true,
-						'actions'       => ['logout', 'getuserdata', 'getarticledata', 'getmomentdata', 'addmoment', 'getmoment'],
+						'actions'       =>[ 'getmomentdata','getuserdata', 'getarticledata','getitemdetail', 'owntodos','getitems','admingetallitems','momentsshow','test'],
 						'roles'         => ['@'],
 						'matchCallback' => function ($rule, $action) {
 							return Yii::$app->user->identity->status == 1;
