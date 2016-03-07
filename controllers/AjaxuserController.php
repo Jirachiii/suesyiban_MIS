@@ -33,7 +33,7 @@ class AjaxuserController extends Controller {
 					, 'getdonemask', 'handleLength', 'insertitem', 'todopastoneweek', 'todowillhandle', 'todogetitwithorder'
 					, 'detaildetshow','detailshow', 'onedetailshow','insertitemperson','deleteitem', 'insertdetail', 'changediscribe', 'adminshowitem', 'gettopmoment','articlepagchange'
 					, 'adminsearcharticle', 'adminsearcharticlefenye', 'adminselectarticle', 'articlepagchangesel', 'admininsertarticle'
-					, 'deletearticle', 'adminupdatearticle', 'adminupdatearticle2', 'adminupdatearticle3','getitemuser'],
+					, 'deletearticle', 'adminupdatearticle', 'adminupdatearticle2', 'adminupdatearticle3','getitemuser','changestatus'],
 				'rules' => [
 					[
 						'allow'   => true,
@@ -47,7 +47,7 @@ class AjaxuserController extends Controller {
 							, 'getdonemask', 'handleLength', 'insertitem', 'todopastoneweek', 'todowillhandle', 'todogetitwithorder'
 							, 'detaildetshow','detailshow', 'onedetailshow','insertitemperson','deleteitem', 'insertdetail', 'changediscribe', 'adminshowitem', 'gettopmoment','articlepagchange'
 							, 'adminsearcharticle', 'adminsearcharticlefenye', 'adminselectarticle', 'articlepagchangesel', 'admininsertarticle'
-							, 'deletearticle', 'adminupdatearticle', 'adminupdatearticle2', 'adminupdatearticle3','getitemuser'],
+							, 'deletearticle', 'adminupdatearticle', 'adminupdatearticle2', 'adminupdatearticle3','getitemuser','changestatus'],
 						'allow'         => true,
 						'roles'         => ['@'],
 						'matchCallback' => function ($rule, $action) {
@@ -56,7 +56,8 @@ class AjaxuserController extends Controller {
 					],
 					//2
 					[
-						'actions'       => [],
+						'actions'       => ['gettopmoment','inserttodo','changetodostatus','deleteownertodo','getdonemask','todopastoneweek','todowillhandle'
+						,'detailshow','getitemuser','onedetailshow','changestatus'],
 						'allow'         => true,
 						'roles'         => ['@'],
 						'matchCallback' => function ($rule, $action) {

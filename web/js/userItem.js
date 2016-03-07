@@ -48,12 +48,13 @@ function detailShow(id){
 					if (data.missionSt == 1) {
 						var itemMessage = '<section class="det_block" id="item_option_1"><h3 class="det_h3">项目设置</h3><br><div class="Detail_sty" id="Detail_setting"><div class="detail_add" onclick="getDoneItem()"><p class="Thedetail_p detailadd_p">归档此项目</p></div> <br><div class="detail_add" onclick="deleteItem()"><p class="Thedetail_p detailadd_p">删除项目</p></div> <br><div><select name="" id="insertUser" class="form-control"></select><br><br><div class="detail_add" onclick="insertUser()"><p class="Thedetail_p detailadd_p">插入</p></div><div><br><br><p id="insetusermsg"></p></div></div></div></section>';
 						$("#item_option_2").before(itemMessage);
+						getitemusername(id)
+
 					}
 					var msg = '<div id="item_detail_add" class="detail_add" onclick="AddDetail('+id+')"><p class="Thedetail_p detailadd_p" >添加...</p></div>';
 					$('#Detail_Doing').append(msg);
 					$('#Detail_Doing').append(data.msg1);
 					$('#Detail_Done').append(data.msg2);
-					getitemusername(id)
 				} else {
 					alert('获取失败');
 					window.location.reload();
@@ -292,12 +293,12 @@ function addInTodo() {
 					window.location.href='index.php?r=user/homepage';
 				} else {
 					alert('错误的数据');
-					window.location.reload();
-				}  
+					//window.location.reload();
+				}
 			},
 			error: function(jqXHR){
 				alert("发生错误：" + jqXHR.status);
-				window.location.reload();
+				//window.location.reload();
 			},
 		});
 	} else {
