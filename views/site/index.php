@@ -21,33 +21,30 @@ use yii\grid\GridView;
                 background-color: #74C4D7;
                 float: left;
                 cursor: pointer;
+                overflow: hidden;
+
             }
             .indeximg2{
                 width: 50%;
                 height: 100%;
                 background-color:#5D66D0;
                 float: right;
+                overflow: hidden;
                 cursor: pointer;
             }
             .textarea{
-               /* margin-left: 50%;
-                margin-top: 30%;*/
-                position: relative;
-                top: 40%;
-                left: 40%;
-
-               /* width: 50%;
-                margin: 0 auto;*/
+                margin-left: 35%;
+                margin-top: 35%;
                 color:white;
                 font-size: 5em;
+            }
+            .textarea_hidden{
+                opacity:0.3!important;
             }
 
         </style>
     </head>
     <body>
-    <!--     <a href="index.php?r=user/item"id="hrefuser">用户界面</a>
-        <a href="index.php?r=admin/index" id="hrefadmin">管理员界面</a>
-         -->
         <div class="indeximg1" id="left" onclick="leftin()">
             <p class="textarea">部员</p>
         </div> 
@@ -56,10 +53,7 @@ use yii\grid\GridView;
             <p class="textarea">管理员</p>
         </div>
     </body>
-     // <script>
-     //        if(<?=  $userstatus ?>!=1){
-     //            $("#hrefadmin").hide()
-     //        }
+         <script>
             function leftin(){
                 location.href="index.php?r=user/item"
             }
@@ -68,6 +62,9 @@ use yii\grid\GridView;
             
             }
             $(function(){
+                if(<?=  $userstatus ?>!=1){
+                    $("#right").removeAttr('onclick').addClass("textarea_hidden")
+                }
                  $("div").fadeTo(300,0.4)
                  $("div").each(function (index) {
                     $(this).hover(
@@ -78,7 +75,7 @@ use yii\grid\GridView;
                             $(this).fadeTo(300,0.4);
                         }
                         )  
-                        })
+                    })
             })
         </script>
 </html>

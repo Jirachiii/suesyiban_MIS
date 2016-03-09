@@ -11,6 +11,8 @@
     background-color: #ffffff;
     z-index: 100;
     -webkit-transition:all .4s ease-in-out;
+    -moz-transition:all .4s ease-in-out;
+    -ms-transition:all .4s ease-in-out;
 }
 .showSetting_2{
     overflow: hidden;
@@ -25,7 +27,11 @@
     left: 70%;
     top: -600px;
     -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
     -webkit-transition:all .4s ease-in-out;
+    -moz-transition:all .4s ease-in-out;
+    -ms-transition:all .4s ease-in-out;
 }
 .showSetting_2 span{
     margin-left: 20px;
