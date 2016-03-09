@@ -57,7 +57,7 @@ class AjaxuserController extends Controller {
 					//2
 					[
 						'actions'       => ['gettopmoment','inserttodo','changetodostatus','deleteownertodo','getdonemask','todopastoneweek','todowillhandle'
-						,'detailshow','getitemuser','onedetailshow','changestatus','getitembystatus'],
+						,'detailshow','getitemuser','onedetailshow','changestatus','getitembystatus','updateuserpassword'],
 						'allow'         => true,
 						'roles'         => ['@'],
 						'matchCallback' => function ($rule, $action) {
