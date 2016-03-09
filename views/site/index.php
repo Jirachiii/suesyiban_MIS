@@ -37,6 +37,7 @@ use yii\grid\GridView;
                 margin-top: 35%;
                 color:white;
                 font-size: 5em;
+                font-family: Microsoft YaHei;
             }
             .textarea_hidden{
                 opacity:0.3!important;
@@ -46,11 +47,11 @@ use yii\grid\GridView;
     </head>
     <body>
         <div class="indeximg1" id="left" onclick="leftin()">
-            <p class="textarea">部员</p>
+            <p class="textarea">部 员</p>
         </div> 
 
         <div class="indeximg2" id="right" onclick="rightin()">  
-            <p class="textarea">管理员</p>
+            <p class="textarea">管 理 员</p>
         </div>
     </body>
          <script>
