@@ -18,6 +18,8 @@
 	border-radius: 25px;
 	background-color: rgb(65, 170, 241);
 	-webkit-transition:all .7s ease-in-out;
+	-moz-transition:all .7s ease-in-out;
+	-ms-transition:all .7s ease-in-out;
 	box-shadow:#CCC 0px 3px 6px 0px;
 	}
 .circlechange {
@@ -27,15 +29,27 @@
 	height: 150px;
 	width: 300px;
 	-webkit-animation-name:getBigger;
+	-moz-animation-name:getBigger;
+	-ms-animation-name:getBigger;
 	-webkit-animation-duration: .7s;
+	-moz-animation-duration: .7s;
+	-ms-animation-duration: .7s;
 	-webkit-animation-timing-function:ease-in-out;
+	-moz-animation-timing-function:ease-in-out;
+	-ms-animation-timing-function:ease-in-out;
 	-webkit-animation-fill-mode: forwards;
+	-moz-animation-fill-mode: forwards;
+	-ms-animation-fill-mode: forwards;
 }
 .borderhandle {
 	opacity: 0;
 	padding: 10px 20px;
 	-webkit-transition:all .5s ease-in-out 0.8s;
+	-moz-transition:all .5s ease-in-out 0.8s;
+	-ms-transition:all .5s ease-in-out 0.8s;
 	-webkit-animation-fill-mode: forwards;
+	-moz-animation-fill-mode: forwards;
+	-ms-animation-fill-mode: forwards;
 }
 #eventShow {
 	z-index: 2 !important;
@@ -54,6 +68,8 @@
 	width: 260px;
 	font-size: 1em;
 	-webkit-transition:all .2s ease-in-out;
+	-moz-transition:all .2s ease-in-out;
+	-ms-transition:all .2s ease-in-out;
 }
 .circle_tougle {
 	width: 100px;
@@ -68,6 +84,8 @@
 	height: 30px;
 	background-color: #396;
 	-webkit-transition:all .2s ease-in-out;
+	-moz-transition:all .2s ease-in-out;
+	-ms-transition:all .2s ease-in-out;
 }
 .circle_btn:hover {
 	background-color: #6C9;
@@ -132,6 +150,8 @@
 	position: relative;
 	top: 5%;
 	-webkit-transition:all .3s ease-in-out;
+	-moz-transition:all .3s ease-in-out;
+	-ms-transition:all .3s ease-in-out;
 }
 .TS_head {
 	margin:0 2%; 
@@ -145,6 +165,8 @@
 	border-left: 10px solid #CCC;
 	margin-bottom: 10px;
 	-webkit-transition:all .3s ease-in-out;
+	-moz-transition:all .3s ease-in-out;
+	-ms-transition:all .3s ease-in-out;
 	overflow: visible;
 }
 .UrgenterBorder {
@@ -174,7 +196,11 @@
 	color: #333;
 	font-size: 3em;
 	-webkit-transform: translateY(-50%) translateX(-50%);
+	-moz-transform: translateY(-50%) translateX(-50%);
+	-ms-transform: translateY(-50%) translateX(-50%);
 	-webkit-transition:all .3s ease-in-out;
+	-moz-transition:all .3s ease-in-out;
+	-ms-transition:all .3s ease-in-out;
 }
 .centerIst_btn {
 	cursor: pointer;
@@ -182,6 +208,8 @@
 	top: 30%;
 	left: 50%;
 	-webkit-transform: translateX(-50%);
+	-moz-transform: translateX(-50%);
+	-ms-transform: translateX(-50%);
 }
 .today_Show_miss {
 	width: 100%;
@@ -196,9 +224,13 @@
 	width: 15px;
 	height: 45px;
 	-webkit-transition:all .3s ease-in-out;
+	-moz-transition:all .3s ease-in-out;
+	-ms-transition:all .3s ease-in-out;
 }
 .mission_SpUrgent:hover {
 	-webkit-transform: scale(2,1);
+	-moz-transform: scale(2,1);
+	-ms-transform: scale(2,1);
 }
 .urgentest {
 	background-color: #F66;
@@ -226,6 +258,8 @@
 	position: relative;
 	top: 50%;
 	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
 }
 .moment_Content {
 	float: left;

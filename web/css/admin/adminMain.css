@@ -63,6 +63,8 @@ td {
 	cursor: pointer;
 	height: 50px;
 	-webkit-transition:all .3s ease-in-out;
+	-moz-transition:all .3s ease-in-out;
+	-ms-transition:all .3s ease-in-out;
 }
 .Ad_Lef_btn_checked {
 	cursor: pointer;
@@ -70,6 +72,8 @@ td {
 	background-color: #099;
 	height: 50px;
 	-webkit-transition:all .3s ease-in-out;
+	-moz-transition:all .3s ease-in-out;
+	-ms-transition:all .3s ease-in-out;
 }
 .Ad_Lef_btn_colorchange {
 	color: #fff !important;
@@ -78,6 +82,8 @@ td {
 	position: relative;
 	top: 50%;
 	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
 	height: 70%;
 	color: #099;
 	text-decoration:none;
@@ -92,6 +98,8 @@ td {
 	top: 50%;
 	left: 50%;
 	-webkit-transform: translateX(-50%) translateY(-50%);
+	-moz-transform: translateX(-50%) translateY(-50%);
+	-ms-transform: translateX(-50%) translateY(-50%);
 }
 .Ad_Lef_btnWord {
 	top: 50%;
@@ -100,6 +108,8 @@ td {
 	position: relative;
 	top: 50%;
 	-webkit-transform: translateY(-40%);
+	-moz-transform: translateY(-40%);
+	-ms-transform: translateY(-40%);
 	font-size: 1.2em;
 }
 .Ad_Lef_btn:hover {
@@ -124,6 +134,8 @@ td {
 	text-decoration:none;
 	margin: 10px;
 	-webkit-transition:all .2s ease-in-out;
+	-moz-transition:all .2s ease-in-out;
+	-ms-transition:all .2s ease-in-out;
 	cursor: pointer;
 }
 .nav_btn:hover {
@@ -142,6 +154,8 @@ td {
 	background-color: #333;
 	z-index: 100;
 	-webkit-transition:all .4s ease-in-out;
+	-moz-transition:all .4s ease-in-out;
+	-ms-transition:all .4s ease-in-out;
 }
 
 .showSetting {
@@ -156,7 +170,11 @@ td {
 	left: 50%;
 	top: -600px;
 	-webkit-transform: translateX(-50%);
+	-moz-transform: translateX(-50%);
+	-ms-transform: translateX(-50%);
 	-webkit-transition:all .7s ease-in-out;
+	-moz-transition:all .7s ease-in-out;
+	-ms-transition:all .7s ease-in-out;
 }
 .Set_pic {
 	position: relative;
@@ -174,6 +192,8 @@ td {
 	text-shadow: 5px 5px 5px #000;
 	top: 50%;
 	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
 }
 .Set_xm {
 	margin: 5%;
@@ -188,6 +208,8 @@ td {
 	color: #EEE;
 	height: 40px;
 	-webkit-transition:all .2s ease-in-out;
+	-moz-transition:all .2s ease-in-out;
+	-ms-transition:all .2s ease-in-out;
 }
 .handlegreen {
 	background-color: #096 !important;
@@ -206,6 +228,8 @@ td {
 .Set_dele {
 	cursor: pointer;
 	-webkit-transition:all .2s ease-in-out;
+	-moz-transition:all .2s ease-in-out;
+	-ms-transition:all .2s ease-in-out;
 }
 .Set_dele:hover {
 	color: #099;
@@ -230,6 +254,8 @@ td {
 		top: -100%;
 		width: 100%;
 		-webkit-transition:all .5s ease-in-out;
+		-moz-transition:all .5s ease-in-out;
+		-ms-transition:all .5s ease-in-out;
 	}
 	.Ad_Rig {
 		position: absolute;
