@@ -136,7 +136,7 @@ class AjaxuserController extends Controller {
 		$usertb  = new UserTb();
 		$allpage = $usertb->userallpage_s(6, $content);
 		if ($allpage < $page || $page < 1) {
-			$result = '{"success":false,"allPage":1,"msg":"页码出错"}';
+			$result = '{"success":false,"allPage":1,"msg":"未找到该学生"}';
 		} else {
 			$result = $usertb->getSearchUserWithPage($content, $page, 6);
 			$result = '{"success":true,"allPage":"'.$allpage.'","users":'.json_encode($result, JSON_UNESCAPED_UNICODE).'}';
