@@ -50,9 +50,12 @@ class Itempersons extends \yii\db\ActiveRecord {
 	}
 	//插入用户
 	public function insertperson($arr) {
+		$id = Yii::$app->user->identity->XH_ID;
 		$Dbfactory = DbFactory::getinstance();
 		$userexit=(new Query())->select(['XH_ID'])->from('itempersons')->where(['and',['Item_Id' => $arr['Item_Id']],['XH_ID' => $arr['XH_ID']]])->all();
 		if($userexit){
+			return false;
+		}elseif ($id==$arr['XH_ID']) {
 			return false;
 		}else{
 			return $Dbfactory->insertIntoDb('itempersons', $arr);
