@@ -69,7 +69,7 @@
 					<option value="7">周日</option>
 				</select>
 				<input type="button" class="btn btn-small btn-primary" onclick="loadanpai()" value="搜索">
-				<input type="button" value="手动排班" class="btn btn-small btn-success" onclick="addAnapi()">
+				<input type="button" value="强制排班" class="btn btn-small btn-success" onclick="addAnapi()">
 				<hr>
 				<div id="zhibanshow" class="zhibanshow">
 					<span>12:00-14:00</span><br><br>
@@ -110,11 +110,12 @@
 							<!--<option value="1">全部</option>-->
 						<!--</select>-->
 						<input type="button" class="btn btn-small btn-primary" onclick="searchEmptyclass()" value="搜索">
+						<input type="button" class="btn btn-success" onclick="insertauto()" value="自动排班">
 						<a class="btn btn-danger btn-sm" onclick="updateMemberkb()">更新部员课表</a>
 				</span><hr class="hranpai"><br>
 				<div class="Ad_User_Main">
 					<table id="emptyclassdata" class="table table-condensed table-hover">
-						<span id="msg918"><h1>第9、18周为我校考试周。因无考试安排数据，请手动排班。</h1></span>
+						<span id="msg918"><h1>第9、18周为我校考试周。因无考试安排数据，请强制排班。</h1></span>
 					</table>
 				</div>
 			</div>
@@ -137,11 +138,11 @@
 					<h1>马上就好，请耐心等待</h1>
 			</section>
 		</section>
-		<!-- 以下安排手动添加，默认隐藏 -->
+		<!-- 以下安排强制添加，默认隐藏 -->
 		<section class="cover" id="coverDiv_anpai" onclick="hideAll_anpai()"></section>
 		<section class="showSetting" id="SetDiv_anpai">
 			<div class="Set_pic articlebk">
-				<p class="Set_tit">手动排班（第9、18周使用）</p>
+				<p class="Set_tit">强制排班（第9、18周使用）</p>
 			</div>
 			<section class="Set_xm" onclick="">
 				<select name="" id="whichweek_manual" class="form-control">

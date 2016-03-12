@@ -21,12 +21,12 @@ class EmptyclassController extends Controller {
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only'  => ['updatememberkb','searchanpai', 'searchemptyclass',  'managest','delanpai','getnamemanual', 'insertmanual','searchorder'],
+				'only'  => ['updatememberkb','searchanpai', 'searchemptyclass',  'managest','delanpai','getnamemanual', 'insertmanual','searchorder','insertauto'],
 				'rules' => [
 
 					//只有1级管理员有权限
 					[
-						'actions'       => ['updatememberkb','searchanpai', 'searchemptyclass',  'managest','delanpai','getnamemanual', 'insertmanual','searchorder'],
+						'actions'       => ['updatememberkb','searchanpai', 'searchemptyclass',  'managest','delanpai','getnamemanual', 'insertmanual','searchorder','insertauto'],
 						'allow'         => true,
 						'roles'         => ['@'],
 						'matchCallback' => function ($rule, $action) {
@@ -125,7 +125,16 @@ class EmptyclassController extends Controller {
         }
         echo $content;
     }
+	//自动排班
+    public function actionInsertauto(){
+    	$zhibantable=new Zhibantable();
+    	if ($reault=$zhibantable->insertauto()) {
+    		return $reault;
+    	}else{
+			return '{"success":false,"msg":"后台更新出错"}';
+		}
 
+    }
 
 
 	/**
