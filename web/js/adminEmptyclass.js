@@ -16,6 +16,7 @@ function whichweek_manual(){
         week_sel.options.add(new Option('第'+i+'周',i))
     }
 }
+
 /**
  * 人工排班的页面出来
  */
@@ -210,6 +211,33 @@ function updateMemberkb(){
     }
 }
 /**
+ * 自动排班
+ *
+ */
+function insertauto(){
+    //window.location.href='index.php?r=emptyclass/insertauto';
+    var update = confirm('没有安排的情况下，自动排班耗时需一分钟，您确认操作吗？');
+    if(update == true){
+        var update2=confirm('确认?')
+        loading()
+        if(update2==true){
+            $.getJSON('index.php?r=emptyclass/insertauto', function(data, textStatus) {
+                if (textStatus == 'success') {
+                    if(data.success==true){
+                        alert(data.msg)
+                        window.location.reload()
+                    }else{
+                        alert(data.msg)
+                        window.location.reload()
+                    }
+                } else {
+                    alert("操作失败" + textStatus);
+                }
+            })
+        }
+    }
+}
+/**
  * 搜索这班没课的人
  */
 function searchEmptyclass(){
@@ -217,6 +245,8 @@ function searchEmptyclass(){
     if($("#whichweek").val()==null||$("#zhibantime").val()==null||$("#weekday").val()==null){
         alert("请完成筛选条件")
     }else{
+        $("#whichweek_2").val($("#whichweek").val())
+        $("#weekday_2").val($("#weekday").val())
         nowPage_anpai = 1;
         allpage_anpai = 1;
         $.ajax({
@@ -254,6 +284,7 @@ function searchEmptyclass(){
                         $("#yema_anpai").append("<a id='"+i+"' onclick='yema_anpai("+i+")'>"+i+"</a>")
                     }
                     danqianye_anpai()
+                    loadanpai()
                 } else {
                     document.getElementById('emptyclassdata').innerHTML = "出现错误：" + data.msg;
                 }
