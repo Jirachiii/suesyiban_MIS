@@ -28,12 +28,12 @@ class AjaxuserController extends Controller {
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only'  => ['admininsertuser', 'userpagechange','adminsearchuser', 'changeuserstatus', 'adminstatusgetitems','updateuserpassword'
-					, 'changeitemstatus', 'getitembystatus','searchitem', 'resetpass', 'deleteone', 'inserttodo', 'changetodostatus','deleteownertodo'
+				'only'  => ['admininsertuser', 'userpagechange', 'adminsearchuser', 'changeuserstatus', 'adminstatusgetitems', 'updateuserpassword'
+					, 'changeitemstatus', 'getitembystatus', 'searchitem', 'resetpass', 'deleteone', 'inserttodo', 'changetodostatus', 'deleteownertodo'
 					, 'getdonemask', 'handleLength', 'insertitem', 'todopastoneweek', 'todowillhandle', 'todogetitwithorder'
-					, 'detaildetshow','detailshow', 'onedetailshow','insertitemperson','deleteitem', 'insertdetail', 'changediscribe', 'adminshowitem', 'gettopmoment','articlepagchange'
+					, 'detaildetshow', 'detailshow', 'onedetailshow', 'insertitemperson', 'deleteitem', 'insertdetail', 'changediscribe', 'adminshowitem', 'gettopmoment', 'articlepagchange'
 					, 'adminsearcharticle', 'adminsearcharticlefenye', 'adminselectarticle', 'articlepagchangesel', 'admininsertarticle'
-					, 'deletearticle', 'adminupdatearticle', 'adminupdatearticle2', 'adminupdatearticle3','getitemuser','changestatus'],
+					, 'deletearticle', 'adminupdatearticle', 'adminupdatearticle2', 'adminupdatearticle3', 'getitemuser', 'changestatus'],
 				'rules' => [
 					[
 						'allow'   => true,
@@ -42,12 +42,12 @@ class AjaxuserController extends Controller {
 					],
 					//1级管理员有权限
 					[
-						'actions' =>  ['admininsertuser', 'userpagechange','adminsearchuser', 'changeuserstatus', 'adminstatusgetitems','updateuserpassword'
-							, 'changeitemstatus', 'getitembystatus','searchitem', 'resetpass', 'deleteone', 'inserttodo', 'changetodostatus','deleteownertodo'
+						'actions' => ['admininsertuser', 'userpagechange', 'adminsearchuser', 'changeuserstatus', 'adminstatusgetitems', 'updateuserpassword'
+							, 'changeitemstatus', 'getitembystatus', 'searchitem', 'resetpass', 'deleteone', 'inserttodo', 'changetodostatus', 'deleteownertodo'
 							, 'getdonemask', 'handleLength', 'insertitem', 'todopastoneweek', 'todowillhandle', 'todogetitwithorder'
-							, 'detaildetshow','detailshow', 'onedetailshow','insertitemperson','deleteitem', 'insertdetail', 'changediscribe', 'adminshowitem', 'gettopmoment','articlepagchange'
+							, 'detaildetshow', 'detailshow', 'onedetailshow', 'insertitemperson', 'deleteitem', 'insertdetail', 'changediscribe', 'adminshowitem', 'gettopmoment', 'articlepagchange'
 							, 'adminsearcharticle', 'adminsearcharticlefenye', 'adminselectarticle', 'articlepagchangesel', 'admininsertarticle'
-							, 'deletearticle', 'adminupdatearticle', 'adminupdatearticle2', 'adminupdatearticle3','getitemuser','changestatus'],
+							, 'deletearticle', 'adminupdatearticle', 'adminupdatearticle2', 'adminupdatearticle3', 'getitemuser', 'changestatus'],
 						'allow'         => true,
 						'roles'         => ['@'],
 						'matchCallback' => function ($rule, $action) {
@@ -56,8 +56,10 @@ class AjaxuserController extends Controller {
 					],
 					//2
 					[
-						'actions'       => ['gettopmoment','inserttodo','changetodostatus','deleteownertodo','getdonemask','todopastoneweek','todowillhandle'
-						,'detailshow','getitemuser','onedetailshow','changestatus','getitembystatus','updateuserpassword'],
+						'actions' => ['gettopmoment', 'inserttodo', 'changetodostatus', 'deleteownertodo', 'getdonemask', 'todopastoneweek', 'todowillhandle'
+							, 'detailshow', 'getitemuser', 'onedetailshow', 'changestatus', 'getitembystatus', 'updateuserpassword'],
+						'actions' => ['gettopmoment', 'inserttodo', 'changetodostatus', 'deleteownertodo', 'getdonemask', 'todopastoneweek', 'todowillhandle'
+							, 'detailshow', 'getitemuser', 'onedetailshow', 'changestatus', 'getitembystatus'],
 						'allow'         => true,
 						'roles'         => ['@'],
 						'matchCallback' => function ($rule, $action) {
@@ -172,11 +174,11 @@ class AjaxuserController extends Controller {
 	}
 	//获取所有状态
 	public function actionAdminstatusgetitems() {
-		$status = $_GET['status'];
-		$page=$_GET['page'];
-		$items  = new items();
-		$countpage=$items->getItempages_sel($status,5);
-		$result = $items->AdminSearchAllItems($status, $page, 5);
+		$status    = $_GET['status'];
+		$page      = $_GET['page'];
+		$items     = new items();
+		$countpage = $items->getItempages_sel($status, 5);
+		$result    = $items->AdminSearchAllItems($status, $page, 5);
 		if ($result) {
 			$msg = '<thead><tr><td>编号</td><td>学号</td><td>姓名</td><td>项目名</td><td>时间</td><td>通过|不通过|详细</td></tr></thead><tbody>';
 			foreach ($result as $key => $value) {
@@ -234,13 +236,13 @@ class AjaxuserController extends Controller {
 	}
 
 	//搜索项目
-	function actionSearchitem(){
-		$request=yii::$app->request;
-		$page=$request->get('page');
-		$content=$request->get('content');
-		$items  = new items();
-		$countpage=$items->getItempages_s($content,5);
-		$result = $items->AdminSearchItems($content, $countpage,$page, 5);
+	function actionSearchitem() {
+		$request   = yii::$app->request;
+		$page      = $request->get('page');
+		$content   = $request->get('content');
+		$items     = new items();
+		$countpage = $items->getItempages_s($content, 5);
+		$result    = $items->AdminSearchItems($content, $countpage, $page, 5);
 		if ($result) {
 			$msg = '<thead><tr><td>编号</td><td>状态</td><td>姓名</td><td>项目名</td><td>时间</td><td>通过|不通过|详细</td></tr></thead><tbody>';
 			foreach ($result as $key => $value) {
@@ -423,11 +425,11 @@ class AjaxuserController extends Controller {
 	}
 	//项目细节展示
 	public function actionDetailshow() {
-		$id         = $_GET['id'];
-		$itemdetail = new Itemdetails();
-		$item       = new Items();
-		$XH_ID      = $item->getClassmark($id);
-		$result     = $itemdetail->detailAll($id);
+		$id             = $_GET['id'];
+		$itemdetail     = new Itemdetails();
+		$item           = new Items();
+		$XH_ID          = $item->getClassmark($id);
+		$result         = $itemdetail->detailAll($id);
 		$rightNowUserId = Yii::$app->user->identity->XH_ID;
 		if ($XH_ID == $rightNowUserId) {
 			$missionSt = 1;
@@ -465,10 +467,10 @@ class AjaxuserController extends Controller {
 	//项目细节排序
 	private function itemDetailGetItWithOrder($query, $missionSt) {
 		$rightNowUserId = Yii::$app->user->identity->XH_ID;
-		$usertb = new UserTb();
-		$status = $usertb->getAuthority($rightNowUserId);
-		$Lev1   = '';
-		$Lev2   = '';
+		$usertb         = new UserTb();
+		$status         = $usertb->getAuthority($rightNowUserId);
+		$Lev1           = '';
+		$Lev2           = '';
 		foreach ($query as $value) {
 			switch ($value['status']) {
 				case '1':
@@ -496,7 +498,7 @@ class AjaxuserController extends Controller {
 	}
 
 	public function actionInsertitemperson() {
-		if(empty($_POST['person'])||empty($_POST['Item_Id'])||!isset($_POST['Item_Id'])||!isset($_POST['person'])){
+		if (empty($_POST['person']) || empty($_POST['Item_Id']) || !isset($_POST['Item_Id']) || !isset($_POST['person'])) {
 			echo '{"success":false,"msg":"选择有误"}';
 			return;
 		}
@@ -773,8 +775,8 @@ class AjaxuserController extends Controller {
 		}
 	}
 	public function actionGetitemuser() {
-		$itemid=$_GET['itemid'];
-		$item = new Items();
+		$itemid  = $_GET['itemid'];
+		$item    = new Items();
 		$content = $item->getitemuser($itemid);
 		return $content;
 	}
