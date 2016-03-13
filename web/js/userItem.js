@@ -572,8 +572,8 @@ function getName() {
 		},
 	});
 }
-var showItOrNot = 0;
 //显示用户状态栏
+var showItOrNot = 0;
 function showThing() {
 	if (showItOrNot == 0) {
 		$("#setting").removeClass("setting_show");
@@ -588,7 +588,6 @@ function showThing() {
 		$("#coverSetting").addClass("setting_show");
 		showItOrNot = 0;
 	}
-
 }
 //显示置顶动态
 function showTopMoments() {

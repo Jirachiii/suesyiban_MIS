@@ -161,7 +161,7 @@
 			var ChangeStatus = ev.target.id;
 			var data = ev.dataTransfer.getData("Text");
 			$('#'+ChangeStatus).append(document.getElementById(data));
-			// console.log(data);
+			// console.log(i);
 			// console.log(ev.target.id);
 			//与数据库进行交换
 			dbStatusChange(ev.target.id, this.i);
