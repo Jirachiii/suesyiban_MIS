@@ -81,24 +81,24 @@ class Items extends \yii\db\ActiveRecord {
 		return $result;
 	}
 	//获取部员列表
-	public function getitemuser($itemid){
-		if($content=(new Query())->select(['Name','XH_ID'])->from('user_tb')->all()){
+	public function getitemuser($itemid) {
+		if ($content = (new Query())->select(['Name', 'XH_ID'])->from('user_tb')->all()) {
 			//获取该项目已有学生
-			$userexit=(new Query())->select(['XH_ID'])->from('itempersons')->where(['Item_Id' => $itemid])->all();
-			$userarr=array();
-			foreach($userexit as $key=>$value){
-				$userarr[]=$value['XH_ID'];
+			$userexit = (new Query())->select(['XH_ID'])->from('itempersons')->where(['Item_Id' => $itemid])->all();
+			$userarr  = array();
+			foreach ($userexit as $key => $value) {
+				$userarr[] = $value['XH_ID'];
 			}
-			foreach($content as $key=>$value ){
-				if(in_array($value['XH_ID'],$userarr)){
-					$content[$key]['isin']="已添加";
-				}else{
-					$content[$key]['isin']="";
+			foreach ($content as $key => $value) {
+				if (in_array($value['XH_ID'], $userarr)) {
+					$content[$key]['isin'] = "已添加";
+				} else {
+					$content[$key]['isin'] = "";
 				}
 			}
 			$content = '{"success":true,"name":'.json_encode($content, JSON_UNESCAPED_UNICODE).'}';
 			return $content;
-		}else{
+		} else {
 			$content = '{"success":false,"name":"用户未找到"}';
 			return $content;
 		}
@@ -142,19 +142,19 @@ class Items extends \yii\db\ActiveRecord {
 		}
 	}
 	//搜索项目
-	public function AdminSearchItems($content, $countpage,$page, $number) {
-		if ($page<=$countpage) {
-			$index     = ($page-1)*$number;
+	public function AdminSearchItems($content, $countpage, $page, $number) {
+		if ($page <= $countpage) {
+			$index = ($page-1)*$number;
 			$items = (new Query())
-//				->select('Item_Id','XH_ID','Item_Name','Item_Intro','Date','status')
+			//				->select('Item_Id','XH_ID','Item_Name','Item_Intro','Date','status')
 				->from('items')
-				->where( ['like', 'Item_Name', $content])
+				->where(['like', 'Item_Name', $content])
 				->orderBy('Date DESC')
 				->limit($number)
 				->offset($index)
 				->all();
 
-			$user      = new UserTb();
+			$user = new UserTb();
 			foreach ($items as $key => $value) {
 				$XH                      = $value['XH_ID'];
 				$username                = $user->getName($XH);
@@ -184,24 +184,24 @@ class Items extends \yii\db\ActiveRecord {
 		}
 	}
 	//获取总的项目数
-	public  function  getItempages($number){
-		$all=self::find()->count();
-		$allpages=ceil($all/$number);
+	public function getItempages($number) {
+		$all      = self::find()->count();
+		$allpages = ceil($all/$number);
 		return $allpages;
 	}
 	//获取总的项目数(select)
-	public  function  getItempages_sel($status,$number){
-		$all=self::find()->where(['Status'=>$status])->count();
-		$allpages=ceil($all/$number);
+	public function getItempages_sel($status, $number) {
+		$all      = self::find()->where(['Status' => $status])->count();
+		$allpages = ceil($all/$number);
 		return $allpages;
 	}
 	//获取总的项目数(search)
-	public  function  getItempages_s($content,$number){
-		$all=(new Query())
+	public function getItempages_s($content, $number) {
+		$all = (new Query())
 			->from('items')
-			->where(['like','Item_Name', $content])
+			->where(['like', 'Item_Name', $content])
 			->count();
-		$allpages=ceil($all/$number);
+		$allpages = ceil($all/$number);
 		return $allpages;
 	}
 

@@ -5,7 +5,6 @@ use app\controllers\DbFactory;
 use Yii;
 use yii\db\Query;
 
-
 /**
  * This is the model class for table "articles".
  *
@@ -69,33 +68,31 @@ class Articles extends \yii\db\ActiveRecord {
 		$Dbfactory->updateTheDbRecord('articles', 'Art_Id', $id, $arr);
 	}
 
-
-
 	/**
 	 * 筛选库存
 	 * @param $status
 	 * @return array|string|\yii\db\ActiveRecord[]
 	 */
-	public function searcharticlebystatus($status,$page,$numbers){
-		$index=($page-1)*6;
+	public function searcharticlebystatus($status, $page, $numbers) {
+		$index = ($page-1)*6;
 		if ($status == 4) {
 			$result = self::find()->asArray()->orderBy('status ASC,Art_Num DESC')->limit($numbers)->offset($index)->all();
-			if(!empty($result)){
-				$allPage=self::countarticlrpages($numbers);
-			}else{
-				$allPage=0;
+			if (!empty($result)) {
+				$allPage = self::countarticlrpages($numbers);
+			} else {
+				$allPage = 0;
 			}
 		} else {
 			$result = self::find()->where(['status' => $status])->asArray()->orderBy('status ASC,Art_Num DESC')->limit($numbers)->offset($index)->all();
-			if(!empty($result)){
-				$allPage=self::countarticlrpages_sel($numbers,$status);
-			}else{
-				$allPage=0;
+			if (!empty($result)) {
+				$allPage = self::countarticlrpages_sel($numbers, $status);
+			} else {
+				$allPage = 0;
 			}
-//
+			//
 		}
-		if($allPage<$page||$page<1){
-			$result='{"success":false,"msg":"未找到条目"}';
+		if ($allPage < $page || $page < 1) {
+			$result = '{"success":false,"msg":"未找到条目"}';
 			return $result;
 		}
 		$result = '{"success":true,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"allPage":'.$allPage.'}';
@@ -108,29 +105,29 @@ class Articles extends \yii\db\ActiveRecord {
 	 * @param $numbers
 	 * @return array|string
 	 */
-	public  function  showarticledata($page,$numbers){
+	public function showarticledata($page, $numbers) {
 		$rightNowUserId   = Yii::$app->user->identity->XH_ID;
 		$rightNowUserName = Yii::$app->user->identity->Name;
-		$index=($page-1)*$numbers;
-		$result   = (new Query())
-			//			->select(['Art_Name', 'status'])
+		$index            = ($page-1)*$numbers;
+		$result           = (new Query())
+		//			->select(['Art_Name', 'status'])
 			->from('articles')
 			->limit($numbers)
 			->offset($index)
 			->orderBy([
-				'status' => SORT_ASC,
+				'status'  => SORT_ASC,
 				'Art_Num' => SORT_DESC,
 			])
 			->all();
-		$allPage=self::countarticlrpages($numbers);
-		if($allPage<$page||$page<1){
-			$result='{"success":false,"msg":"未找到条目"}';
+		$allPage = self::countarticlrpages($numbers);
+		if ($allPage < $page || $page < 1) {
+			$result = '{"success":false,"msg":"未找到条目"}';
 			return $result;
 		}
-		if(empty($result)){
+		if (empty($result)) {
 			$result = '{"success":false,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"allPage":'.$allPage.',"msg":"未找到条目","userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
-		}else {
-			$result = '{"success":true,"articles":' . json_encode($result, JSON_UNESCAPED_UNICODE) . ',"allPage":' . $allPage . ',"userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
+		} else {
+			$result = '{"success":true,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"allPage":'.$allPage.',"userIdNow":"'.$rightNowUserId.'","userName":"'.$rightNowUserName.'"}';
 		}
 		return $result;
 	}
@@ -139,38 +136,38 @@ class Articles extends \yii\db\ActiveRecord {
 	 * @param $Art_Name
 	 * @return array|string
 	 */
-	public function searcharticle($Art_Name,$page,$numbers){
-		$index=($page-1)*$numbers;
-		$result   = (new Query())
-			//			->select(['Art_Name', 'status'])
+	public function searcharticle($Art_Name, $page, $numbers) {
+		$index  = ($page-1)*$numbers;
+		$result = (new Query())
+		//			->select(['Art_Name', 'status'])
 			->from('articles')
 			->where(['like', 'Art_Name', $Art_Name])
 			->limit($numbers)
 			->offset($index)
 			->all();
-		$allPage=self::countarticlrpages_s($numbers,$Art_Name);
-		if($allPage<$page||$page<1){
-			$result='{"success":false,"msg":"未找到条目"}';
+		$allPage = self::countarticlrpages_s($numbers, $Art_Name);
+		if ($allPage < $page || $page < 1) {
+			$result = '{"success":false,"msg":"未找到条目"}';
 			return $result;
 		}
-		if(empty($result)){
+		if (empty($result)) {
 			$result = '{"success":false,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"allPage":'.$allPage.',"msg":"未找到条目"}';
-		}else {
-			$result = '{"success":true,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"allPage":' . $allPage . '}';
+		} else {
+			$result = '{"success":true,"articles":'.json_encode($result, JSON_UNESCAPED_UNICODE).',"allPage":'.$allPage.'}';
 		}
 		return $result;
 	}
-	public function countarticlrpages($numbers){
-		$allpages=self::find()->count();
+	public function countarticlrpages($numbers) {
+		$allpages = self::find()->count();
 		return (ceil($allpages/$numbers));
 	}
-	public function countarticlrpages_sel($numbers,$status){
+	public function countarticlrpages_sel($numbers, $status) {
 		$allpages = self::find()->where(['status' => $status])->count();
 		return (ceil($allpages/$numbers));
 	}
-	public function countarticlrpages_s($numbers,$Art_Name){
-	$allpages = self::find()->where("Art_Name like '%$Art_Name%'")->count();
-	return (ceil($allpages/$numbers));
-}
+	public function countarticlrpages_s($numbers, $Art_Name) {
+		$allpages = self::find()->where("Art_Name like '%$Art_Name%'")->count();
+		return (ceil($allpages/$numbers));
+	}
 
 }
