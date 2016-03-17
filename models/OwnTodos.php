@@ -66,10 +66,10 @@ class OwnTodos extends \yii\db\ActiveRecord {
 		$rightNowUserId = Yii::$app->user->identity->XH_ID;
 		$today          = date('Y-m-d');
 		$Dbfactory      = DbFactory::getinstance();
-		$sql            = 'SELECT COUNT(*) FROM ownTodos WHERE XH_ID = \''.$rightNowUserId.'\' and CreateDate = \''.$today.'\'';
+		$sql            = 'SELECT max(Num) FROM ownTodos WHERE XH_ID = \''.$rightNowUserId.'\' and CreateDate = \''.$today.'\'';
 		$count          = $Dbfactory->doQuery($sql);
 		$count          = $Dbfactory->findAll($count);
-		return $count['0']['COUNT(*)'];
+		return $count['0']['max(Num)'];
 	}
 	//插入数据，并在插入之前检验数据是否会对数据库有害
 	public function insertTodoData($arr) {

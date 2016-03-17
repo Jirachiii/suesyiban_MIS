@@ -96,7 +96,7 @@ function insertUser(){
 				setTimeout("hideAll()",3500);
 				$("#createResult").html("保存成功！3秒后将自动关闭此页面");
 				setTimeout("daojishi()",1000);				
-				setTimeout("getRawData();",3800);
+				setTimeout(" window.location.reload()",3700);
 
 
 			} else {

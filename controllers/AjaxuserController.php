@@ -58,8 +58,6 @@ class AjaxuserController extends Controller {
 					[
 						'actions' => ['gettopmoment', 'inserttodo', 'changetodostatus', 'deleteownertodo', 'getdonemask', 'todopastoneweek', 'todowillhandle'
 							, 'detailshow', 'getitemuser', 'onedetailshow', 'changestatus', 'getitembystatus', 'updateuserpassword'],
-						'actions' => ['gettopmoment', 'inserttodo', 'changetodostatus', 'deleteownertodo', 'getdonemask', 'todopastoneweek', 'todowillhandle'
-							, 'detailshow', 'getitemuser', 'onedetailshow', 'changestatus', 'getitembystatus'],
 						'allow'         => true,
 						'roles'         => ['@'],
 						'matchCallback' => function ($rule, $action) {
@@ -513,9 +511,9 @@ class AjaxuserController extends Controller {
 		}
 	}
 
-	public function actionDeleteItem() {
+	public function actionDeleteitem() {
 		$Item_Id = $_POST['Item_Id'];
-		$item    = new Item();
+		$item    = new Items();
 		$result  = $item->deleteItem($Item_Id);
 		if ($result) {
 			echo '{"success":true}';

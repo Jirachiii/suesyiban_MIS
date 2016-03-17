@@ -455,7 +455,7 @@ function deleteItem() {
 	if(deleteOrNot == true) {
 		$.ajax({
 			type: "POST",
-			url: "index.php?r=ajaxuser/deleteItem",
+			url: "index.php?r=ajaxuser/deleteitem",
 			dataType: "json",
 			data: {
 				Item_Id: itemIdOnAllShow,

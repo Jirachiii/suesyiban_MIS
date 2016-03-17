@@ -130,6 +130,9 @@
 
 		function getOwnItem() {
 			$.getJSON('index.php?r=json/getitems', function(data, textStatus) {
+				$("#getname").empty();
+				$("#item_showbox").empty();
+				$("#item_showbox").empty();
 				if (textStatus == 'success') {
 					$("#getname").empty();
 					if (data.success) {
