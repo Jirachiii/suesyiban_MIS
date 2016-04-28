@@ -1,3 +1,4 @@
+
 .myselect {
     font-size: larger;
     padding: 5px;
@@ -19,6 +20,7 @@
 	height: 80%;
 	float: left;
 }
+
 .myblue{
 	color: #0880d7;
 }
@@ -123,4 +125,47 @@
 	font-weight: bold;
 	font-size: 1.2em;
 	margin-bottom: 10px;
+}
+@media (max-width: 1100px)  {
+  .Ad_RShow_l{
+    background-color: #FFF;
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 1px 0px 7px #BBB;
+    height: 80%;
+    margin-top: 20px;
+
+  }
+  .Ad_RShow_r{
+    background-color: #FFF;
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 1px 0px 7px #BBB;
+    height: 80%;
+  }
+  .pageStyle_anpai{
+    position: absolute;
+    bottom: -500px;
+    right: 400px;
+  }
+  .Ad_Lef {
+    background-color: #FFF;
+    position: absolute;
+    top: -100%;
+    width: 100%;
+    -webkit-transition:all .5s ease-in-out;
+    -moz-transition:all .5s ease-in-out;
+    -ms-transition:all .5s ease-in-out;
+  }
+  .Ad_Rig {
+    position: absolute;
+    top: 50px;
+    width: 100%;
+  }
+  .hd_downbtn {
+    display: block;
+    position: relative;
+    left: 92%;
+  }
+
 }
