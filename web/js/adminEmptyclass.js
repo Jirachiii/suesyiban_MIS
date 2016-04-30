@@ -216,7 +216,7 @@ function updateMemberkb(){
  */
 function insertauto(){
     //window.location.href='index.php?r=emptyclass/insertauto';
-    var update = confirm('没有安排的情况下，自动排班耗时需一分钟，您确认操作吗？');
+    var update = confirm('您确认操作吗？');
     if(update == true){
         var update2=confirm('确认?')
         loading()

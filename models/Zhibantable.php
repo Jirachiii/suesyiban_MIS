@@ -56,6 +56,8 @@ class Zhibantable extends \yii\db\ActiveRecord
             'year_xq' => 'Year Xq',
         ];
     }
+    //自动排班用
+    private $sqlinsert="INSERT zhibantable(stname,stid,date_zhoushu,date_weekday,date_turn,year_xq)VALUES";
 
     /**
      * 更新成员们的课表,从kb存到memberkb
@@ -232,9 +234,23 @@ class Zhibantable extends \yii\db\ActiveRecord
     }
     //自动排班
     public function insertauto(){
+        //查找左右用户和所有的用户已经安排的次数
         $alluser=(new Query)->select(["XH_ID","Name"])->from("user_tb")->all();
-        foreach ($alluser as $key => $value) {
-            $userarr[$value['XH_ID']]=0;
+        $already_manage=(new Query)->select(["stid","COUNT(stid) AS counts"])->from("zhibantable")->groupBy('stid')->all();
+        if(empty($already_manage)){
+            foreach ($alluser as $key2 => $value2) {
+                    $userarr[$value2['XH_ID']]=0;
+                }
+        }else{
+            foreach ($already_manage as $key => $value) {
+                foreach ($alluser as $key2 => $value2) {
+                    //统计个数
+                    $userarr[$value2['XH_ID']]=0;
+                    if($value2['XH_ID']==$value['stid']){
+                        $userarr[$value2['XH_ID']]=$value['counts'];
+                    }
+                }
+            }
         }
         $year_xq=self::xuenianxueqi();
         $maxaver=22;
@@ -242,34 +258,64 @@ class Zhibantable extends \yii\db\ActiveRecord
              for ($y=1; $y <=7 ; $y++) { 
                  for ($z=1; $z <=3; $z++) { 
                     //获取这周这天这个值班时间有空的学生(数组)
-                     $idname[$x][$y][$z]=self::getemptyst($x,$y,$z);
+                    $idname[$x][$y][$z]=self::getemptyst($x,$y,$z);
                     // 随机获取这周这天这个班的两个学生（数组序号）
+                    $sqlThisTurn="select stid from zhibantable WHERE   date_zhoushu='$x' AND date_weekday='$y' AND date_turn='$z'AND year_xq='$year_xq'";
+                    $stAlready=Yii::$app->db->createCommand($sqlThisTurn)->queryAll();
+                    $stAlready=array_column($stAlready,'stid');
+                    //次数达到一定数量的排除掉
                     foreach($idname[$x][$y][$z] as $key2=>$value2){
                         if( $userarr[$value2['XH_ID']]>$maxaver){
                             unset($idname[$x][$y][$z][$key2]);
                         }
+                        if(in_array('031513217',$stAlready)){
+                            unset($idname[$x][$y][$z][$key2]);
+                        }
                     }
-                     shuffle($idname[$x][$y][$z]);
-                     $idnameToinsert[$x][$y][$z]=array_rand($idname[$x][$y][$z],2);
-                     $st1=$idnameToinsert[$x][$y][$z][0];
-                     $st2=$idnameToinsert[$x][$y][$z][1];
-                     // 两个学生的学号
-                     $id1=$idname[$x][$y][$z][$st1]['XH_ID'];
-                     $id2=$idname[$x][$y][$z][$st2]['XH_ID'];
-                     //记录次数
-                     $userarr[$id1]+=1;
-                     $userarr[$id2]+=1;
-                     //插入
-                     $name1=$idname[$x][$y][$z][$st1]['Name'];
-                     self::insertauo_insert($name1,$id1,$x,$y,$z,$year_xq);
-                     $name2=$idname[$x][$y][$z][$st2]['Name'];
-                     self::insertauo_insert($name2,$id2,$x,$y,$z,$year_xq);
-//                    }
-                    
+                    // die;
+                    shuffle($idname[$x][$y][$z]);
+                    $sqlThisTurn="select COUNT(*) from zhibantable WHERE   date_zhoushu='$x' AND date_weekday='$y' AND date_turn='$z'AND year_xq='$year_xq'";
+                    $thisturn=Yii::$app->db->createCommand($sqlThisTurn)->queryScalar();
+                    if($thisturn==1){
+                        $idnameToinsert[$x][$y][$z]=array_rand($idname[$x][$y][$z],1);
+                        $st1=$idnameToinsert[$x][$y][$z];
+                         // 一个学生的学号
+                        $id1=$idname[$x][$y][$z][$st1]['XH_ID'];
+                        //记录次数
+                        $userarr[$id1]+=1;
+                         //插入   
+                        $name1=$idname[$x][$y][$z][$st1]['Name'];
+                        $this->sqlinsert.="('".$name1."','".$id1."','".$x."','".$y."','".$z."','".$year_xq."'),";
+                        // self::insertauo_insert($name1,$id1,$x,$y,$z,$year_xq);
+                    }elseif($thisturn>=2){
+                        continue;
+                    }else{
+                        $idnameToinsert[$x][$y][$z]=array_rand($idname[$x][$y][$z],2);
+                        $st1=$idnameToinsert[$x][$y][$z][0];
+                        $st2=$idnameToinsert[$x][$y][$z][1];
+                         // 两个学生的学号
+                        $id1=$idname[$x][$y][$z][$st1]['XH_ID'];
+                        $id2=$idname[$x][$y][$z][$st2]['XH_ID'];
+                        //记录次数
+                        $userarr[$id1]+=1;
+                        $userarr[$id2]+=1;
+                         //插入                      
+                        $name1=$idname[$x][$y][$z][$st1]['Name'];
+                        $this->sqlinsert.="('".$name1."','".$id1."','".$x."','".$y."','".$z."','".$year_xq."'),";
+                        $name2=$idname[$x][$y][$z][$st2]['Name'];
+                        $this->sqlinsert.="('".$name2."','".$id2."','".$x."','".$y."','".$z."','".$year_xq."'),";
+                     }                
                  }
              }
         }
         //22个星期x7天x6人=924
+        $this->sqlinsert=rtrim($this->sqlinsert,',');
+        $this->sqlinsert.=';';
+        if(substr($this->sqlinsert, -7,6)=='VALUES'){
+            return '{"success":true,"msg":"更新完成"}';
+        }else{
+            $content=Yii::$app->db->createCommand($this->sqlinsert)->execute();
+        }
         $countall=self::find()->count();
         if($countall==924){
            return '{"success":true,"msg":"更新完成"}';
@@ -277,32 +323,7 @@ class Zhibantable extends \yii\db\ActiveRecord
             return '{"success":true,"msg":"更新不完全"}';
         }
     }
-    //自动排版的插入函数
-    public function insertauo_insert($name,$id,$x,$y,$z,$year_xq){
-         $newzhiban=new Zhibantable();
-         $newzhiban->stname=$name;
-         $newzhiban->stid=$id;
-         $newzhiban->date_zhoushu=$x;
-         $newzhiban->date_weekday=$y;
-         $newzhiban->date_turn=$z;
-         $newzhiban->year_xq= $year_xq;
-         $sql1="select * from zhibantable WHERE stname='$name' AND stid='$id' AND date_zhoushu='$x' AND date_weekday='$y' AND date_turn='$z'AND year_xq='$year_xq'";
-        //判断这一天这一班是否满了
-        $sql2="select COUNT(*) from zhibantable WHERE   date_zhoushu='$x' AND date_weekday='$y' AND date_turn='$z'AND year_xq='$year_xq'";
-         if(Yii::$app->db->createCommand($sql1)->queryOne()){
-            // $result='{"success":true,"msg":"该学生已经安排过此日期的排班了"}';
-             return;
-        }else if(Yii::$app->db->createCommand($sql2)->queryScalar()>=2){
-            // $result='{"success":true,"msg":"这一班已经安排满了！(可在左边栏确认)"}';
-             return;
 
-        }else{
-            $newzhiban->save(false);
-            // $result='{"success":true,"msg":"安排值班成功"}';
-            // return;
-            
-        }
-    }
     /**
      * 分页用
      * @param $content
