@@ -70,6 +70,16 @@
 						<option value="3">已下架</option>
 
 					</select>
+					<span class="myword">库存记录：</span>
+					<select name="sel_record" class="myselect" id="sel_record" onchange="articleRecord()" onclick='document.getElementById("searchArticle").value=""'>
+						<option value="5">显示全部</option>
+						<option value="1">新增库存</option>
+						<option value="2">删除库存</option>
+						<option value="3">数量增加</option>
+						<option value="4">数量减少</option>
+
+					</select>
+
 				</span><hr>
 				<div class="Ad_Article_Main">
 					<table id="articleMsgShow" class="table table-condensed table-hover">

@@ -80,3 +80,29 @@
     position: absolute;
     bottom: 0px;
 }
+/*#art_rec>p{
+    padding: 20px;
+}*/
+#art_rec{
+    height:700px;
+}
+.rec_title{
+    font-size:1.5em;
+}
+.rec_title>span{
+    margin-right: 60px;
+    
+}
+#art_rec_cont{
+    height: 40%;
+    overflow: auto;
+    font-size: 1.5em;
+    font-family: Montserrat;
+}
+#art_rec_cont>div{
+    margin: 15px;
+}
+#art_rec_cont span{
+    margin-right: 30px;
+}
+

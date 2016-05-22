@@ -28,6 +28,7 @@ function tiggle() {
  * @param a
  */
 function getRawArticleData(a){
+    $(".pageStyle_article").show();
     document.getElementById("searchArticle").value="";
     $("articleMsgShow").empty();
     if(a==4){
@@ -104,6 +105,7 @@ function hideAll_ch_3() {
  * 仓库搜索
  */
 function searchArticlehandle() {
+    $(".pageStyle_article").show();
     //$("#articleMsgShow").empty();
     $("#article_prev").attr("onclick","beforePage_article_s()")
     $("#article_aft").attr("onclick","afterPage_article_s()")
@@ -154,6 +156,7 @@ function searchArticlehandle() {
  * 状态筛选
  */
 function selectArticle() {
+    $(".pageStyle_article").show();
     nowPage_art_sel = 1;
     allPage_art_sel= 1;
     $("#yema_art").empty()
@@ -199,6 +202,48 @@ function selectArticle() {
             alert("发生错误：" + jqXHR.status);
         },
     });
+}
+/**
+ * 库存记录
+ * @return {[type]} [description]
+ */
+function articleRecord(){
+    $(".pageStyle_article").hide();
+    $("#yema_art").empty()
+    $("#yema_art_sel").empty()
+    $("#yema_art_s").empty()
+    $.ajax({
+        url: 'index.php?r=ajaxuser/articlerecord',
+        type: 'GET',
+        dataType: 'json',
+        data: {status: $("#sel_record").val()},
+    })
+    .done(function(data) {
+         if (data.success) {
+                if (data.records == '') {
+                    var tableBody = '<h1>此分类为空</h1>';
+                } else {
+                    var tableBody = '<section id="art_rec"><div class="rec_title"><span>物品</span><span>操作记录</span><span>操作时间</span><span>操作人</span></div><div id="art_rec_cont">';
+                    for (var i = 0; i < data.records.length; i++) {
+                        tableBody += '<div><span>'+data.records[i].art_info+'</span><span>'+data.records[i].action+'</span><span>'+data.records[i].dotime+'</span><span>'+data.records[i].user+'</span><span></span></div>';
+
+                    };
+                    tableBody+="</div></section>";
+                };
+                document.getElementById('articleMsgShow').innerHTML = tableBody;
+            } else {
+                document.getElementById('articleMsgShow').innerHTML = "出现错误：" + data.msg;
+            }
+        console.log("success");
+    })
+    .fail(function() {
+        alert('查询失败，后台错误！');
+        console.log("error");
+    })
+    .always(function() {
+        console.log("complete");
+    });
+    
 }
 //删除库存
 function deleteArticle(article_id,article_name){
@@ -281,7 +326,7 @@ function updateArticle(){
             //changeart_sel: $("#changeart_sel").val(),
             changeart_inp: $("#changeart_inp").val(),
             total:         Number($("#showarticlenumber").text())+Number($("#changeart_inp").val()),
-            //total: "10000",
+            before: Number($("#showarticlenumber").text()),
         },
         dataType: "json",
         success: function(data){
@@ -314,6 +359,7 @@ function updateArticle_2(){
             //changeart_sel: $("#changeart_sel_2").val(),
             changeart_inp: $("#changeart_inp_2").val(),
             total:         Number($("#showarticlenumber_2").text())-Number($("#changeart_inp_2").val()),
+            before: Number($("#showarticlenumber_2").text()),
             //total: "10000",
         },
         dataType: "json",
@@ -372,6 +418,7 @@ function updateArticle_3(){
         },
     });
 }
+
 function addArticle() {
     document.getElementById("coverDiv").style.top = '0px';
     document.getElementById("SetDiv").style.top = '5%';
@@ -417,6 +464,7 @@ function changeArticle_3(obj,obj3) {
     //document.getElementById("showarticlenumber_3").innerHTML=obj2;
     document.getElementById("articleid_3").innerHTML=obj3;
 }
+
 //插入倒计时
 var daojishinum=1;
 function daojishi () {
@@ -461,6 +509,7 @@ function daojishi3 () {
 
     }
 }
+
 /**
  * 下一页
  */

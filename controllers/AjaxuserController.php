@@ -1,6 +1,7 @@
 <?php
 namespace app\controllers;
 use app\models\articles;
+use app\models\Articlerecord;
 use app\models\Files;
 use app\models\Itemdetails;
 use app\models\Itempersons;
@@ -643,6 +644,25 @@ class AjaxuserController extends Controller {
 		echo $result;
 	}
 	/**
+	 * 库存记录查询
+	 * @return [type] [description]
+	 */
+	public function actionArticlerecord(){
+		if (!isset($_GET["status"]) || empty($_GET["status"])) {
+			echo '{"success":false,"msg":"请选择查询状态"}';
+			return;
+		}
+		if($_GET["status"]=='5'){
+			$status=$_GET["status"];
+			$records=Articlerecord::find()->asArray()->orderBy('dotime DESC')->all();
+		}else{
+			$status=$_GET["status"];
+			$records=Articlerecord::find()->where(['status' => $status])->asArray()->orderBy('dotime DESC')->all();
+		}
+		
+		return '{"success":true,"records":'.json_encode($records, JSON_UNESCAPED_UNICODE).'}';
+	}
+	/**
 	 * 状态筛选分页
 	 */
 	public function actionArticlepagchangesel() {
@@ -674,7 +694,15 @@ class AjaxuserController extends Controller {
 		$article->Art_Num  = \yii\helpers\Html::encode($_POST["number"]);
 		$article->Art_Time = date("y-m-d", time());
 		$article->status   = 1;
-		$article->save();
+		if($article->save()){
+			$artRecord=new Articlerecord();
+			$artRecord->art_info=$article->Art_Name;
+			$artRecord->action="新增该物品，数量:".$article->Art_Num ;
+			$artRecord->dotime=date('Y-m-d H:i:s');
+			$artRecord->user=Yii::$app->user->identity->Name;
+			$artRecord->status=1;
+			$artRecord->save();
+		}
 		echo '{"success":true,"msg":"用户：'.$_POST["itemname"].' 信息保存成功！"}';
 	}
 
@@ -684,7 +712,15 @@ class AjaxuserController extends Controller {
 	public function actionDeletearticle() {
 		$art_id  = $_POST['art_id'];
 		$article = Articles::findOne($art_id);
-		$article->delete();
+		if($article->delete()){
+			$artRecord=new Articlerecord();
+			$artRecord->art_info=$article->Art_Name;
+			$artRecord->action="删除了该物品";
+			$artRecord->dotime=date('Y-m-d H:i:s');
+			$artRecord->user=Yii::$app->user->identity->Name;
+			$artRecord->status=2;
+			$artRecord->save();
+		}
 		echo '{"success":true}';
 	}
 
@@ -702,11 +738,25 @@ class AjaxuserController extends Controller {
 			return;
 		}
 		$aimarticle          = Articles::findOne($_POST['articleid']);
+		$trueNum=$_POST["changeart_inp"]+$aimarticle->Art_Num;
+		if($trueNum!=$_POST['total']){
+			echo '{"success":false,"msg":"数据不是最新，请刷新后重试"}';
+			return;
+		}
 		$aimarticle->Art_Num = $_POST['total'];
 		if ($aimarticle->Art_Num > 0 && $aimarticle->status != 3) {
 			$aimarticle->status = 1;
 		}
-		$aimarticle->save(false);
+		// $aimarticle->save(false);
+		if($aimarticle->save(false)){
+			$artRecord=new Articlerecord();
+			$artRecord->art_info=$aimarticle->Art_Name;
+			$artRecord->action="原有：". $_POST['before'].",现有：".$_POST['total'];
+			$artRecord->dotime=date('Y-m-d H:i:s');
+			$artRecord->user=Yii::$app->user->identity->Name;
+			$artRecord->status=3;
+			$artRecord->save();
+		}
 		echo '{"success":true,"msg":"添加成功！"}';
 	}
 
@@ -726,12 +776,28 @@ class AjaxuserController extends Controller {
 			echo '{"success":false,"msg":"没有这么多库存啦"}';
 			return;
 		}
+
 		$aimarticle          = Articles::findOne($_POST['articleid']);
+		$trueNum=$aimarticle->Art_Num-$_POST["changeart_inp"];
+		if($trueNum!=$_POST['total']){
+			echo '{"success":false,"msg":"数据不是最新的，请刷新后重试"}';
+			return;
+		}
+
 		$aimarticle->Art_Num = $_POST['total'];
 		if ($aimarticle->Art_Num == 0 && $aimarticle->status != 3) {
 			$aimarticle->status = 2;
 		}
-		$aimarticle->save(false);
+		// $aimarticle->save(false);
+		if($aimarticle->save(false)){
+			$artRecord=new Articlerecord();
+			$artRecord->art_info=$aimarticle->Art_Name;
+			$artRecord->action="原有：". $_POST['before'].",现有：".$_POST['total'];
+			$artRecord->dotime=date('Y-m-d H:i:s');
+			$artRecord->user=Yii::$app->user->identity->Name;
+			$artRecord->status=4;
+			$artRecord->save();
+		}
 		echo '{"success":true,"msg":"扣除成功！"}';
 	}
 
