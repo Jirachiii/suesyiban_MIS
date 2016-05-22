@@ -207,6 +207,7 @@ function selectArticle() {
  * 库存记录
  * @return {[type]} [description]
  */
+
 function articleRecord(){
     $(".pageStyle_article").hide();
     $("#yema_art").empty()
@@ -223,12 +224,12 @@ function articleRecord(){
                 if (data.records == '') {
                     var tableBody = '<h1>此分类为空</h1>';
                 } else {
-                    var tableBody = '<section id="art_rec"><div class="rec_title"><span>物品</span><span>操作记录</span><span>操作时间</span><span>操作人</span></div><div id="art_rec_cont">';
+                    var tableBody = '<thead id="art_rec"><td>物品</td><td>操作记录</td><td>操作时间</td><td>操作人</td></thead>';
                     for (var i = 0; i < data.records.length; i++) {
-                        tableBody += '<div><span>'+data.records[i].art_info+'</span><span>'+data.records[i].action+'</span><span>'+data.records[i].dotime+'</span><span>'+data.records[i].user+'</span><span></span></div>';
+                        tableBody += '<tr><td>'+data.records[i].art_info+'</td><td>'+data.records[i].action+'</td><td>'+data.records[i].dotime+'</td><td>'+data.records[i].user+'</td><td></td></tr>';
 
                     };
-                    tableBody+="</div></section>";
+                    tableBody+="</table></div>";
                 };
                 document.getElementById('articleMsgShow').innerHTML = tableBody;
             } else {
