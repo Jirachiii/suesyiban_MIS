@@ -715,7 +715,7 @@ class AjaxuserController extends Controller {
 		if($article->delete()){
 			$artRecord=new Articlerecord();
 			$artRecord->art_info=$article->Art_Name;
-			$artRecord->action="删除了该物品";
+			$artRecord->action="删除了该物品，删除前有：".$article->Art_Num;
 			$artRecord->dotime=date('Y-m-d H:i:s');
 			$artRecord->user=Yii::$app->user->identity->Name;
 			$artRecord->status=2;

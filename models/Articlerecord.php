@@ -30,9 +30,9 @@ class Articlerecord extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['art_info', 'status'], 'integer'],
+            [['status'], 'integer'],
             [['action', 'dotime'], 'string', 'max' => 20],
-            [['user'], 'string', 'max' => 30]
+            [['user','art_info'], 'string', 'max' => 30]
         ];
     }
 
