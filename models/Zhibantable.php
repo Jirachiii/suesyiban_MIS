@@ -252,6 +252,11 @@ class Zhibantable extends \yii\db\ActiveRecord
                 }
             }
         }
+        $xh_name=array();//'031513218'=>'jin'
+        foreach ($alluser as $key => $value) {
+            $xh_name[$value['XH_ID']]=$value['Name'];
+        }
+        // print_r($xh_name);die;
         $year_xq=self::xuenianxueqi();
         $maxaver=22;
         for ($x=1; $x <=22 ; $x++) { 
@@ -263,46 +268,44 @@ class Zhibantable extends \yii\db\ActiveRecord
                     $sqlThisTurn="select stid from zhibantable WHERE   date_zhoushu='$x' AND date_weekday='$y' AND date_turn='$z'AND year_xq='$year_xq'";
                     $stAlready=Yii::$app->db->createCommand($sqlThisTurn)->queryAll();
                     $stAlready=array_column($stAlready,'stid');
-                    //次数达到一定数量的排除掉
+                    $backup=$idname[$x][$y][$z];
+                    //次数达到或者该同学这班已被安排一定数量的排除掉
                     foreach($idname[$x][$y][$z] as $key2=>$value2){
-                        if( $userarr[$value2['XH_ID']]>$maxaver){
-                            unset($idname[$x][$y][$z][$key2]);
-                        }
-                        if(in_array('031513217',$stAlready)){
+                        if( $userarr[$value2['XH_ID']]>$maxaver||self::isInThisTurn($idname[$x][$y][$z][$key2]['XH_ID'],$stAlready)){
                             unset($idname[$x][$y][$z][$key2]);
                         }
                     }
-                    // die;
+                    //人数不够就撤销上面的操作
+                    if(count($idname[$x][$y][$z])<2){
+                        $idname[$x][$y][$z]=$backup;
+                    }
+                    // print_r($idname[$x][$y][$z]);die;
                     shuffle($idname[$x][$y][$z]);
+                    //这周已安排人数
                     $sqlThisTurn="select COUNT(*) from zhibantable WHERE   date_zhoushu='$x' AND date_weekday='$y' AND date_turn='$z'AND year_xq='$year_xq'";
                     $thisturn=Yii::$app->db->createCommand($sqlThisTurn)->queryScalar();
                     if($thisturn==1){
-                        $idnameToinsert[$x][$y][$z]=array_rand($idname[$x][$y][$z],1);
-                        $st1=$idnameToinsert[$x][$y][$z];
-                         // 一个学生的学号
-                        $id1=$idname[$x][$y][$z][$st1]['XH_ID'];
+                        $st1=self::chooseSt($idname[$x][$y][$z],1,$userarr);
+                        $id1=$st1[0];
                         //记录次数
                         $userarr[$id1]+=1;
                          //插入   
-                        $name1=$idname[$x][$y][$z][$st1]['Name'];
+                        $name1=$xh_name[$id1];
                         $this->sqlinsert.="('".$name1."','".$id1."','".$x."','".$y."','".$z."','".$year_xq."'),";
-                        // self::insertauo_insert($name1,$id1,$x,$y,$z,$year_xq);
                     }elseif($thisturn>=2){
                         continue;
                     }else{
-                        $idnameToinsert[$x][$y][$z]=array_rand($idname[$x][$y][$z],2);
-                        $st1=$idnameToinsert[$x][$y][$z][0];
-                        $st2=$idnameToinsert[$x][$y][$z][1];
-                         // 两个学生的学号
-                        $id1=$idname[$x][$y][$z][$st1]['XH_ID'];
-                        $id2=$idname[$x][$y][$z][$st2]['XH_ID'];
+                        $st=self::chooseSt($idname[$x][$y][$z],2,$userarr);
+                        $id1=$st[0];
+                        $id2=$st[1];
                         //记录次数
                         $userarr[$id1]+=1;
                         $userarr[$id2]+=1;
+                        $name1=$xh_name[$id1];
+                        $name2=$xh_name[$id2];
+
                          //插入                      
-                        $name1=$idname[$x][$y][$z][$st1]['Name'];
                         $this->sqlinsert.="('".$name1."','".$id1."','".$x."','".$y."','".$z."','".$year_xq."'),";
-                        $name2=$idname[$x][$y][$z][$st2]['Name'];
                         $this->sqlinsert.="('".$name2."','".$id2."','".$x."','".$y."','".$z."','".$year_xq."'),";
                      }                
                  }
@@ -322,6 +325,56 @@ class Zhibantable extends \yii\db\ActiveRecord
         }else{
             return '{"success":true,"msg":"更新不完全"}';
         }
+    }
+    /**
+     * 判断该学生这班是否已经安排过了
+     * @param  [type]  $value   [学生学号]
+     * @param  [type]  $already [这班的学号数组]
+     * @return boolean          [description]
+     */
+    public function isInThisTurn($value,$already){
+        return in_array($value,$already)? true: false;
+    }
+    /**
+     * 权重算法权重算法权重算法
+     * @param  [type] $users   [description]
+     * @param  [type] $num     [description]
+     * @param  [type] $userarr [description]
+     * @return [type]          [description]
+     */
+    public function chooseSt($users,$num,$userarr){
+        $stChoosed=array();
+        $userarr_this=array();// [031413217] => 0
+        $userlist=array();// [0] => 101214230 这班的学号
+        foreach ($users as $key => $value) {
+            $userlist[]=$value['XH_ID'];
+        }
+        foreach ($userarr as $key => $value) {
+            if(in_array($key,$userlist)){
+                $userarr_this[$key]=$value;
+            }
+        }
+        shuffle($userlist);
+        for($i=1;$i<=count($userarr_this)-$num;$i++){
+            $randKey = rand(0, array_sum($userarr_this)*10);
+            $radix = 0;
+            $one='';
+            foreach ($userlist as $key => $value) {
+                $radix+=$userarr_this[$value]*10;
+                if ($randKey <= $radix)
+                {
+                    // $stChoosed[]=$key;
+                    $a=$key;
+                    break;
+                }
+            }
+            unset($userarr_this[$a]);
+
+        }
+        foreach ($userarr_this as $key => $value) {
+            $stChoosed[]=$key;
+        }
+        return $stChoosed ;
     }
 
     /**

@@ -86,10 +86,10 @@ class AjaxuserController extends Controller {
 			return;
 		}
 		$usertb         = new UserTb();
-		$usertb->XH_ID  = trim($_POST["classmark"]);
+		$usertb->XH_ID  = trim(\yii\helpers\Html::encode($_POST["classmark"]));
 		$usertb->XH_PW  = md5('123456');
-		$usertb->Name   = trim($_POST["name"]);
-		$usertb->phone  = trim($_POST["phone"]);
+		$usertb->Name   = trim(\yii\helpers\Html::encode($_POST["name"]));
+		$usertb->phone  = trim(\yii\helpers\Html::encode($_POST["phone"]));
 		$usertb->status = 2;
 		if ($usertb->save()) {
 			echo '{"success":true,"msg":"用户：'.$_POST["name"].' 信息保存成功！"}';
@@ -131,7 +131,7 @@ class AjaxuserController extends Controller {
 			return;
 		}
 		$page    = $_GET['page'];
-		$content = $_GET["searchuser"];
+		$content = \yii\helpers\Html::encode($_GET["searchuser"]);
 
 		$usertb  = new UserTb();
 		$allpage = $usertb->userallpage_s(6, $content);
@@ -278,7 +278,7 @@ class AjaxuserController extends Controller {
 		$content['CreateDate'] = date('Y-m-d');
 		$content['Num']        = intval($owntodos->findTodayMissionCount())+1;
 		//		$content['content']    = $_POST['content'];
-		$content['content']   = $_POST['content'];
+		$content['content']   = \yii\helpers\Html::encode($_POST['content']);
 		$content['urgentLev'] = 1;
 		if ($owntodos->insertTodoData($content)) {
 			$result = '{"success":true,"msg":"<div data-createDate=\"'.$content['CreateDate'].'\" data-Num=\"'.$content['Num'].'\" class=\"mission_type\" draggable=\"true\" ondragstart=\"drag(event)\"><span class=\"mission_SpDes\">'.$content['content'].'</span><span class=\"mission_SpDate\">'.$content['CreateDate'].'</span>';
@@ -353,8 +353,8 @@ class AjaxuserController extends Controller {
 	 */
 	public function actionInsertitem() {
 		$arr['XH_ID']      = \Yii::$app->user->identity->XH_ID;
-		$arr['Item_Name']  = $_POST["ItemName"];
-		$arr['Item_Intro'] = $_POST["ItemIntro"];
+		$arr['Item_Name']  = \yii\helpers\Html::encode($_POST["ItemName"]);
+		$arr['Item_Intro'] = \yii\helpers\Html::encode($_POST["ItemIntro"]);
 		$arr['Status']     = 1;
 		$arr['Date']       = date('y-m-d');
 		$item              = new Items();
@@ -524,7 +524,7 @@ class AjaxuserController extends Controller {
 	//插入
 	public function actionInsertdetail() {
 		$arr['item_id']  = $_POST['item_id'];
-		$arr['discribe'] = $_POST['discribe'];
+		$arr['discribe'] = \yii\helpers\Html::encode($_POST['discribe']);
 		$arr['status']   = 1;
 		$arr['Date']     = date('y-m-d');
 		$arr['Time']     = date('H:i:s');
@@ -545,7 +545,7 @@ class AjaxuserController extends Controller {
 	//修改项目任务细节内容
 	public function actionChangediscribe() {
 		$ItemDetail_Id = $_POST['ItemDetail_Id'];
-		$discribe      = $_POST['discribe'];
+		$discribe      = \yii\helpers\Html::encode($_POST['discribe']);
 		$itemdetail    = new Itemdetails();
 		$result        = $itemdetail->ChangeDetail($ItemDetail_Id, $discribe);
 		if ($result) {
@@ -610,7 +610,7 @@ class AjaxuserController extends Controller {
 			echo '{"success":false,"msg":"请输查询入内容"}';
 			return;
 		}
-		$Art_Name = $_GET["searcharticle"];
+		$Art_Name =\yii\helpers\Html::encode( $_GET["searcharticle"]);
 		$page     = $_GET['page'];
 		$artice   = new Articles();
 		$result   = $artice->searcharticle($Art_Name, 1, 6);
@@ -670,8 +670,8 @@ class AjaxuserController extends Controller {
 		}
 		$article = new articles();
 		//		$article->Art_Id = $_POST["itemname"];
-		$article->Art_Name = $_POST["itemname"];
-		$article->Art_Num  = $_POST["number"];
+		$article->Art_Name = \yii\helpers\Html::encode($_POST["itemname"]);
+		$article->Art_Num  = \yii\helpers\Html::encode($_POST["number"]);
 		$article->Art_Time = date("y-m-d", time());
 		$article->status   = 1;
 		$article->save();

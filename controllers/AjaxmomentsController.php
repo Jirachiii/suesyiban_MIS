@@ -113,7 +113,7 @@ class AjaxmomentsController extends Controller {
 			echo '{"success":false,"msg":"请输查询入内容"}';
 			return;
 		}
-		$input = $_GET["searchmoment"];
+		$input = \yii\helpers\Html::encode($_GET["searchmoment"]);
 		$moments=new Moments();
 		$result=$moments->getPageMomentWithOrder_2($input,1, 6);
 		echo $result;
@@ -127,7 +127,7 @@ class AjaxmomentsController extends Controller {
 			return;
 		}
 		$aimmoment         = Moments::findOne($_POST['momentid']);
-		$aimmoment->Content = $_POST['moment_content'];
+		$aimmoment->Content = \yii\helpers\Html::encode($_POST['moment_content']);
 		$aimmoment->save(false);
 		echo '{"success":true,"msg":"添加成功！"}';
 	}
@@ -140,7 +140,7 @@ class AjaxmomentsController extends Controller {
 //			exit();
 		}
 		$newmoment=new Moments();
-		$newmoment->Content=$_POST['moment_content'];
+		$newmoment->Content=\yii\helpers\Html::encode($_POST['moment_content']);
 		$newmoment->XH_ID=\Yii::$app->user->identity->XH_ID;
 		$newmoment->Mdate=date('y-m-d');
 		$newmoment->Time=date('H:i:s');
